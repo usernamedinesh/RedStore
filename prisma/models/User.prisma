@@ -9,7 +9,7 @@ model User {
   email       String?    @unique
   password    String
   phoneNo     String?   @unique
-  isVerified  Boolean   @default(false)
+  isVerified  Boolean   @default(false) // remove this too 
   userRole    UserRole  @default(USER) 
   updatedAt   DateTime  @updatedAt
   createdAt   DateTime  @default(now())

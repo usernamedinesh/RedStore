@@ -12,12 +12,12 @@ exports.sendOtpWithSave = async ({ otp, email, phoneNo }) => {
     update: {
       otp,
       createdAt: new Date(),
-      expiresAt: new Date(Date.now() + 1 * 60 * 1000), // ✅ corrected here
+      expiresAt: new Date(Date.now() + 1 * 60 * 1000), //TODO:  1m for dev 2m for production
     },
     create: {
       otp,
       ...identifier,
-      expiresAt: new Date(Date.now() + 1 * 60 * 1000),
+      expiresAt: new Date(Date.now() + 1 * 60 * 1000), //TODO: need remove here too
     },
   });
 

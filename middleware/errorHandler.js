@@ -2,7 +2,7 @@
 const { errorResponse } = require("../utils/response");
 
 function errorHandler(err, req, res, next) {
-  console.error(err); // Log full error (for dev/debugging)
+  console.error(err); // WARN:need to remove  // Log full error (for dev/debugging)
 
   let statusCode = err.statusCode || 500;
   let message = err.message || "Something went wrong";

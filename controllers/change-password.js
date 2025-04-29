@@ -28,7 +28,6 @@ exports.changePassword = catchAsync(async (req, res, next) => {
       next(error);
     }
 
-    console.log("password", req.user);
     const user = await prisma.user.findUnique({ where: { id: req.user.id } });
 
     if (!user) {
