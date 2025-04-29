@@ -1,0 +1,67 @@
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Models start here
+
+
+// model Product {
+//   id        Int      @id @default(autoincrement())
+//   name      String
+//   price     Float
+//   userId    Int
+//   user      User     @relation(fields: [userId], references: [id])
+// }
+
+
+// model Rating {
+//   id     Int     @id @default(autoincrement())
+//   name   String
+//   email  String  @unique
+//   score  Int     // or Float, if rating is like 4.5 stars
+// }
+
+
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model User {
+  id          Int       @id @default(autoincrement())
+  name        String
+  email       String?    @unique
+  password    String
+  phoneNo     String?   @unique
+  otp         String?   
+  isVerified  Boolean   @default(false)
+  userRole    UserRole  @default(USER) 
+  updatedAt   DateTime  @updatedAt
+  createdAt  DateTime @default(now())
+  // expiresAt  DateTime @default(dbgenerated("(NOW() + interval '5 minutes')"))
+}
+
+
+
+// This is temperory for storing otp and email
+// after successfully otp matched remove this and store to the user 
+
+model TempOtp {
+  id    Int    @id @default(autoincrement())
+  otp   String
+  email String? @unique
+  phoneNo String? @unique
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+}
+
+
+

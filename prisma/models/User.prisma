@@ -1,0 +1,18 @@
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model User {
+  id          Int       @id @default(autoincrement())
+  name        String
+  email       String?    @unique
+  password    String
+  phoneNo     String?   @unique
+  isVerified  Boolean   @default(false)
+  userRole    UserRole  @default(USER) 
+  updatedAt   DateTime  @updatedAt
+  createdAt  DateTime @default(now())
+  // expiresAt  DateTime @default(dbgenerated("(NOW() + interval '5 minutes')"))
+}
+
