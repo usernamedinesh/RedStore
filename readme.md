@@ -14,4 +14,6 @@
 
 # manulayy if i added or change nay filed in db i just run only one
 
-npx prisma migrate dev --name add-refresh-token
+- node prisma/mergeSchema.js
+
+* npx prisma migrate dev --name add-otp-field =>(otp is the name of filed but i guess need to make optional)

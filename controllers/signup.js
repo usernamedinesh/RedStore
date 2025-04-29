@@ -35,9 +35,8 @@ const userSchema = Joi.object({
  *
  */
 
-// const { error, value } = userSchema.validate(req.body, { abortEarly: false });
-
 exports.verifyOtp = catchAsync(async (req, res, next) => {
+  // const { error, value } = userSchema.validate(req.body, { abortEarly: false });
   const { phoneOremail } = req.body;
 
   if (!phoneOremail) {

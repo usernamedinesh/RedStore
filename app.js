@@ -15,7 +15,6 @@ app.use(cookieParser());
 // Use passport middleware
 app.use(passport.initialize());
 app.use(corsMiddleware);
-
 app.use("/api", userRoute);
 
 app.use(notFoundHandler);

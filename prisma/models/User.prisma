@@ -12,8 +12,10 @@ model User {
   isVerified  Boolean   @default(false)
   userRole    UserRole  @default(USER) 
   updatedAt   DateTime  @updatedAt
-  createdAt  DateTime @default(now())
+  createdAt   DateTime  @default(now())
   refreshToken String?
+  otp         String?  
+  otpCreatedAt DateTime?
   // expiresAt  DateTime @default(dbgenerated("(NOW() + interval '5 minutes')"))
 }
 

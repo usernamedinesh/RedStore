@@ -44,6 +44,11 @@ const authenticateJwtWithAutoRefresh = async (req, res, next) => {
 
           const user = await prisma.user.findUnique({
             where: { id: refreshDecoded.id },
+            select: {
+              id: true,
+              email: true,
+              name: true,
+            },
           });
 
           if (!user || user.refreshToken !== refreshToken) {
