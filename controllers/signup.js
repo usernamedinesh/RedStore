@@ -1,7 +1,10 @@
 const { PrismaClient } = require("../generated/prisma");
 const bcrypt = require("bcryptjs");
 const catchAsync = require("../utils/catchAsync");
-const generateToken = require("../utils/generateToken");
+const {
+  generateAccessToken,
+  generateRefreshToken,
+} = require("../utils/generateToken");
 const prisma = new PrismaClient();
 const { successResponse } = require("../utils/response");
 const Joi = require("joi");
@@ -40,64 +43,67 @@ exports.verifyOtp = catchAsync(async (req, res, next) => {
   if (!phoneOremail) {
     return next(new Error("phone/email is required !"));
   }
+  try {
+    const otp = generateOtp();
+    let email;
+    let phoneNo;
+    let findCondition = {};
 
-  const otp = generateOtp();
-  let email;
-  let phoneNo;
-  let findCondition = {};
+    if (isEmail(phoneOremail)) {
+      email = phoneOremail;
+      const emailExist = await prisma.user.findUnique({
+        where: { email },
+      });
+      if (emailExist) {
+        return next(new Error("user is already registered"));
+      }
+      findCondition = { email };
+      /* check here if the email is already exist */
+      // sendOtp(email, otp);
+    } else if (isPhone(phoneOremail)) {
+      phoneNo = phoneOremail;
+      const phoneExist = await prisma.user.findFirst({
+        where: { phoneNo },
+      });
 
-  if (isEmail(phoneOremail)) {
-    email = phoneOremail;
-    const emailExist = await prisma.user.findUnique({
-      where: { email },
-    });
-    if (emailExist) {
-      return next(new Error("user is already registered"));
+      if (phoneExist) {
+        return next(new Error("user is already registered"));
+      }
+      findCondition = { phoneNo };
+    } else {
+      return next(new Error("Invalid phone or email format"));
     }
-    findCondition = { email };
-    /* check here if the email is already exist */
-    // sendOtp(email, otp);
-  } else if (isPhone(phoneOremail)) {
-    phoneNo = phoneOremail;
-    const phoneExist = await prisma.user.findFirst({
-      where: { phoneNo },
-    });
 
-    if (phoneExist) {
-      return next(new Error("user is already registered"));
-    }
-    findCondition = { phoneNo };
-  } else {
-    return next(new Error("Invalid phone or email format"));
+    // let tempUser = prisma.tempOtp.findUnique({ where: { findCondition } });
+    //
+    // if (tempUser) {
+    //   tempUser = await prisma.tempOtp.update({
+    //     where: findCondition,
+    //     data: {
+    //       otp,
+    //       createdAt: new Date(), // reset timestamp
+    //     },
+    //   });
+    // } else {
+    //   //Create  new tempOtp
+    //   const dataToSave = { otp };
+    //   if (email) dataToSave.email = email;
+    //   if (phoneNo) dataToSave.phone = phoneNo;
+    //   tempUser = await prisma.tempOtp.create({
+    //     data: dataToSave,
+    //   });
+    // }
+    // if (email) {
+    //   await sendOtp(email, otp);
+    // } else if (phoneNo) {
+    //   await sendOtp(phoneNo, otp);
+    // }
+
+    const tempUser = await sendOtpWithSave({ otp, email, phoneNo });
+    successResponse(res, tempUser, "otp send successfully", 201);
+  } catch (error) {
+    next(error);
   }
-
-  // let tempUser = prisma.tempOtp.findUnique({ where: { findCondition } });
-  //
-  // if (tempUser) {
-  //   tempUser = await prisma.tempOtp.update({
-  //     where: findCondition,
-  //     data: {
-  //       otp,
-  //       createdAt: new Date(), // reset timestamp
-  //     },
-  //   });
-  // } else {
-  //   //Create  new tempOtp
-  //   const dataToSave = { otp };
-  //   if (email) dataToSave.email = email;
-  //   if (phoneNo) dataToSave.phone = phoneNo;
-  //   tempUser = await prisma.tempOtp.create({
-  //     data: dataToSave,
-  //   });
-  // }
-  // if (email) {
-  //   await sendOtp(email, otp);
-  // } else if (phoneNo) {
-  //   await sendOtp(phoneNo, otp);
-  // }
-
-  const tempUser = await sendOtpWithSave({ otp, email, phoneNo });
-  successResponse(res, tempUser, "otp send successfully", 201);
 });
 
 exports.register = catchAsync(async (req, res, next) => {
@@ -153,8 +159,32 @@ exports.register = catchAsync(async (req, res, next) => {
 
     // ✅ OTP matched — now delete from TempOtp
     await prisma.tempOtp.deleteMany({ where: findCondition });
-    const token = generateToken(user);
-    successResponse(res, { token, user }, "user created successfully", 201);
+
+    const accessToken = generateAccessToken({
+      id: user.id,
+      email: user.email,
+    });
+    const refreshToken = generateRefreshToken({
+      id: user.id,
+      email: user.email,
+    });
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { refreshToken },
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+    successResponse(
+      res,
+      { accessToken, user },
+      "user created successfully",
+      201,
+    );
   } catch (error) {
     console.error(error);
     next(error);

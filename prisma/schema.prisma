@@ -41,11 +41,11 @@ model User {
   email       String?    @unique
   password    String
   phoneNo     String?   @unique
-  otp         String?   
   isVerified  Boolean   @default(false)
   userRole    UserRole  @default(USER) 
   updatedAt   DateTime  @updatedAt
   createdAt  DateTime @default(now())
+  refreshToken String?
   // expiresAt  DateTime @default(dbgenerated("(NOW() + interval '5 minutes')"))
 }
 

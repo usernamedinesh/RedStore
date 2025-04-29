@@ -39,6 +39,7 @@ const sendOtp = async (recipient, otp) => {
       });
       console.log("OTP sent via email to:", recipient);
     } else {
+      //TODO: here implementation of sendOTP using phone number
       // Send via SMS
       // await sendSmsOtp(recipient, otp);
       console.log("OTP sent via SMS to:", recipient);

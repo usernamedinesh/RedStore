@@ -123,11 +123,11 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   phoneNo: 'phoneNo',
-  otp: 'otp',
   isVerified: 'isVerified',
   userRole: 'userRole',
   updatedAt: 'updatedAt',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  refreshToken: 'refreshToken'
 };
 
 exports.Prisma.TempOtpScalarFieldEnum = {

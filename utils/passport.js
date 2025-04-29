@@ -5,28 +5,20 @@ const env = require("../config/envConfig");
 const prisma = new PrismaClient();
 
 // Passport JWT strategy configuration
-const opts = {
-  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), // Extract JWT token from Authorization header
-  secretOrKey: env.JWT_SECRET, // Secret key to verify the JWT token
-};
 
 passport.use(
-  new Strategy(opts, async (jwt_payload, done) => {
-    try {
-      // Correctly look up user in your DB
+  new Strategy(
+    {
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: env.ACCESS_TOKEN_SECRET,
+    },
+    async (jwt_payload, done) => {
       const user = await prisma.user.findUnique({
-        where: { id: jwt_payload.id }, // Use a `where` clause to find the user
+        where: { id: jwt_payload.id },
       });
-
-      if (user) {
-        return done(null, user); // Authentication successful
-      } else {
-        return done(null, false); // Authentication failed
-      }
-    } catch (error) {
-      return done(error, false); // Error occurred during authentication
-    }
-  }),
+      return user ? done(null, user) : done(null, false);
+    },
+  ),
 );
 
 module.exports = passport;

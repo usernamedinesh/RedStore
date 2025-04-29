@@ -11,3 +11,7 @@
 
 * migration-command: npx prisma migrate dev --name init
   - <->thats all i need to
+
+# manulayy if i added or change nay filed in db i just run only one
+
+npx prisma migrate dev --name add-refresh-token
