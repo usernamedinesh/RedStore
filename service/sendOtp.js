@@ -1,7 +1,7 @@
 const env = require("../config/envConfig");
 const nodemailer = require("nodemailer");
 const sendOTP = require("../utils/template");
-const { isEmail } = require("./validator");
+const { isEmail } = require("../validator/emailPhoneValidator");
 
 const transporter = nodemailer.createTransport({
   service: "Gmail",

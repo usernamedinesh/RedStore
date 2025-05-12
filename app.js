@@ -1,6 +1,9 @@
 const express = require("express");
 const errorHandler = require("./middleware/errorHandler");
 const userRoute = require("./router/user");
+const adminRoute = require("./router/admin/user");
+const adminProductRoute = require("./router/admin/productRoute");
+const adminCart = require("./router/admin/addTocart");
 const notFoundHandler = require("./middleware/notFound");
 const corsMiddleware = require("./middleware/cors");
 const bodyParser = require("body-parser");
@@ -8,14 +11,15 @@ const passport = require("./utils/passport");
 const cookieParser = require("cookie-parser");
 
 const app = express();
+
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookieParser());
-
-// Use passport middleware
 app.use(passport.initialize());
 app.use(corsMiddleware);
+
 app.use("/api", userRoute);
+app.use("/admin", adminRoute, adminProductRoute, adminCart);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

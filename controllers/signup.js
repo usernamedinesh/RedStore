@@ -8,24 +8,37 @@ const {
 const prisma = new PrismaClient();
 const { successResponse } = require("../utils/response");
 const Joi = require("joi");
-const sendOtp = require("../utils/sendOtp");
-const { sendOtpWithSave } = require("../utils/otpService");
+// const sendOtp = require("../utils/sendOtp");
+const { sendOtpWithSave } = require("../service/otpService");
 const generateOtp = require("../utils/generateOtp");
 const { isOtpExpired } = require("../utils/otpExpiration");
-const { isPhone, isEmail } = require("../utils/validator");
+const { isPhone, isEmail } = require("../validator/emailPhoneValidator");
 
 const userSchema = Joi.object({
   name: Joi.string().alphanum().min(3).max(30).required(),
-  email: Joi.string().email().required(),
   password: Joi.string()
     .min(8)
     .max(30)
     .pattern(new RegExp("^[a-zA-Z0-9]{8,30}$"))
     .required(),
-  userType: Joi.string().valid("admin", "user"),
-  phone: Joi.alternatives().try(Joi.string(), Joi.number()).optional(),
-});
-
+  email: Joi.string().email().messages({
+    "string.email": "Please provide a valid email",
+  }),
+  phoneNo: Joi.string()
+    .pattern(/^\+?[0-9]{10,15}$/)
+    .messages({
+      "string.pattern.base": "Please provide a valid phone number",
+    }),
+  password: Joi.string().min(6).required().messages({
+    "string.empty": "Password is required",
+    "string.min": "Password should be at least 6 characters",
+  }),
+  otp: Joi.string().required(),
+})
+  .or("email", "phoneNo") // ✅ At least one of email or phoneNo is required
+  .messages({
+    "object.missing": "Either email or phone number is required",
+  });
 /*
  *
  * In this route I am taking only email | phone
@@ -46,7 +59,6 @@ exports.verifyOtp = catchAsync(async (req, res, next) => {
     const otp = generateOtp();
     let email;
     let phoneNo;
-    let findCondition = {};
 
     if (isEmail(phoneOremail)) {
       email = phoneOremail;
@@ -56,9 +68,6 @@ exports.verifyOtp = catchAsync(async (req, res, next) => {
       if (emailExist) {
         return next(new Error("user is already registered"));
       }
-      findCondition = { email };
-      /* check here if the email is already exist */
-      // sendOtp(email, otp);
     } else if (isPhone(phoneOremail)) {
       phoneNo = phoneOremail;
       const phoneExist = await prisma.user.findFirst({
@@ -68,35 +77,9 @@ exports.verifyOtp = catchAsync(async (req, res, next) => {
       if (phoneExist) {
         return next(new Error("user is already registered"));
       }
-      findCondition = { phoneNo };
     } else {
       return next(new Error("Invalid phone or email format"));
     }
-
-    // let tempUser = prisma.tempOtp.findUnique({ where: { findCondition } });
-    //
-    // if (tempUser) {
-    //   tempUser = await prisma.tempOtp.update({
-    //     where: findCondition,
-    //     data: {
-    //       otp,
-    //       createdAt: new Date(), // reset timestamp
-    //     },
-    //   });
-    // } else {
-    //   //Create  new tempOtp
-    //   const dataToSave = { otp };
-    //   if (email) dataToSave.email = email;
-    //   if (phoneNo) dataToSave.phone = phoneNo;
-    //   tempUser = await prisma.tempOtp.create({
-    //     data: dataToSave,
-    //   });
-    // }
-    // if (email) {
-    //   await sendOtp(email, otp);
-    // } else if (phoneNo) {
-    //   await sendOtp(phoneNo, otp);
-    // }
 
     const tempUser = await sendOtpWithSave({ otp, email, phoneNo });
     successResponse(res, tempUser, "otp send successfully", 201);
@@ -106,7 +89,11 @@ exports.verifyOtp = catchAsync(async (req, res, next) => {
 });
 
 exports.register = catchAsync(async (req, res, next) => {
-  const { name, email, password, otp, phoneNo } = req.body;
+  const { error, value } = userSchema.validate(req.body, { abortEarly: false });
+  if (error) {
+    return next(error);
+  }
+  const { name, email, password, otp, phoneNo } = value;
 
   /* here need to sanitize body */
   if (!name || !password || !otp) {

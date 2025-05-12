@@ -17,3 +17,7 @@
 - node prisma/mergeSchema.js
 
 * npx prisma migrate dev --name add-otp-field =>(otp is the name of filed but i guess need to make optional)
+
+# hard reset
+
+npx prisma migrate reset --force

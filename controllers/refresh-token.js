@@ -48,6 +48,7 @@ const authenticateJwtWithAutoRefresh = async (req, res, next) => {
               id: true,
               email: true,
               name: true,
+              refreshToken: true,
             },
           });
 

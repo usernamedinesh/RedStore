@@ -1,0 +1,19 @@
+model CartItem {
+    id        String   @id @default(uuid())
+    quantity  Int      @default(1)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    //Relation 
+    user   User @relation(fields: [userId], references: [id])
+    userId Int
+
+    product   Product @relation(fields: [productId], references: [id], onDelete: Cascade) // delete automatically if product is deleted
+    productId String
+
+    variantName   String?
+    variantOption String?
+
+    variantSelection Json?
+    variantKey       String?
+}

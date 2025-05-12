@@ -8,6 +8,7 @@ const {
   generateRefreshToken,
 } = require("../utils/generateToken");
 const { successResponse } = require("../utils/response");
+const { isEmail, isPhone } = require("../validator/emailPhoneValidator");
 
 const schema = Joi.object({
   email: Joi.string().email().messages({
@@ -32,6 +33,9 @@ exports.login = catchAsync(async (req, res, next) => {
   try {
     const { error, value } = schema.validate(req.body, { abortEarly: false });
     const { email, password, phoneNo } = value;
+
+    if (!isEmail(email)) return next(error);
+    if (!isPhone(phoneNo)) return next(error);
 
     let findCondition = {};
     if (email) findCondition.email = email;
