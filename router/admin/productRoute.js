@@ -4,26 +4,35 @@ const router = require("express").Router();
 const {
   createProduct,
   createCategory,
-  getCategory,
   getAllProducts,
   SingleProduct,
   removeProduct,
+  deleteSingleVariants,
+  getCategoryAndBrand,
 } = require("../../adminControllers/product/product");
 const authMiddleware = require("../../controllers/refresh-token");
 
-router.post("/product", authMiddleware, createProduct); /* create new product */
-router.get("/category", authMiddleware, getCategory); /* get all category   */
-router.post(
-  "/category",
-  authMiddleware,
-  createCategory,
-); /* create new category */
-router.get("/product", authMiddleware, getAllProducts); /* get all product */
-router.get(
-  "/product/:id",
-  authMiddleware,
-  SingleProduct,
-); /* get single proudct */
+/* create product */
+router.post("/product", authMiddleware, createProduct);
+
+/* get category or brand */
+router.get("/category", authMiddleware, getCategoryAndBrand);
+
+/* create new category NOTE: not used*/
+router.post("/category", authMiddleware, createCategory);
+
+/* get all product */
+/* axios.get(`/api/products?page=${pagination.page}&limit=${pagination.limit}`); */
+/*TEST: GET /products?page=2&limit=15 */
+router.get("/product", authMiddleware, getAllProducts);
+
+/* get single proudct */
+router.get("/product/:id", authMiddleware, SingleProduct);
+
+/* remove product */
 router.delete("/product/:id", authMiddleware, removeProduct);
+
+// delete an variant
+router.delete("variants/:variantId", deleteSingleVariants);
 
 module.exports = router;

@@ -1,10 +1,13 @@
 // controllers/productController.js
+
+const { client: redis, policies } = require("../../config/redisConfig");
+const { getProductKey, getProductTTL } = require("../../redis/cache.redis");
+
 const Joi = require("joi");
 const { PrismaClient } = require("../../generated/prisma");
 const prisma = new PrismaClient();
 const catchAsync = require("../../utils/catchAsync");
 const { successResponse } = require("../../utils/response");
-const { options } = require("../../router/user");
 
 const userSchema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
@@ -40,7 +43,7 @@ exports.createCategory = catchAsync(async (req, res, next) => {
   }
 });
 
-exports.getCategory = catchAsync(async (req, res, next) => {
+exports.getCategoryAndBrand = catchAsync(async (req, res, next) => {
   try {
     const id = req.user.id;
     const isAdmin = await prisma.user.findUnique({ where: { id: id } });
@@ -48,13 +51,18 @@ exports.getCategory = catchAsync(async (req, res, next) => {
     if (isAdmin.userRole !== "ADMIN") {
       return next(new Error("Admin can perform this operation!"));
     }
-    const category = await prisma.category.findMany({});
-    if (!category) {
-      return next(new Error("No Category found"));
+    const [categories, brands] = await Promise.all([
+      prisma.category.findMany(),
+      prisma.brand.findMany(),
+    ]);
+
+    if (!categories || categories.length === 0) {
+      return next(new Error("No Category Found!"));
     }
+
     return successResponse(
       res,
-      category,
+      { categories, brands },
       "Category fetched successfully!",
       200,
     );
@@ -65,59 +73,98 @@ exports.getCategory = catchAsync(async (req, res, next) => {
 
 exports.createProduct = async (req, res, next) => {
   try {
-    const { name, description, price, stock, images, variants } = req.body;
-    /* check first admin or not */
+    const {
+      name,
+      description,
+      basePrice,
+      categoryName,
+      brandName,
+      images,
+      gender = "UNISEX",
+      variants = [],
+    } = req.body;
+
+    /*
+     * PICK AND RANDOM IMAGE FROM IMAGES ARRAY
+     */
+    let AllImage = variants.flatMap((v) => v.images || []);
+    const randomImage =
+      AllImage.length > 0
+        ? AllImage[Math.floor(Math.random() * AllImage.length)]
+        : null;
+
+    // Check if user is admin
     const id = req.user.id;
-    const isAdmin = await prisma.user.findUnique({ where: { id: id } });
-    if (isAdmin.userRole !== "ADMIN") {
-      return next(new Error("only admin can perform this operation!"));
+    const user = await prisma.user.findUnique({ where: { id } });
+
+    if (user.userRole !== "ADMIN") {
+      return next(new Error("Only admin can perform this operation!"));
     }
 
-    /* lest find the Category id first */
-    const isValidCategory = await prisma.category.findUnique({
-      where: { id: req.body.id },
+    // Validate required fields
+    if (
+      !name ||
+      !description ||
+      !basePrice ||
+      !categoryName ||
+      !brandName ||
+      !images ||
+      !variants.length
+    ) {
+      return next(new Error("All fields are required"));
+    }
+
+    // Find or create category
+    let category = await prisma.category.findFirst({
+      where: { name: categoryName },
     });
-    if (!isValidCategory) {
-      return next(new Error("No Such Category Found"));
+    if (!category) {
+      category = await prisma.category.create({ data: { name: categoryName } });
     }
 
-    const result = await prisma.$transaction(async (prisma) => {
-      //create main product
-      const product = await prisma.product.create({
+    // Find or create brand
+    let brand = await prisma.brand.findFirst({ where: { name: brandName } });
+    if (!brand) {
+      brand = await prisma.brand.create({ data: { name: brandName } });
+    }
+
+    // Create product inside a transaction
+    const result = await prisma.$transaction(async (tx) => {
+      const product = await tx.product.create({
         data: {
           name,
           description,
-          price,
-          stock,
-          images,
-          categoryId: req.body.id,
+          gender,
+          basePrice,
+          categoryId: category.id,
+          brandId: brand.id,
+          thumnailImage: randomImage || "",
+          variants: {
+            create: variants.map((v) => ({
+              size: v.size,
+              color: v.color,
+              price: v.price,
+              stock: v.stock,
+              sku: v.sku,
+              images: {
+                create: v.images.map((url) => ({ url })),
+              },
+            })),
+          },
+        },
+        include: {
+          variants: {
+            include: {
+              images: true,
+            },
+          },
         },
       });
-      //create variant if provied
 
-      if (variants && variants.length > 0) {
-        await prisma.productVariant.createMany({
-          data: variants.map((v) => ({
-            name: v.name,
-            options: v.options,
-            productId: product.id,
-          })),
-        });
-      }
       return product;
     });
 
-    const createdProduct = await prisma.product.findUnique({
-      where: { id: result.id },
-      include: { variants: true, category: true },
-    });
-
-    return successResponse(
-      res,
-      createdProduct,
-      "Product Created Successfully",
-      201,
-    );
+    return successResponse(res, result, "Product Created Successfully", 201);
   } catch (error) {
     return next(error);
   }
@@ -125,18 +172,87 @@ exports.createProduct = async (req, res, next) => {
 
 exports.getAllProducts = catchAsync(async (req, res, next) => {
   try {
-    /* get all product here */
-    const id = req.user.id;
-    const isAdmin = await prisma.user.findUnique({ where: { id: id } });
-    if (isAdmin.userRole !== "ADMIN") {
-      return next(new Error("Only ADMIN can perform this operation!"));
+    // 1. Admin verification (optimized query)
+    const user = await prisma.user.findUnique({
+      where: { id: req.user.id },
+      select: { userRole: true }, // Only fetch needed field
+    });
+
+    if (!user || user.userRole !== "ADMIN") {
+      return next(
+        new AppError("Access denied: Admin privileges required", 403),
+      );
     }
-    const product = await prisma.product.findMany({});
-    if (!product || product.length === 0) {
-      return next(new Error("No Product Found!"));
+
+    // 2. Pagination setup with validation
+    const page = Math.max(1, parseInt(req.query.page) || 1);
+    const limit = Math.min(Math.max(1, parseInt(req.query.limit) || 10, 100)); // Max 100 items
+    const skip = (page - 1) * limit;
+
+    // 3. Cache operations
+    const cacheKey = getProductKey(page, limit);
+    const cachedData = await redis.get(cacheKey);
+
+    if (cachedData) {
+      const { data, message } = JSON.parse(cachedData);
+      return successResponse(res, data, message);
     }
-    return successResponse(res, product, "Product fetched successfully!", 200);
+
+    // 4. Database query (optimized)
+    const [products, totalProducts] = await Promise.all([
+      prisma.product.findMany({
+        skip,
+        take: limit,
+        select: {
+          // Explicitly select fields for security
+          id: true,
+          name: true,
+          category: { select: { name: true } },
+          brand: { select: { name: true } },
+          variants: {
+            select: {
+              id: true,
+              images: { select: { url: true } },
+            },
+          },
+          createdAt: true,
+        },
+        orderBy: { createdAt: "desc" },
+      }),
+      prisma.product.count(),
+    ]);
+
+    // 5. Handle empty results
+    if (!products.length) {
+      return successResponse(res, [], "No products found", 200);
+    }
+
+    // 6. Prepare and cache response
+    const responseData = {
+      products,
+      pagination: {
+        totalItems: totalProducts,
+        currentPage: page,
+        totalPages: Math.ceil(totalProducts / limit),
+        nextPage: page * limit < totalProducts ? page + 1 : null,
+        prevPage: page > 1 ? page - 1 : null,
+      },
+    };
+
+    await redis.setEx(
+      cacheKey,
+      getProductTTL(),
+      JSON.stringify({
+        data: responseData,
+        message: "Products fetched successfully",
+      }),
+    );
+
+    // 7. Send response
+    return successResponse(res, responseData, "Products fetched successfully");
   } catch (error) {
+    // 8. Improved error handling
+    if (!error.statusCode) error.statusCode = 500;
     return next(error);
   }
 });
@@ -150,15 +266,25 @@ exports.SingleProduct = catchAsync(async (req, res, next) => {
       return next(new Error("Only ADMIN can perform this operation!"));
     }
     const produtId = req.params.id;
-    const isAvalidProductId = await prisma.product.findUnique({
+    const product = await prisma.product.findUnique({
       where: { id: produtId },
+      include: {
+        category: true,
+        brand: true,
+        variants: {
+          include: {
+            images: true,
+          },
+        },
+      },
     });
-    if (!produtId) {
+
+    if (!product) {
       return next(new Error("Invalid prodcut id or product not found"));
     }
     return successResponse(
       res,
-      isAvalidProductId,
+      product,
       "Singe Product fetched successfully!",
       200,
     );
@@ -169,12 +295,24 @@ exports.SingleProduct = catchAsync(async (req, res, next) => {
 
 exports.removeProduct = catchAsync(async (req, res, next) => {
   try {
+    /*
+     *---params{id} will be the admin id
+     *---params{productId} will be the product id
+     */
     const id = req.user.id;
     const productId = req.params.id;
     const isAdmin = await prisma.user.findUnique({ where: { id: id } });
     const isValidProductId = await prisma.product.findUnique({
       where: { id: productId },
+      include: {
+        variants: {
+          include: {
+            images: true,
+          },
+        },
+      },
     });
+
     if (isAdmin.userRole !== "ADMIN" || !isValidProductId) {
       return next(new Error("Only ADMIN perfom this operation!"));
     }
@@ -184,5 +322,24 @@ exports.removeProduct = catchAsync(async (req, res, next) => {
     return successResponse(res, null, "Product deleted successfully", 200);
   } catch (error) {
     return next(error);
+  }
+});
+
+exports.deleteSingleVariants = catchAsync(async (req, res, next) => {
+  const { variantId } = req.params;
+
+  try {
+    const variant = await prisma.productVariant.findUnique({
+      where: { id: variantId },
+    });
+    if (!variant) {
+      return next(new Error("Variant not found!"));
+    }
+    const deletedVariant = await prisma.productVariant.delete({
+      where: { id: variantId },
+    });
+    successResponse(res, deletedVariant, "Variant deleted successfully", 200);
+  } catch (error) {
+    next(error);
   }
 });

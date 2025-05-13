@@ -16,26 +16,22 @@ function isEqualVariant(a, b) {
   return aKeys.every((key) => a[key] === b[key]);
 }
 
-function generateVariantKey(variantSelection) {
-  return Object.entries(variantSelection)
-    .sort()
-    .map(([key, value]) => `${key}=${value}`)
-    .join("|");
-}
-
 exports.AddTOCart = catchAsync(async (req, res, next) => {
+  const { userId, productId, quantity, variantId } = req.body;
+  if (!userId || !productId || !quantity || !variantId) {
+    return next(new Error("Please provide all required fields"));
+  }
+
   try {
-    const { userId, productId, quantity, variantSelection } = req.body;
-    const variantKey = generateVariantKey(variantSelection);
-    const productExist = await prisma.cartItem.findFirst({
+    const productExist = await prisma.cart.findFirst({
       where: {
         userId,
         productId,
-        variantKey,
+        variantId,
       },
     });
     if (productExist) {
-      const updated = await prisma.cartItem.update({
+      const updated = await prisma.cart.update({
         where: { id: productExist.id },
         data: {
           quantity: productExist.quantity + quantity,
@@ -49,13 +45,13 @@ exports.AddTOCart = catchAsync(async (req, res, next) => {
       );
     }
 
-    const newProduct = await prisma.cartItem.create({
+    /* create new cart */
+    const newProduct = await prisma.cart.create({
       data: {
         userId,
         productId,
+        variantId,
         quantity,
-        variantSelection,
-        variantKey,
       },
     });
     return successResponse(
@@ -71,19 +67,22 @@ exports.AddTOCart = catchAsync(async (req, res, next) => {
 
 exports.getCartItems = catchAsync(async (req, res, next) => {
   try {
-    const userId = req.params.id;
-    const cartTems = await prisma.cartItem.findMany({
+    const { userId } = req.params;
+    const cartItems = await prisma.cart.findMany({
       where: { userId: Number(userId) },
       include: {
         product: true,
+        variant: {
+          include: { images: true },
+        },
       },
     });
-    if (!cartTems || cartTems.length === 0) {
+    if (!cartItems || cartItems.length === 0) {
       return next(new Error("No CartItem found!"));
     }
     return successResponse(
       res,
-      cartTems,
+      cartItems,
       "Cart product fetch successfully",
       200,
     );
@@ -94,23 +93,18 @@ exports.getCartItems = catchAsync(async (req, res, next) => {
 
 exports.removeCartItem = catchAsync(async (req, res, next) => {
   try {
-    const { userId, variantSelection, productId } = req.body;
-    const cartItem = await prisma.cartItem.findMany({
+    const { cartId } = req.params;
+    const cartItem = await prisma.cart.findUnique({
       where: {
-        userId: Number(userId),
-        productId,
+        id: Number(cartId),
       },
     });
+    if (!cartItem) {
+      return next(new Error("Invalid cartID"));
+    }
+    await prisma.cart.delete({ where: { id: Number(cartId) } });
     console.log("cartItem: ", cartItem);
 
-    const matchingItem = cartItem.find((item) =>
-      isEqualVariant(item.variantSelection, variantSelection),
-    );
-
-    if (!matchingItem) {
-      return next(new Error("Cart Item not found"));
-    }
-    await prisma.cartItem.delete({ where: { id: matchingItem.id } });
     return successResponse(res, null, "Cart Item removed successfully", 200);
   } catch (error) {
     return next(error);

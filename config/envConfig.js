@@ -8,6 +8,9 @@ const env = cleanEnv(process.env, {
   MAIL_EMAIL: str(),
   MAIL_PASSWORD: str(),
   REFRESH_TOKEN_SECRET: str(),
+  REDIS_HOST: str(),
+  REDIS_PORT: str(),
+  REDIS_PASSWORD: str(),
 });
 
 module.exports = env;

@@ -25,18 +25,20 @@ model CategoryBrand {
 }
 
 model Product {
-    id          String           @id @default(uuid()) @map("product_id")
-    name        String
-    description String
-    category    Category         @relation(fields: [categoryId], references: [id])
-    categoryId  String           @map("category_id")
-    brand       Brand            @relation(fields: [brandId], references: [id])
-    brandId     String           @map("brand_id")
-    gender      Gender           @default(UNISEX)
-    basePrice   Float?           @map("base_price")
-    variants    ProductVariant[]
-    ratings     Rating[]
-    createdAt   DateTime         @default(now()) @map("created_at")
+    id            String           @id @default(uuid()) @map("product_id")
+    name          String
+    description   String
+    category      Category         @relation(fields: [categoryId], references: [id])
+    categoryId    String           @map("category_id")
+    brand         Brand            @relation(fields: [brandId], references: [id])
+    brandId       String           @map("brand_id")
+    gender        Gender           @default(UNISEX)
+    thumnailImage String
+    basePrice     Float?           @map("base_price")
+    variants      ProductVariant[]
+    ratings       Rating[]
+    createdAt     DateTime         @default(now()) @map("created_at")
+    cart          Cart[]
 
     @@index([name]) // For product name searches
     @@index([brandId]) // For brand filtering
@@ -44,16 +46,36 @@ model Product {
     @@map("products")
 }
 
+// i dont know it gonna work or not 
+model Cart {
+    id        String         @id @default(uuid()) @map("cart_id")
+    user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId    Int            @map("user_id")
+    product   Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+    productId String         @map("product_id")
+    variant   ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+    variantId String         @map("variant_id")
+    quantity  Int
+    createdAt DateTime       @default(now()) @map("created_at")
+
+    @@index([userId])
+    @@index([productId])
+    @@index([variantId])
+    @@map("carts")
+}
+
 model ProductVariant {
-    id        String   @id @default(uuid()) @map("variant_id")
-    product   Product  @relation(fields: [productId], references: [id])
-    productId String   @map("product_id")
+    id        String         @id @default(uuid()) @map("variant_id")
+    product   Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+    productId String         @map("product_id")
     size      Float
     color     String
-    stock     Int      @default(0)
+    stock     Int            @default(0)
     price     Float // add this now i run this => npx prisma migrate dev --name add_price_to_variant =>before that npx prisma format
-    sku       String   @unique
-    createdAt DateTime @default(now()) @map("created_at")
+    sku       String         @unique
+    createdAt DateTime       @default(now()) @map("created_at")
+    images    VariantImage[]
+    cart      Cart[]
 
     @@index([sku]) // Critical for inventory lookups
     @@index([productId]) // For fetching all variants of a product
@@ -61,9 +83,16 @@ model ProductVariant {
     @@map("product_variants")
 }
 
+model VariantImage {
+    id        String         @id @default(uuid())
+    url       String
+    variantId String
+    variant   ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+}
+
 model Rating {
     id        String   @id @default(uuid()) @map("rating_id")
-    product   Product  @relation(fields: [productId], references: [id])
+    product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
     productId String   @map("product_id")
     user      User     @relation(fields: [userId], references: [id])
     userId    Int      @map("user_id")

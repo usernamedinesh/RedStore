@@ -1,5 +1,5 @@
-# docker-compose.yml
-# version: '3'
+version: '3.8'  # 👈 Explicit version recommended
+
 services:
   db:
     image: postgres
@@ -12,7 +12,31 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:  # 👈 Add this to connect to network
+      - mynetwork
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    environment:
+      - REDIS_MEMORY=512mb  # 👈 Optional memory limit
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --save 60 1  # 👈 Auto-save config
+    networks:
+      - mynetwork
 
 volumes:
   postgres_data:
+  redis_data:
 
+networks:  # 👈 Must declare the network
+  mynetwork:
+    driver: bridge

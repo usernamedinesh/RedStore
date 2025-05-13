@@ -153,7 +153,17 @@ exports.Prisma.ProductScalarFieldEnum = {
   categoryId: 'categoryId',
   brandId: 'brandId',
   gender: 'gender',
+  thumnailImage: 'thumnailImage',
   basePrice: 'basePrice',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.CartScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  productId: 'productId',
+  variantId: 'variantId',
+  quantity: 'quantity',
   createdAt: 'createdAt'
 };
 
@@ -166,6 +176,12 @@ exports.Prisma.ProductVariantScalarFieldEnum = {
   price: 'price',
   sku: 'sku',
   createdAt: 'createdAt'
+};
+
+exports.Prisma.VariantImageScalarFieldEnum = {
+  id: 'id',
+  url: 'url',
+  variantId: 'variantId'
 };
 
 exports.Prisma.RatingScalarFieldEnum = {
@@ -286,7 +302,9 @@ exports.Prisma.ModelName = {
   Category: 'Category',
   CategoryBrand: 'CategoryBrand',
   Product: 'Product',
+  Cart: 'Cart',
   ProductVariant: 'ProductVariant',
+  VariantImage: 'VariantImage',
   Rating: 'Rating',
   Order: 'Order',
   OrderItem: 'OrderItem',
