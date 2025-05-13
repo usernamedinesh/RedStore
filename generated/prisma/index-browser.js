@@ -198,8 +198,8 @@ exports.Prisma.OrderScalarFieldEnum = {
   userId: 'userId',
   totalAmount: 'totalAmount',
   status: 'status',
-  paymentMethod: 'paymentMethod',
-  shippingAddress: 'shippingAddress',
+  shippingAddressId: 'shippingAddressId',
+  paymentId: 'paymentId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -210,6 +210,31 @@ exports.Prisma.OrderItemScalarFieldEnum = {
   variantId: 'variantId',
   quantity: 'quantity',
   price: 'price',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.PaymentScalarFieldEnum = {
+  id: 'id',
+  orderId: 'orderId',
+  paymentMethod: 'paymentMethod',
+  transactionId: 'transactionId',
+  amount: 'amount',
+  status: 'status',
+  gatewayResponse: 'gatewayResponse',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AddressScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  fullName: 'fullName',
+  addresLine1: 'addresLine1',
+  addresLine2: 'addresLine2',
+  city: 'city',
+  state: 'state',
+  postalCode: 'postalCode',
+  phoneNumber: 'phoneNumber',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -245,10 +270,6 @@ exports.Prisma.SortOrder = {
 
 exports.Prisma.NullableJsonNullValueInput = {
   DbNull: Prisma.DbNull,
-  JsonNull: Prisma.JsonNull
-};
-
-exports.Prisma.JsonNullValueInput = {
   JsonNull: Prisma.JsonNull
 };
 
@@ -291,6 +312,12 @@ exports.PaymentMethod = exports.$Enums.PaymentMethod = {
   STRIPE: 'STRIPE'
 };
 
+exports.PaymentStatus = exports.$Enums.PaymentStatus = {
+  SUCCESS: 'SUCCESS',
+  FAILED: 'FAILED',
+  PENDING: 'PENDING'
+};
+
 exports.UserRole = exports.$Enums.UserRole = {
   USER: 'USER',
   ADMIN: 'ADMIN'
@@ -308,6 +335,8 @@ exports.Prisma.ModelName = {
   Rating: 'Rating',
   Order: 'Order',
   OrderItem: 'OrderItem',
+  Payment: 'Payment',
+  Address: 'Address',
   User: 'User',
   TempOtp: 'TempOtp'
 };

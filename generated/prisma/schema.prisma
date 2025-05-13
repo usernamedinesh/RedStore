@@ -141,35 +141,80 @@ model Rating {
 }
 
 model Order {
-  id              String        @id @default(uuid()) @map("order_id")
-  user            User          @relation(fields: [userId], references: [id])
-  userId          Int           @map("user_id")
-  items           OrderItem[]
-  totalAmount     Float         @map("total_amount")
-  status          OrderStatus   @default(PENDING)
-  paymentMethod   PaymentMethod
-  shippingAddress Json          @map("shipping_address")
-  createdAt       DateTime      @default(now()) @map("created_at")
-  updatedAt       DateTime      @updatedAt @map("updated_at")
+  id                String      @id @default(uuid()) @map("order_id")
+  user              User        @relation(fields: [userId], references: [id])
+  userId            Int         @map("user_id")
+  items             OrderItem[] @relation("OrderItems")
+  totalAmount       Decimal     @map("total_amount")
+  status            OrderStatus @default(PENDING)
+  shippingAddress   Address     @relation("ShippingAddress", fields: [shippingAddressId], references: [id])
+  shippingAddressId String      @map("shipping_address_id")
+  payment           Payment?
+  paymentId         String?     @unique @map("payment_id")
+  createdAt         DateTime    @default(now()) @map("created_at")
+  updatedAt         DateTime    @updatedAt @map("updated_at")
 
-  @@index([userId]) //users orders history
-  @@index([status]) // For order status filtering or for admin order management
-  @@index([createdAt]) // For sorting orders by date for time base report
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
   @@map("orders")
 }
 
 model OrderItem {
   id        String         @id @default(uuid()) @map("order_item_id")
-  order     Order          @relation(fields: [orderId], references: [id])
+  order     Order          @relation("OrderItems", fields: [orderId], references: [id], onDelete: Cascade)
   orderId   String         @map("order_id")
-  variant   ProductVariant @relation(fields: [variantId], references: [id])
+  variant   ProductVariant @relation(fields: [variantId], references: [id], onDelete: Restrict)
   variantId String         @map("variant_id")
   quantity  Int
-  price     Float
+  price     Decimal
   createdAt DateTime       @default(now()) @map("created_at")
-  updatedAt DateTime       @updatedAt @map("updated_at")
 
+  @@index([orderId])
+  @@index([variantId])
   @@map("order_items")
+}
+
+model Payment {
+  id              String        @id @default(uuid()) @map("payment_id")
+  order           Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId         String        @unique @map("order_id")
+  paymentMethod   PaymentMethod @map("payment_method")
+  transactionId   String        @unique @map("transaction_id")
+  amount          Decimal
+  status          PaymentStatus @default(PENDING)
+  gatewayResponse Json?
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  @@index([transactionId])
+  @@map("payments")
+}
+
+model Address {
+  id     String @id @default(uuid()) @map("address_id")
+  userId Int    @map("user_id")
+  user   User   @relation(fields: [userId], references: [id])
+
+  fullName       String   @map("full_name")
+  addresLine1    String   @map("address_line_1")
+  addresLine2    String?  @map("address_line_2") //optional
+  city           String
+  state          String
+  postalCode     String   @map("postal_code")
+  phoneNumber    String   @map("phone_number")
+  shippingOrders Order[]  @relation("ShippingAddress")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@map("addresses")
+}
+
+enum PaymentStatus {
+  SUCCESS
+  FAILED
+  PENDING
 }
 
 enum Gender {
@@ -226,6 +271,7 @@ model User {
   Cart         Cart[]
   Rating       Rating[]
   Order        Order[]
+  Address      Address[]
 }
 
 // This is temperory for storing otp and email
