@@ -7,12 +7,12 @@ const {
 } = require("../../adminControllers/product/AddToCart");
 const authMiddleware = require("../../controllers/refresh-token"); /* do i need this middleware */
 
-router.post("/cart", AddTOCart);
+router.post("/cart", authMiddleware, AddTOCart);
 
 /* get cart items  by userId*/
-router.get("/cart/:userId", getCartItems);
+router.get("/cart/:userId", authMiddleware, getCartItems);
 
 /* delete an item from cart using cartId */
-router.delete("/cart/:cartId", removeCartItem);
+router.delete("/cart/:variantId", authMiddleware, removeCartItem);
 
 module.exports = router;

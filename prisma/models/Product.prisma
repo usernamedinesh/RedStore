@@ -107,16 +107,20 @@ model Rating {
 }
 
 model Order {
-    id              String        @id @default(uuid()) @map("order_id")
-    user            User          @relation(fields: [userId], references: [id])
-    userId          Int           @map("user_id")
-    items           OrderItem[]
-    totalAmount     Float         @map("total_amount")
-    status          OrderStatus   @default(PENDING)
-    paymentMethod   PaymentMethod
-    shippingAddress Json          @map("shipping_address")
-    createdAt       DateTime      @default(now()) @map("created_at")
-    updatedAt       DateTime      @updatedAt @map("updated_at")
+    id     String @id @default(uuid()) @map("order_id")
+    user   User   @relation(fields: [userId], references: [id])
+    userId Int    @map("user_id")
+
+    items             OrderItem[]
+    totalAmount       Float       @map("total_amount")
+    status            OrderStatus @default(PENDING)
+    // paymentMethod     PaymentMethod // may be i dont need here 
+    shippingAddressId String      @map("shiping_address_id")
+    shippingAddress   Address     @relation("ShippingAddress", fields: [shippingAddressId], references: [id])
+    payment           Payment
+
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
 
     @@index([userId]) //users orders history
     @@index([status]) // For order status filtering or for admin order management
@@ -135,7 +139,54 @@ model OrderItem {
     createdAt DateTime       @default(now()) @map("created_at")
     updatedAt DateTime       @updatedAt @map("updated_at")
 
+    @@index([orderId])
+    @@index([variantId])
     @@map("order_items")
+}
+
+model Payment {
+    id      String @id @default(uuid()) @map("payment_id")
+    orderId String @unique @map("order_id")
+    order   Order  @relation(fields: [orderId], references: [id])
+
+    paymentMethod PaymentMethod @map("payment_method")
+    transactionId String        @unique @map("transaction_id")
+    amount        Float         @map("amount")
+    status        paymentStatus @map("status")
+
+    gatewayResponse Json?    @map("gateway_response") //For stroing raw response from payment gateway
+    createdAt       DateTime @default(now()) @map("created_at")
+    updatedAt       DateTime @updatedAt @map("updated_at")
+
+    @@index([orderId])
+    @@index([transactionId])
+    @@map("payments")
+}
+
+model Address {
+    id     String @id @default(uuid()) @map("address_id")
+    userId Int    @map("user_id")
+    user   User   @relation(fields: [userId], references: [id])
+
+    fullName       String   @map("full_name")
+    addresLine1    String   @map("address_line_1")
+    addresLine2    String?  @map("address_line_2") //optional
+    city           String
+    state          String
+    postalCode     String   @map("postal_code")
+    phoneNumber    String   @map("phone_number")
+    shippingOrders Order[]  @relation("ShippingAddress")
+    createdAt      DateTime @default(now()) @map("created_at")
+    updatedAt      DateTime @updatedAt @map("updated_at")
+
+    @@index([userId])
+    @@map("addresses")
+}
+
+enum paymentStatus {
+    SUCCESS
+    FAILED
+    PENDING
 }
 
 enum Gender {

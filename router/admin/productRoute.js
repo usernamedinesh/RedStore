@@ -23,7 +23,7 @@ router.post("/category", authMiddleware, createCategory);
 
 /* get all product */
 /* axios.get(`/api/products?page=${pagination.page}&limit=${pagination.limit}`); */
-/*TEST: GET /products?page=2&limit=15 */
+/*TEST: GET /product?page=2&limit=15 */
 router.get("/product", authMiddleware, getAllProducts);
 
 /* get single proudct */

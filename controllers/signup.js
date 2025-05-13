@@ -15,7 +15,7 @@ const { isOtpExpired } = require("../utils/otpExpiration");
 const { isPhone, isEmail } = require("../validator/emailPhoneValidator");
 
 const userSchema = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30).required(),
+  name: Joi.string().min(3).max(30).required(),
   password: Joi.string()
     .min(8)
     .max(30)

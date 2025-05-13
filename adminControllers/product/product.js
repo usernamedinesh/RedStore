@@ -108,7 +108,6 @@ exports.createProduct = async (req, res, next) => {
       !basePrice ||
       !categoryName ||
       !brandName ||
-      !images ||
       !variants.length
     ) {
       return next(new Error("All fields are required"));
@@ -212,6 +211,11 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
           variants: {
             select: {
               id: true,
+              size: true,
+              color: true,
+              price: true,
+              stock: true,
+              sku: true,
               images: { select: { url: true } },
             },
           },
