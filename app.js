@@ -3,6 +3,7 @@ const errorHandler = require("./middleware/errorHandler");
 const userRoute = require("./router/user");
 const adminRoute = require("./router/admin/user");
 const adminProductRoute = require("./router/admin/productRoute");
+const addressRoute = require("./router/order");
 const adminCart = require("./router/admin/addTocart");
 const notFoundHandler = require("./middleware/notFound");
 const corsMiddleware = require("./middleware/cors");
@@ -19,6 +20,7 @@ app.use(passport.initialize());
 app.use(corsMiddleware);
 
 app.use("/api", userRoute);
+app.use("/api/user", addressRoute);
 app.use("/admin", adminRoute, adminProductRoute, adminCart);
 
 app.use(notFoundHandler);

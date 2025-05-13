@@ -13,7 +13,7 @@ POST /api/address
     "addressLine2": "Apt 4B",
     "city": "Tamulpur",
     "state": "Assam",
-    "pin": "10001",
+    "postalCode": "10001",
     "phoneNumber": "+1-555-555-5555"
   }
 }
