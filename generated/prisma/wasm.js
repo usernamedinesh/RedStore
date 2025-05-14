@@ -117,17 +117,14 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.CartItemScalarFieldEnum = {
+exports.Prisma.CheckoutItemScalarFieldEnum = {
   id: 'id',
+  userId: 'userId',
   quantity: 'quantity',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  userId: 'userId',
-  productId: 'productId',
-  variantName: 'variantName',
-  variantOption: 'variantOption',
-  variantSelection: 'variantSelection',
-  variantKey: 'variantKey'
+  variantId: 'variantId',
+  expiresAt: 'expiresAt'
 };
 
 exports.Prisma.BrandScalarFieldEnum = {
@@ -278,15 +275,15 @@ exports.Prisma.QueryMode = {
   insensitive: 'insensitive'
 };
 
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+
 exports.Prisma.JsonNullValueFilter = {
   DbNull: Prisma.DbNull,
   JsonNull: Prisma.JsonNull,
   AnyNull: Prisma.AnyNull
-};
-
-exports.Prisma.NullsOrder = {
-  first: 'first',
-  last: 'last'
 };
 exports.Gender = exports.$Enums.Gender = {
   MEN: 'MEN',
@@ -324,7 +321,7 @@ exports.UserRole = exports.$Enums.UserRole = {
 };
 
 exports.Prisma.ModelName = {
-  CartItem: 'CartItem',
+  CheckoutItem: 'CheckoutItem',
   Brand: 'Brand',
   Category: 'Category',
   CategoryBrand: 'CategoryBrand',

@@ -16,6 +16,14 @@ const isOtpExpired = (expiresAt) => {
   return new Date() > new Date(expiresAt);
 };
 
+const calculateExpirationTime = () => {
+  const now = new Date();
+  // Add 24 hours in milliseconds (24 hours * 60 minutes/hour * 60 seconds/minute * 1000 milliseconds/second)
+  const expiresAt = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+  return expiresAt;
+};
+
 module.exports = {
   isOtpExpired,
+  calculateExpirationTime,
 };
