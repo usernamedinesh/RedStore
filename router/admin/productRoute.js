@@ -9,6 +9,7 @@ const {
   removeProduct,
   deleteSingleVariants,
   getCategoryAndBrand,
+  getProductByOwer,
 } = require("../../adminControllers/product/product");
 const authMiddleware = require("../../controllers/refresh-token");
 
@@ -34,5 +35,7 @@ router.delete("/product/:id", authMiddleware, removeProduct);
 
 // delete an variant
 router.delete("variants/:variantId", deleteSingleVariants);
+
+router.get("/my-product/:ownerId", getProductByOwer);
 
 module.exports = router;

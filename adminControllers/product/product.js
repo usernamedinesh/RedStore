@@ -310,6 +310,67 @@ exports.SingleProduct = catchAsync(async (req, res, next) => {
   }
 });
 
+/* prouduct fetched by owner of the product */
+exports.getProductByOwer = catchAsync(async (req, res, next) => {
+  const { ownerId } = req.params;
+  if (!ownerId) {
+    return next(new Error("OwnerId is required !"));
+  }
+  try {
+    const products = await prisma.product.findMany({
+      where: { ownerId: Number(ownerId) },
+      include: {
+        owner: true, // Include the owner details if needed
+        category: true, // Optionally include related category
+        brand: true, // Optionally include related brand
+        variants: true, // Optionally include product variants
+      },
+    });
+
+    if (!products.length) {
+      return res.json({
+        success: true,
+        message: "No products found for this owner",
+        owner: null,
+        data: [],
+      });
+    }
+
+    const owner = {
+      name: products[0].owner.name,
+      email: products[0].owner.email,
+    };
+
+    const simplifiedProducts = products.map((product) => ({
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      gender: product.gender,
+      basePrice: product.basePrice,
+      thumnailImage: product.thumnailImage,
+      category: product.category.name,
+      brand: product.brand.name,
+      variants: product.variants.map((v) => ({
+        size: v.size,
+        color: v.color,
+        stock: v.stock,
+        price: v.price,
+        sku: v.sku,
+      })),
+    }));
+
+    successResponse(
+      res,
+      { owner, simplifiedProducts },
+      "my product fetched successfully",
+      200,
+    );
+  } catch (error) {
+    console.error("Error in fecthing my products");
+    next(error);
+  }
+});
+
 exports.removeProduct = catchAsync(async (req, res, next) => {
   try {
     /*
