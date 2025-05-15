@@ -103,6 +103,15 @@ exports.createProduct = async (req, res, next) => {
     // }
     const { userId } = req.params;
 
+    /* check userId is valid or not */
+
+    const validUserId = await prisma.productOwner.findUnique({
+      where: { id: Number(userId) },
+    });
+    if (!userId || !validUserId) {
+      return next(new Error("OwnerId is needed!"));
+    }
+
     // Validate required fields
     if (
       !name ||
@@ -112,7 +121,7 @@ exports.createProduct = async (req, res, next) => {
       !brandName ||
       !variants.length
     ) {
-      return next(new Error("All fields are required"));
+      return next(new Error("All fields are required bro"));
     }
 
     // Find or create category
@@ -135,7 +144,7 @@ exports.createProduct = async (req, res, next) => {
         data: {
           name,
           description,
-          owerId: userId,
+          ownerId: Number(userId),
           gender,
           basePrice,
           categoryId: category.id,

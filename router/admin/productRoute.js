@@ -13,7 +13,7 @@ const {
 const authMiddleware = require("../../controllers/refresh-token");
 
 /* create product */
-router.post("/product", authMiddleware, createProduct);
+router.post("/product/:userId", createProduct);
 
 /* get category or brand */
 router.get("/category", authMiddleware, getCategoryAndBrand);
