@@ -87,6 +87,7 @@ exports.createProduct = async (req, res, next) => {
     /*
      * PICK AND RANDOM IMAGE FROM IMAGES ARRAY
      */
+
     let AllImage = variants.flatMap((v) => v.images || []);
     const randomImage =
       AllImage.length > 0
@@ -94,12 +95,13 @@ exports.createProduct = async (req, res, next) => {
         : null;
 
     // Check if user is admin
-    const id = req.user.id;
-    const user = await prisma.user.findUnique({ where: { id } });
-
-    if (user.userRole !== "ADMIN") {
-      return next(new Error("Only admin can perform this operation!"));
-    }
+    // const id = req.user.id;
+    // const user = await prisma.user.findUnique({ where: { id } });
+    //
+    // if (user.userRole !== "ADMIN") {
+    //   return next(new Error("Only admin can perform this operation!"));
+    // }
+    const { userId } = req.params;
 
     // Validate required fields
     if (
@@ -133,6 +135,7 @@ exports.createProduct = async (req, res, next) => {
         data: {
           name,
           description,
+          owerId: userId,
           gender,
           basePrice,
           categoryId: category.id,
@@ -208,6 +211,7 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
           name: true,
           category: { select: { name: true } },
           brand: { select: { name: true } },
+          ower: true,
           variants: {
             select: {
               id: true,

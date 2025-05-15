@@ -19,6 +19,16 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type CheckoutItem = $Result.DefaultSelection<Prisma.$CheckoutItemPayload>
 /**
+ * Model Message
+ * 
+ */
+export type Message = $Result.DefaultSelection<Prisma.$MessagePayload>
+/**
+ * Model ProductOwner
+ * 
+ */
+export type ProductOwner = $Result.DefaultSelection<Prisma.$ProductOwnerPayload>
+/**
  * Model Brand
  * 
  */
@@ -93,7 +103,17 @@ export type TempOtp = $Result.DefaultSelection<Prisma.$TempOtpPayload>
  * Enums
  */
 export namespace $Enums {
-  export const PaymentStatus: {
+  export const MessasageType: {
+  TEXT: 'TEXT',
+  IMAGE: 'IMAGE',
+  VIDEO: 'VIDEO',
+  AUDIO: 'AUDIO'
+};
+
+export type MessasageType = (typeof MessasageType)[keyof typeof MessasageType]
+
+
+export const PaymentStatus: {
   SUCCESS: 'SUCCESS',
   FAILED: 'FAILED',
   PENDING: 'PENDING'
@@ -143,6 +163,10 @@ export const UserRole: {
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 }
+
+export type MessasageType = $Enums.MessasageType
+
+export const MessasageType: typeof $Enums.MessasageType
 
 export type PaymentStatus = $Enums.PaymentStatus
 
@@ -298,6 +322,26 @@ export class PrismaClient<
     * ```
     */
   get checkoutItem(): Prisma.CheckoutItemDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.message`: Exposes CRUD operations for the **Message** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Messages
+    * const messages = await prisma.message.findMany()
+    * ```
+    */
+  get message(): Prisma.MessageDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.productOwner`: Exposes CRUD operations for the **ProductOwner** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProductOwners
+    * const productOwners = await prisma.productOwner.findMany()
+    * ```
+    */
+  get productOwner(): Prisma.ProductOwnerDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.brand`: Exposes CRUD operations for the **Brand** model.
@@ -879,6 +923,8 @@ export namespace Prisma {
 
   export const ModelName: {
     CheckoutItem: 'CheckoutItem',
+    Message: 'Message',
+    ProductOwner: 'ProductOwner',
     Brand: 'Brand',
     Category: 'Category',
     CategoryBrand: 'CategoryBrand',
@@ -911,7 +957,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "checkoutItem" | "brand" | "category" | "categoryBrand" | "product" | "cart" | "productVariant" | "variantImage" | "rating" | "order" | "orderItem" | "payment" | "address" | "user" | "tempOtp"
+      modelProps: "checkoutItem" | "message" | "productOwner" | "brand" | "category" | "categoryBrand" | "product" | "cart" | "productVariant" | "variantImage" | "rating" | "order" | "orderItem" | "payment" | "address" | "user" | "tempOtp"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -986,6 +1032,154 @@ export namespace Prisma {
           count: {
             args: Prisma.CheckoutItemCountArgs<ExtArgs>
             result: $Utils.Optional<CheckoutItemCountAggregateOutputType> | number
+          }
+        }
+      }
+      Message: {
+        payload: Prisma.$MessagePayload<ExtArgs>
+        fields: Prisma.MessageFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MessageFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MessageFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagePayload>
+          }
+          findFirst: {
+            args: Prisma.MessageFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MessageFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagePayload>
+          }
+          findMany: {
+            args: Prisma.MessageFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagePayload>[]
+          }
+          create: {
+            args: Prisma.MessageCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagePayload>
+          }
+          createMany: {
+            args: Prisma.MessageCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MessageCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagePayload>[]
+          }
+          delete: {
+            args: Prisma.MessageDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagePayload>
+          }
+          update: {
+            args: Prisma.MessageUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagePayload>
+          }
+          deleteMany: {
+            args: Prisma.MessageDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MessageUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MessageUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagePayload>[]
+          }
+          upsert: {
+            args: Prisma.MessageUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MessagePayload>
+          }
+          aggregate: {
+            args: Prisma.MessageAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMessage>
+          }
+          groupBy: {
+            args: Prisma.MessageGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MessageGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MessageCountArgs<ExtArgs>
+            result: $Utils.Optional<MessageCountAggregateOutputType> | number
+          }
+        }
+      }
+      ProductOwner: {
+        payload: Prisma.$ProductOwnerPayload<ExtArgs>
+        fields: Prisma.ProductOwnerFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProductOwnerFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductOwnerPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProductOwnerFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductOwnerPayload>
+          }
+          findFirst: {
+            args: Prisma.ProductOwnerFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductOwnerPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProductOwnerFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductOwnerPayload>
+          }
+          findMany: {
+            args: Prisma.ProductOwnerFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductOwnerPayload>[]
+          }
+          create: {
+            args: Prisma.ProductOwnerCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductOwnerPayload>
+          }
+          createMany: {
+            args: Prisma.ProductOwnerCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProductOwnerCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductOwnerPayload>[]
+          }
+          delete: {
+            args: Prisma.ProductOwnerDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductOwnerPayload>
+          }
+          update: {
+            args: Prisma.ProductOwnerUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductOwnerPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProductOwnerDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProductOwnerUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProductOwnerUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductOwnerPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProductOwnerUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductOwnerPayload>
+          }
+          aggregate: {
+            args: Prisma.ProductOwnerAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProductOwner>
+          }
+          groupBy: {
+            args: Prisma.ProductOwnerGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProductOwnerGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProductOwnerCountArgs<ExtArgs>
+            result: $Utils.Optional<ProductOwnerCountAggregateOutputType> | number
           }
         }
       }
@@ -2110,6 +2304,8 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     checkoutItem?: CheckoutItemOmit
+    message?: MessageOmit
+    productOwner?: ProductOwnerOmit
     brand?: BrandOmit
     category?: CategoryOmit
     categoryBrand?: CategoryBrandOmit
@@ -2211,6 +2407,55 @@ export namespace Prisma {
   /**
    * Count Types
    */
+
+
+  /**
+   * Count Type ProductOwnerCountOutputType
+   */
+
+  export type ProductOwnerCountOutputType = {
+    sentMessages: number
+    receivedMessages: number
+    Product: number
+  }
+
+  export type ProductOwnerCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sentMessages?: boolean | ProductOwnerCountOutputTypeCountSentMessagesArgs
+    receivedMessages?: boolean | ProductOwnerCountOutputTypeCountReceivedMessagesArgs
+    Product?: boolean | ProductOwnerCountOutputTypeCountProductArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ProductOwnerCountOutputType without action
+   */
+  export type ProductOwnerCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOwnerCountOutputType
+     */
+    select?: ProductOwnerCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ProductOwnerCountOutputType without action
+   */
+  export type ProductOwnerCountOutputTypeCountSentMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MessageWhereInput
+  }
+
+  /**
+   * ProductOwnerCountOutputType without action
+   */
+  export type ProductOwnerCountOutputTypeCountReceivedMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MessageWhereInput
+  }
+
+  /**
+   * ProductOwnerCountOutputType without action
+   */
+  export type ProductOwnerCountOutputTypeCountProductArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductWhereInput
+  }
 
 
   /**
@@ -2468,6 +2713,8 @@ export namespace Prisma {
 
   export type UserCountOutputType = {
     cart: number
+    sentMessages: number
+    receivedMessages: number
     CheckoutItem: number
     Rating: number
     Order: number
@@ -2476,6 +2723,8 @@ export namespace Prisma {
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     cart?: boolean | UserCountOutputTypeCountCartArgs
+    sentMessages?: boolean | UserCountOutputTypeCountSentMessagesArgs
+    receivedMessages?: boolean | UserCountOutputTypeCountReceivedMessagesArgs
     CheckoutItem?: boolean | UserCountOutputTypeCountCheckoutItemArgs
     Rating?: boolean | UserCountOutputTypeCountRatingArgs
     Order?: boolean | UserCountOutputTypeCountOrderArgs
@@ -2498,6 +2747,20 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountCartArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CartWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountSentMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MessageWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountReceivedMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MessageWhereInput
   }
 
   /**
@@ -3660,6 +3923,2478 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: CheckoutItemInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Message
+   */
+
+  export type AggregateMessage = {
+    _count: MessageCountAggregateOutputType | null
+    _avg: MessageAvgAggregateOutputType | null
+    _sum: MessageSumAggregateOutputType | null
+    _min: MessageMinAggregateOutputType | null
+    _max: MessageMaxAggregateOutputType | null
+  }
+
+  export type MessageAvgAggregateOutputType = {
+    id: number | null
+    senderUserId: number | null
+    receiverUserId: number | null
+    senderOwnerId: number | null
+    receiverOwnerId: number | null
+  }
+
+  export type MessageSumAggregateOutputType = {
+    id: number | null
+    senderUserId: number | null
+    receiverUserId: number | null
+    senderOwnerId: number | null
+    receiverOwnerId: number | null
+  }
+
+  export type MessageMinAggregateOutputType = {
+    id: number | null
+    type: $Enums.MessasageType | null
+    sentAt: Date | null
+    text: string | null
+    fileUrl: string | null
+    senderUserId: number | null
+    receiverUserId: number | null
+    senderOwnerId: number | null
+    receiverOwnerId: number | null
+  }
+
+  export type MessageMaxAggregateOutputType = {
+    id: number | null
+    type: $Enums.MessasageType | null
+    sentAt: Date | null
+    text: string | null
+    fileUrl: string | null
+    senderUserId: number | null
+    receiverUserId: number | null
+    senderOwnerId: number | null
+    receiverOwnerId: number | null
+  }
+
+  export type MessageCountAggregateOutputType = {
+    id: number
+    type: number
+    sentAt: number
+    text: number
+    fileUrl: number
+    senderUserId: number
+    receiverUserId: number
+    senderOwnerId: number
+    receiverOwnerId: number
+    _all: number
+  }
+
+
+  export type MessageAvgAggregateInputType = {
+    id?: true
+    senderUserId?: true
+    receiverUserId?: true
+    senderOwnerId?: true
+    receiverOwnerId?: true
+  }
+
+  export type MessageSumAggregateInputType = {
+    id?: true
+    senderUserId?: true
+    receiverUserId?: true
+    senderOwnerId?: true
+    receiverOwnerId?: true
+  }
+
+  export type MessageMinAggregateInputType = {
+    id?: true
+    type?: true
+    sentAt?: true
+    text?: true
+    fileUrl?: true
+    senderUserId?: true
+    receiverUserId?: true
+    senderOwnerId?: true
+    receiverOwnerId?: true
+  }
+
+  export type MessageMaxAggregateInputType = {
+    id?: true
+    type?: true
+    sentAt?: true
+    text?: true
+    fileUrl?: true
+    senderUserId?: true
+    receiverUserId?: true
+    senderOwnerId?: true
+    receiverOwnerId?: true
+  }
+
+  export type MessageCountAggregateInputType = {
+    id?: true
+    type?: true
+    sentAt?: true
+    text?: true
+    fileUrl?: true
+    senderUserId?: true
+    receiverUserId?: true
+    senderOwnerId?: true
+    receiverOwnerId?: true
+    _all?: true
+  }
+
+  export type MessageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Message to aggregate.
+     */
+    where?: MessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Messages to fetch.
+     */
+    orderBy?: MessageOrderByWithRelationInput | MessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Messages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Messages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Messages
+    **/
+    _count?: true | MessageCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MessageAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MessageSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MessageMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MessageMaxAggregateInputType
+  }
+
+  export type GetMessageAggregateType<T extends MessageAggregateArgs> = {
+        [P in keyof T & keyof AggregateMessage]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMessage[P]>
+      : GetScalarType<T[P], AggregateMessage[P]>
+  }
+
+
+
+
+  export type MessageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MessageWhereInput
+    orderBy?: MessageOrderByWithAggregationInput | MessageOrderByWithAggregationInput[]
+    by: MessageScalarFieldEnum[] | MessageScalarFieldEnum
+    having?: MessageScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MessageCountAggregateInputType | true
+    _avg?: MessageAvgAggregateInputType
+    _sum?: MessageSumAggregateInputType
+    _min?: MessageMinAggregateInputType
+    _max?: MessageMaxAggregateInputType
+  }
+
+  export type MessageGroupByOutputType = {
+    id: number
+    type: $Enums.MessasageType
+    sentAt: Date
+    text: string | null
+    fileUrl: string | null
+    senderUserId: number | null
+    receiverUserId: number | null
+    senderOwnerId: number | null
+    receiverOwnerId: number | null
+    _count: MessageCountAggregateOutputType | null
+    _avg: MessageAvgAggregateOutputType | null
+    _sum: MessageSumAggregateOutputType | null
+    _min: MessageMinAggregateOutputType | null
+    _max: MessageMaxAggregateOutputType | null
+  }
+
+  type GetMessageGroupByPayload<T extends MessageGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MessageGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MessageGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MessageGroupByOutputType[P]>
+            : GetScalarType<T[P], MessageGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MessageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    type?: boolean
+    sentAt?: boolean
+    text?: boolean
+    fileUrl?: boolean
+    senderUserId?: boolean
+    receiverUserId?: boolean
+    senderOwnerId?: boolean
+    receiverOwnerId?: boolean
+    senderUser?: boolean | Message$senderUserArgs<ExtArgs>
+    receiverUser?: boolean | Message$receiverUserArgs<ExtArgs>
+    senderOwner?: boolean | Message$senderOwnerArgs<ExtArgs>
+    receiverOwner?: boolean | Message$receiverOwnerArgs<ExtArgs>
+  }, ExtArgs["result"]["message"]>
+
+  export type MessageSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    type?: boolean
+    sentAt?: boolean
+    text?: boolean
+    fileUrl?: boolean
+    senderUserId?: boolean
+    receiverUserId?: boolean
+    senderOwnerId?: boolean
+    receiverOwnerId?: boolean
+    senderUser?: boolean | Message$senderUserArgs<ExtArgs>
+    receiverUser?: boolean | Message$receiverUserArgs<ExtArgs>
+    senderOwner?: boolean | Message$senderOwnerArgs<ExtArgs>
+    receiverOwner?: boolean | Message$receiverOwnerArgs<ExtArgs>
+  }, ExtArgs["result"]["message"]>
+
+  export type MessageSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    type?: boolean
+    sentAt?: boolean
+    text?: boolean
+    fileUrl?: boolean
+    senderUserId?: boolean
+    receiverUserId?: boolean
+    senderOwnerId?: boolean
+    receiverOwnerId?: boolean
+    senderUser?: boolean | Message$senderUserArgs<ExtArgs>
+    receiverUser?: boolean | Message$receiverUserArgs<ExtArgs>
+    senderOwner?: boolean | Message$senderOwnerArgs<ExtArgs>
+    receiverOwner?: boolean | Message$receiverOwnerArgs<ExtArgs>
+  }, ExtArgs["result"]["message"]>
+
+  export type MessageSelectScalar = {
+    id?: boolean
+    type?: boolean
+    sentAt?: boolean
+    text?: boolean
+    fileUrl?: boolean
+    senderUserId?: boolean
+    receiverUserId?: boolean
+    senderOwnerId?: boolean
+    receiverOwnerId?: boolean
+  }
+
+  export type MessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "sentAt" | "text" | "fileUrl" | "senderUserId" | "receiverUserId" | "senderOwnerId" | "receiverOwnerId", ExtArgs["result"]["message"]>
+  export type MessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    senderUser?: boolean | Message$senderUserArgs<ExtArgs>
+    receiverUser?: boolean | Message$receiverUserArgs<ExtArgs>
+    senderOwner?: boolean | Message$senderOwnerArgs<ExtArgs>
+    receiverOwner?: boolean | Message$receiverOwnerArgs<ExtArgs>
+  }
+  export type MessageIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    senderUser?: boolean | Message$senderUserArgs<ExtArgs>
+    receiverUser?: boolean | Message$receiverUserArgs<ExtArgs>
+    senderOwner?: boolean | Message$senderOwnerArgs<ExtArgs>
+    receiverOwner?: boolean | Message$receiverOwnerArgs<ExtArgs>
+  }
+  export type MessageIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    senderUser?: boolean | Message$senderUserArgs<ExtArgs>
+    receiverUser?: boolean | Message$receiverUserArgs<ExtArgs>
+    senderOwner?: boolean | Message$senderOwnerArgs<ExtArgs>
+    receiverOwner?: boolean | Message$receiverOwnerArgs<ExtArgs>
+  }
+
+  export type $MessagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Message"
+    objects: {
+      senderUser: Prisma.$UserPayload<ExtArgs> | null
+      receiverUser: Prisma.$UserPayload<ExtArgs> | null
+      senderOwner: Prisma.$ProductOwnerPayload<ExtArgs> | null
+      receiverOwner: Prisma.$ProductOwnerPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      type: $Enums.MessasageType
+      sentAt: Date
+      text: string | null
+      fileUrl: string | null
+      senderUserId: number | null
+      receiverUserId: number | null
+      senderOwnerId: number | null
+      receiverOwnerId: number | null
+    }, ExtArgs["result"]["message"]>
+    composites: {}
+  }
+
+  type MessageGetPayload<S extends boolean | null | undefined | MessageDefaultArgs> = $Result.GetResult<Prisma.$MessagePayload, S>
+
+  type MessageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MessageFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MessageCountAggregateInputType | true
+    }
+
+  export interface MessageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Message'], meta: { name: 'Message' } }
+    /**
+     * Find zero or one Message that matches the filter.
+     * @param {MessageFindUniqueArgs} args - Arguments to find a Message
+     * @example
+     * // Get one Message
+     * const message = await prisma.message.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MessageFindUniqueArgs>(args: SelectSubset<T, MessageFindUniqueArgs<ExtArgs>>): Prisma__MessageClient<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Message that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MessageFindUniqueOrThrowArgs} args - Arguments to find a Message
+     * @example
+     * // Get one Message
+     * const message = await prisma.message.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MessageFindUniqueOrThrowArgs>(args: SelectSubset<T, MessageFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MessageClient<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Message that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessageFindFirstArgs} args - Arguments to find a Message
+     * @example
+     * // Get one Message
+     * const message = await prisma.message.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MessageFindFirstArgs>(args?: SelectSubset<T, MessageFindFirstArgs<ExtArgs>>): Prisma__MessageClient<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Message that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessageFindFirstOrThrowArgs} args - Arguments to find a Message
+     * @example
+     * // Get one Message
+     * const message = await prisma.message.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MessageFindFirstOrThrowArgs>(args?: SelectSubset<T, MessageFindFirstOrThrowArgs<ExtArgs>>): Prisma__MessageClient<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Messages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessageFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Messages
+     * const messages = await prisma.message.findMany()
+     * 
+     * // Get first 10 Messages
+     * const messages = await prisma.message.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const messageWithIdOnly = await prisma.message.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MessageFindManyArgs>(args?: SelectSubset<T, MessageFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Message.
+     * @param {MessageCreateArgs} args - Arguments to create a Message.
+     * @example
+     * // Create one Message
+     * const Message = await prisma.message.create({
+     *   data: {
+     *     // ... data to create a Message
+     *   }
+     * })
+     * 
+     */
+    create<T extends MessageCreateArgs>(args: SelectSubset<T, MessageCreateArgs<ExtArgs>>): Prisma__MessageClient<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Messages.
+     * @param {MessageCreateManyArgs} args - Arguments to create many Messages.
+     * @example
+     * // Create many Messages
+     * const message = await prisma.message.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MessageCreateManyArgs>(args?: SelectSubset<T, MessageCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Messages and returns the data saved in the database.
+     * @param {MessageCreateManyAndReturnArgs} args - Arguments to create many Messages.
+     * @example
+     * // Create many Messages
+     * const message = await prisma.message.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Messages and only return the `id`
+     * const messageWithIdOnly = await prisma.message.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MessageCreateManyAndReturnArgs>(args?: SelectSubset<T, MessageCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Message.
+     * @param {MessageDeleteArgs} args - Arguments to delete one Message.
+     * @example
+     * // Delete one Message
+     * const Message = await prisma.message.delete({
+     *   where: {
+     *     // ... filter to delete one Message
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MessageDeleteArgs>(args: SelectSubset<T, MessageDeleteArgs<ExtArgs>>): Prisma__MessageClient<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Message.
+     * @param {MessageUpdateArgs} args - Arguments to update one Message.
+     * @example
+     * // Update one Message
+     * const message = await prisma.message.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MessageUpdateArgs>(args: SelectSubset<T, MessageUpdateArgs<ExtArgs>>): Prisma__MessageClient<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Messages.
+     * @param {MessageDeleteManyArgs} args - Arguments to filter Messages to delete.
+     * @example
+     * // Delete a few Messages
+     * const { count } = await prisma.message.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MessageDeleteManyArgs>(args?: SelectSubset<T, MessageDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Messages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Messages
+     * const message = await prisma.message.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MessageUpdateManyArgs>(args: SelectSubset<T, MessageUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Messages and returns the data updated in the database.
+     * @param {MessageUpdateManyAndReturnArgs} args - Arguments to update many Messages.
+     * @example
+     * // Update many Messages
+     * const message = await prisma.message.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Messages and only return the `id`
+     * const messageWithIdOnly = await prisma.message.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MessageUpdateManyAndReturnArgs>(args: SelectSubset<T, MessageUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Message.
+     * @param {MessageUpsertArgs} args - Arguments to update or create a Message.
+     * @example
+     * // Update or create a Message
+     * const message = await prisma.message.upsert({
+     *   create: {
+     *     // ... data to create a Message
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Message we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MessageUpsertArgs>(args: SelectSubset<T, MessageUpsertArgs<ExtArgs>>): Prisma__MessageClient<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Messages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessageCountArgs} args - Arguments to filter Messages to count.
+     * @example
+     * // Count the number of Messages
+     * const count = await prisma.message.count({
+     *   where: {
+     *     // ... the filter for the Messages we want to count
+     *   }
+     * })
+    **/
+    count<T extends MessageCountArgs>(
+      args?: Subset<T, MessageCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MessageCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Message.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MessageAggregateArgs>(args: Subset<T, MessageAggregateArgs>): Prisma.PrismaPromise<GetMessageAggregateType<T>>
+
+    /**
+     * Group by Message.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessageGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MessageGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MessageGroupByArgs['orderBy'] }
+        : { orderBy?: MessageGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MessageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMessageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Message model
+   */
+  readonly fields: MessageFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Message.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MessageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    senderUser<T extends Message$senderUserArgs<ExtArgs> = {}>(args?: Subset<T, Message$senderUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    receiverUser<T extends Message$receiverUserArgs<ExtArgs> = {}>(args?: Subset<T, Message$receiverUserArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    senderOwner<T extends Message$senderOwnerArgs<ExtArgs> = {}>(args?: Subset<T, Message$senderOwnerArgs<ExtArgs>>): Prisma__ProductOwnerClient<$Result.GetResult<Prisma.$ProductOwnerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    receiverOwner<T extends Message$receiverOwnerArgs<ExtArgs> = {}>(args?: Subset<T, Message$receiverOwnerArgs<ExtArgs>>): Prisma__ProductOwnerClient<$Result.GetResult<Prisma.$ProductOwnerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Message model
+   */
+  interface MessageFieldRefs {
+    readonly id: FieldRef<"Message", 'Int'>
+    readonly type: FieldRef<"Message", 'MessasageType'>
+    readonly sentAt: FieldRef<"Message", 'DateTime'>
+    readonly text: FieldRef<"Message", 'String'>
+    readonly fileUrl: FieldRef<"Message", 'String'>
+    readonly senderUserId: FieldRef<"Message", 'Int'>
+    readonly receiverUserId: FieldRef<"Message", 'Int'>
+    readonly senderOwnerId: FieldRef<"Message", 'Int'>
+    readonly receiverOwnerId: FieldRef<"Message", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Message findUnique
+   */
+  export type MessageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Message
+     */
+    select?: MessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Message
+     */
+    omit?: MessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageInclude<ExtArgs> | null
+    /**
+     * Filter, which Message to fetch.
+     */
+    where: MessageWhereUniqueInput
+  }
+
+  /**
+   * Message findUniqueOrThrow
+   */
+  export type MessageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Message
+     */
+    select?: MessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Message
+     */
+    omit?: MessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageInclude<ExtArgs> | null
+    /**
+     * Filter, which Message to fetch.
+     */
+    where: MessageWhereUniqueInput
+  }
+
+  /**
+   * Message findFirst
+   */
+  export type MessageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Message
+     */
+    select?: MessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Message
+     */
+    omit?: MessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageInclude<ExtArgs> | null
+    /**
+     * Filter, which Message to fetch.
+     */
+    where?: MessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Messages to fetch.
+     */
+    orderBy?: MessageOrderByWithRelationInput | MessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Messages.
+     */
+    cursor?: MessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Messages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Messages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Messages.
+     */
+    distinct?: MessageScalarFieldEnum | MessageScalarFieldEnum[]
+  }
+
+  /**
+   * Message findFirstOrThrow
+   */
+  export type MessageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Message
+     */
+    select?: MessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Message
+     */
+    omit?: MessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageInclude<ExtArgs> | null
+    /**
+     * Filter, which Message to fetch.
+     */
+    where?: MessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Messages to fetch.
+     */
+    orderBy?: MessageOrderByWithRelationInput | MessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Messages.
+     */
+    cursor?: MessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Messages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Messages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Messages.
+     */
+    distinct?: MessageScalarFieldEnum | MessageScalarFieldEnum[]
+  }
+
+  /**
+   * Message findMany
+   */
+  export type MessageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Message
+     */
+    select?: MessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Message
+     */
+    omit?: MessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageInclude<ExtArgs> | null
+    /**
+     * Filter, which Messages to fetch.
+     */
+    where?: MessageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Messages to fetch.
+     */
+    orderBy?: MessageOrderByWithRelationInput | MessageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Messages.
+     */
+    cursor?: MessageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Messages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Messages.
+     */
+    skip?: number
+    distinct?: MessageScalarFieldEnum | MessageScalarFieldEnum[]
+  }
+
+  /**
+   * Message create
+   */
+  export type MessageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Message
+     */
+    select?: MessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Message
+     */
+    omit?: MessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Message.
+     */
+    data: XOR<MessageCreateInput, MessageUncheckedCreateInput>
+  }
+
+  /**
+   * Message createMany
+   */
+  export type MessageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Messages.
+     */
+    data: MessageCreateManyInput | MessageCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Message createManyAndReturn
+   */
+  export type MessageCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Message
+     */
+    select?: MessageSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Message
+     */
+    omit?: MessageOmit<ExtArgs> | null
+    /**
+     * The data used to create many Messages.
+     */
+    data: MessageCreateManyInput | MessageCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Message update
+   */
+  export type MessageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Message
+     */
+    select?: MessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Message
+     */
+    omit?: MessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Message.
+     */
+    data: XOR<MessageUpdateInput, MessageUncheckedUpdateInput>
+    /**
+     * Choose, which Message to update.
+     */
+    where: MessageWhereUniqueInput
+  }
+
+  /**
+   * Message updateMany
+   */
+  export type MessageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Messages.
+     */
+    data: XOR<MessageUpdateManyMutationInput, MessageUncheckedUpdateManyInput>
+    /**
+     * Filter which Messages to update
+     */
+    where?: MessageWhereInput
+    /**
+     * Limit how many Messages to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Message updateManyAndReturn
+   */
+  export type MessageUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Message
+     */
+    select?: MessageSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Message
+     */
+    omit?: MessageOmit<ExtArgs> | null
+    /**
+     * The data used to update Messages.
+     */
+    data: XOR<MessageUpdateManyMutationInput, MessageUncheckedUpdateManyInput>
+    /**
+     * Filter which Messages to update
+     */
+    where?: MessageWhereInput
+    /**
+     * Limit how many Messages to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Message upsert
+   */
+  export type MessageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Message
+     */
+    select?: MessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Message
+     */
+    omit?: MessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Message to update in case it exists.
+     */
+    where: MessageWhereUniqueInput
+    /**
+     * In case the Message found by the `where` argument doesn't exist, create a new Message with this data.
+     */
+    create: XOR<MessageCreateInput, MessageUncheckedCreateInput>
+    /**
+     * In case the Message was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MessageUpdateInput, MessageUncheckedUpdateInput>
+  }
+
+  /**
+   * Message delete
+   */
+  export type MessageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Message
+     */
+    select?: MessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Message
+     */
+    omit?: MessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageInclude<ExtArgs> | null
+    /**
+     * Filter which Message to delete.
+     */
+    where: MessageWhereUniqueInput
+  }
+
+  /**
+   * Message deleteMany
+   */
+  export type MessageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Messages to delete
+     */
+    where?: MessageWhereInput
+    /**
+     * Limit how many Messages to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Message.senderUser
+   */
+  export type Message$senderUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Message.receiverUser
+   */
+  export type Message$receiverUserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the User
+     */
+    omit?: UserOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserInclude<ExtArgs> | null
+    where?: UserWhereInput
+  }
+
+  /**
+   * Message.senderOwner
+   */
+  export type Message$senderOwnerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOwner
+     */
+    select?: ProductOwnerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductOwner
+     */
+    omit?: ProductOwnerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductOwnerInclude<ExtArgs> | null
+    where?: ProductOwnerWhereInput
+  }
+
+  /**
+   * Message.receiverOwner
+   */
+  export type Message$receiverOwnerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOwner
+     */
+    select?: ProductOwnerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductOwner
+     */
+    omit?: ProductOwnerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductOwnerInclude<ExtArgs> | null
+    where?: ProductOwnerWhereInput
+  }
+
+  /**
+   * Message without action
+   */
+  export type MessageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Message
+     */
+    select?: MessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Message
+     */
+    omit?: MessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ProductOwner
+   */
+
+  export type AggregateProductOwner = {
+    _count: ProductOwnerCountAggregateOutputType | null
+    _avg: ProductOwnerAvgAggregateOutputType | null
+    _sum: ProductOwnerSumAggregateOutputType | null
+    _min: ProductOwnerMinAggregateOutputType | null
+    _max: ProductOwnerMaxAggregateOutputType | null
+  }
+
+  export type ProductOwnerAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type ProductOwnerSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type ProductOwnerMinAggregateOutputType = {
+    id: number | null
+    name: string | null
+    email: string | null
+    password: string | null
+    updatedAt: Date | null
+    createdAt: Date | null
+    token: string | null
+    isVerified: boolean | null
+    expiredAt: Date | null
+  }
+
+  export type ProductOwnerMaxAggregateOutputType = {
+    id: number | null
+    name: string | null
+    email: string | null
+    password: string | null
+    updatedAt: Date | null
+    createdAt: Date | null
+    token: string | null
+    isVerified: boolean | null
+    expiredAt: Date | null
+  }
+
+  export type ProductOwnerCountAggregateOutputType = {
+    id: number
+    name: number
+    email: number
+    password: number
+    updatedAt: number
+    createdAt: number
+    token: number
+    isVerified: number
+    expiredAt: number
+    _all: number
+  }
+
+
+  export type ProductOwnerAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type ProductOwnerSumAggregateInputType = {
+    id?: true
+  }
+
+  export type ProductOwnerMinAggregateInputType = {
+    id?: true
+    name?: true
+    email?: true
+    password?: true
+    updatedAt?: true
+    createdAt?: true
+    token?: true
+    isVerified?: true
+    expiredAt?: true
+  }
+
+  export type ProductOwnerMaxAggregateInputType = {
+    id?: true
+    name?: true
+    email?: true
+    password?: true
+    updatedAt?: true
+    createdAt?: true
+    token?: true
+    isVerified?: true
+    expiredAt?: true
+  }
+
+  export type ProductOwnerCountAggregateInputType = {
+    id?: true
+    name?: true
+    email?: true
+    password?: true
+    updatedAt?: true
+    createdAt?: true
+    token?: true
+    isVerified?: true
+    expiredAt?: true
+    _all?: true
+  }
+
+  export type ProductOwnerAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProductOwner to aggregate.
+     */
+    where?: ProductOwnerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductOwners to fetch.
+     */
+    orderBy?: ProductOwnerOrderByWithRelationInput | ProductOwnerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProductOwnerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductOwners from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductOwners.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProductOwners
+    **/
+    _count?: true | ProductOwnerCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ProductOwnerAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProductOwnerSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProductOwnerMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProductOwnerMaxAggregateInputType
+  }
+
+  export type GetProductOwnerAggregateType<T extends ProductOwnerAggregateArgs> = {
+        [P in keyof T & keyof AggregateProductOwner]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProductOwner[P]>
+      : GetScalarType<T[P], AggregateProductOwner[P]>
+  }
+
+
+
+
+  export type ProductOwnerGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductOwnerWhereInput
+    orderBy?: ProductOwnerOrderByWithAggregationInput | ProductOwnerOrderByWithAggregationInput[]
+    by: ProductOwnerScalarFieldEnum[] | ProductOwnerScalarFieldEnum
+    having?: ProductOwnerScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProductOwnerCountAggregateInputType | true
+    _avg?: ProductOwnerAvgAggregateInputType
+    _sum?: ProductOwnerSumAggregateInputType
+    _min?: ProductOwnerMinAggregateInputType
+    _max?: ProductOwnerMaxAggregateInputType
+  }
+
+  export type ProductOwnerGroupByOutputType = {
+    id: number
+    name: string | null
+    email: string | null
+    password: string | null
+    updatedAt: Date
+    createdAt: Date
+    token: string
+    isVerified: boolean
+    expiredAt: Date | null
+    _count: ProductOwnerCountAggregateOutputType | null
+    _avg: ProductOwnerAvgAggregateOutputType | null
+    _sum: ProductOwnerSumAggregateOutputType | null
+    _min: ProductOwnerMinAggregateOutputType | null
+    _max: ProductOwnerMaxAggregateOutputType | null
+  }
+
+  type GetProductOwnerGroupByPayload<T extends ProductOwnerGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProductOwnerGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProductOwnerGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProductOwnerGroupByOutputType[P]>
+            : GetScalarType<T[P], ProductOwnerGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProductOwnerSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    password?: boolean
+    updatedAt?: boolean
+    createdAt?: boolean
+    token?: boolean
+    isVerified?: boolean
+    expiredAt?: boolean
+    sentMessages?: boolean | ProductOwner$sentMessagesArgs<ExtArgs>
+    receivedMessages?: boolean | ProductOwner$receivedMessagesArgs<ExtArgs>
+    Product?: boolean | ProductOwner$ProductArgs<ExtArgs>
+    _count?: boolean | ProductOwnerCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productOwner"]>
+
+  export type ProductOwnerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    password?: boolean
+    updatedAt?: boolean
+    createdAt?: boolean
+    token?: boolean
+    isVerified?: boolean
+    expiredAt?: boolean
+  }, ExtArgs["result"]["productOwner"]>
+
+  export type ProductOwnerSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    password?: boolean
+    updatedAt?: boolean
+    createdAt?: boolean
+    token?: boolean
+    isVerified?: boolean
+    expiredAt?: boolean
+  }, ExtArgs["result"]["productOwner"]>
+
+  export type ProductOwnerSelectScalar = {
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    password?: boolean
+    updatedAt?: boolean
+    createdAt?: boolean
+    token?: boolean
+    isVerified?: boolean
+    expiredAt?: boolean
+  }
+
+  export type ProductOwnerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "updatedAt" | "createdAt" | "token" | "isVerified" | "expiredAt", ExtArgs["result"]["productOwner"]>
+  export type ProductOwnerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sentMessages?: boolean | ProductOwner$sentMessagesArgs<ExtArgs>
+    receivedMessages?: boolean | ProductOwner$receivedMessagesArgs<ExtArgs>
+    Product?: boolean | ProductOwner$ProductArgs<ExtArgs>
+    _count?: boolean | ProductOwnerCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ProductOwnerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ProductOwnerIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $ProductOwnerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProductOwner"
+    objects: {
+      sentMessages: Prisma.$MessagePayload<ExtArgs>[]
+      receivedMessages: Prisma.$MessagePayload<ExtArgs>[]
+      Product: Prisma.$ProductPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      name: string | null
+      email: string | null
+      password: string | null
+      updatedAt: Date
+      createdAt: Date
+      token: string
+      isVerified: boolean
+      expiredAt: Date | null
+    }, ExtArgs["result"]["productOwner"]>
+    composites: {}
+  }
+
+  type ProductOwnerGetPayload<S extends boolean | null | undefined | ProductOwnerDefaultArgs> = $Result.GetResult<Prisma.$ProductOwnerPayload, S>
+
+  type ProductOwnerCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProductOwnerFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProductOwnerCountAggregateInputType | true
+    }
+
+  export interface ProductOwnerDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProductOwner'], meta: { name: 'ProductOwner' } }
+    /**
+     * Find zero or one ProductOwner that matches the filter.
+     * @param {ProductOwnerFindUniqueArgs} args - Arguments to find a ProductOwner
+     * @example
+     * // Get one ProductOwner
+     * const productOwner = await prisma.productOwner.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProductOwnerFindUniqueArgs>(args: SelectSubset<T, ProductOwnerFindUniqueArgs<ExtArgs>>): Prisma__ProductOwnerClient<$Result.GetResult<Prisma.$ProductOwnerPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProductOwner that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProductOwnerFindUniqueOrThrowArgs} args - Arguments to find a ProductOwner
+     * @example
+     * // Get one ProductOwner
+     * const productOwner = await prisma.productOwner.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProductOwnerFindUniqueOrThrowArgs>(args: SelectSubset<T, ProductOwnerFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProductOwnerClient<$Result.GetResult<Prisma.$ProductOwnerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProductOwner that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductOwnerFindFirstArgs} args - Arguments to find a ProductOwner
+     * @example
+     * // Get one ProductOwner
+     * const productOwner = await prisma.productOwner.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProductOwnerFindFirstArgs>(args?: SelectSubset<T, ProductOwnerFindFirstArgs<ExtArgs>>): Prisma__ProductOwnerClient<$Result.GetResult<Prisma.$ProductOwnerPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProductOwner that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductOwnerFindFirstOrThrowArgs} args - Arguments to find a ProductOwner
+     * @example
+     * // Get one ProductOwner
+     * const productOwner = await prisma.productOwner.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProductOwnerFindFirstOrThrowArgs>(args?: SelectSubset<T, ProductOwnerFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProductOwnerClient<$Result.GetResult<Prisma.$ProductOwnerPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProductOwners that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductOwnerFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProductOwners
+     * const productOwners = await prisma.productOwner.findMany()
+     * 
+     * // Get first 10 ProductOwners
+     * const productOwners = await prisma.productOwner.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const productOwnerWithIdOnly = await prisma.productOwner.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProductOwnerFindManyArgs>(args?: SelectSubset<T, ProductOwnerFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductOwnerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProductOwner.
+     * @param {ProductOwnerCreateArgs} args - Arguments to create a ProductOwner.
+     * @example
+     * // Create one ProductOwner
+     * const ProductOwner = await prisma.productOwner.create({
+     *   data: {
+     *     // ... data to create a ProductOwner
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProductOwnerCreateArgs>(args: SelectSubset<T, ProductOwnerCreateArgs<ExtArgs>>): Prisma__ProductOwnerClient<$Result.GetResult<Prisma.$ProductOwnerPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProductOwners.
+     * @param {ProductOwnerCreateManyArgs} args - Arguments to create many ProductOwners.
+     * @example
+     * // Create many ProductOwners
+     * const productOwner = await prisma.productOwner.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProductOwnerCreateManyArgs>(args?: SelectSubset<T, ProductOwnerCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProductOwners and returns the data saved in the database.
+     * @param {ProductOwnerCreateManyAndReturnArgs} args - Arguments to create many ProductOwners.
+     * @example
+     * // Create many ProductOwners
+     * const productOwner = await prisma.productOwner.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProductOwners and only return the `id`
+     * const productOwnerWithIdOnly = await prisma.productOwner.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProductOwnerCreateManyAndReturnArgs>(args?: SelectSubset<T, ProductOwnerCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductOwnerPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ProductOwner.
+     * @param {ProductOwnerDeleteArgs} args - Arguments to delete one ProductOwner.
+     * @example
+     * // Delete one ProductOwner
+     * const ProductOwner = await prisma.productOwner.delete({
+     *   where: {
+     *     // ... filter to delete one ProductOwner
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProductOwnerDeleteArgs>(args: SelectSubset<T, ProductOwnerDeleteArgs<ExtArgs>>): Prisma__ProductOwnerClient<$Result.GetResult<Prisma.$ProductOwnerPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProductOwner.
+     * @param {ProductOwnerUpdateArgs} args - Arguments to update one ProductOwner.
+     * @example
+     * // Update one ProductOwner
+     * const productOwner = await prisma.productOwner.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProductOwnerUpdateArgs>(args: SelectSubset<T, ProductOwnerUpdateArgs<ExtArgs>>): Prisma__ProductOwnerClient<$Result.GetResult<Prisma.$ProductOwnerPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProductOwners.
+     * @param {ProductOwnerDeleteManyArgs} args - Arguments to filter ProductOwners to delete.
+     * @example
+     * // Delete a few ProductOwners
+     * const { count } = await prisma.productOwner.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProductOwnerDeleteManyArgs>(args?: SelectSubset<T, ProductOwnerDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProductOwners.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductOwnerUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProductOwners
+     * const productOwner = await prisma.productOwner.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProductOwnerUpdateManyArgs>(args: SelectSubset<T, ProductOwnerUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProductOwners and returns the data updated in the database.
+     * @param {ProductOwnerUpdateManyAndReturnArgs} args - Arguments to update many ProductOwners.
+     * @example
+     * // Update many ProductOwners
+     * const productOwner = await prisma.productOwner.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ProductOwners and only return the `id`
+     * const productOwnerWithIdOnly = await prisma.productOwner.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProductOwnerUpdateManyAndReturnArgs>(args: SelectSubset<T, ProductOwnerUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductOwnerPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ProductOwner.
+     * @param {ProductOwnerUpsertArgs} args - Arguments to update or create a ProductOwner.
+     * @example
+     * // Update or create a ProductOwner
+     * const productOwner = await prisma.productOwner.upsert({
+     *   create: {
+     *     // ... data to create a ProductOwner
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProductOwner we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProductOwnerUpsertArgs>(args: SelectSubset<T, ProductOwnerUpsertArgs<ExtArgs>>): Prisma__ProductOwnerClient<$Result.GetResult<Prisma.$ProductOwnerPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProductOwners.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductOwnerCountArgs} args - Arguments to filter ProductOwners to count.
+     * @example
+     * // Count the number of ProductOwners
+     * const count = await prisma.productOwner.count({
+     *   where: {
+     *     // ... the filter for the ProductOwners we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProductOwnerCountArgs>(
+      args?: Subset<T, ProductOwnerCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProductOwnerCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProductOwner.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductOwnerAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProductOwnerAggregateArgs>(args: Subset<T, ProductOwnerAggregateArgs>): Prisma.PrismaPromise<GetProductOwnerAggregateType<T>>
+
+    /**
+     * Group by ProductOwner.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductOwnerGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProductOwnerGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProductOwnerGroupByArgs['orderBy'] }
+        : { orderBy?: ProductOwnerGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProductOwnerGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProductOwnerGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProductOwner model
+   */
+  readonly fields: ProductOwnerFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProductOwner.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProductOwnerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    sentMessages<T extends ProductOwner$sentMessagesArgs<ExtArgs> = {}>(args?: Subset<T, ProductOwner$sentMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    receivedMessages<T extends ProductOwner$receivedMessagesArgs<ExtArgs> = {}>(args?: Subset<T, ProductOwner$receivedMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    Product<T extends ProductOwner$ProductArgs<ExtArgs> = {}>(args?: Subset<T, ProductOwner$ProductArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProductOwner model
+   */
+  interface ProductOwnerFieldRefs {
+    readonly id: FieldRef<"ProductOwner", 'Int'>
+    readonly name: FieldRef<"ProductOwner", 'String'>
+    readonly email: FieldRef<"ProductOwner", 'String'>
+    readonly password: FieldRef<"ProductOwner", 'String'>
+    readonly updatedAt: FieldRef<"ProductOwner", 'DateTime'>
+    readonly createdAt: FieldRef<"ProductOwner", 'DateTime'>
+    readonly token: FieldRef<"ProductOwner", 'String'>
+    readonly isVerified: FieldRef<"ProductOwner", 'Boolean'>
+    readonly expiredAt: FieldRef<"ProductOwner", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProductOwner findUnique
+   */
+  export type ProductOwnerFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOwner
+     */
+    select?: ProductOwnerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductOwner
+     */
+    omit?: ProductOwnerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductOwnerInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductOwner to fetch.
+     */
+    where: ProductOwnerWhereUniqueInput
+  }
+
+  /**
+   * ProductOwner findUniqueOrThrow
+   */
+  export type ProductOwnerFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOwner
+     */
+    select?: ProductOwnerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductOwner
+     */
+    omit?: ProductOwnerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductOwnerInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductOwner to fetch.
+     */
+    where: ProductOwnerWhereUniqueInput
+  }
+
+  /**
+   * ProductOwner findFirst
+   */
+  export type ProductOwnerFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOwner
+     */
+    select?: ProductOwnerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductOwner
+     */
+    omit?: ProductOwnerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductOwnerInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductOwner to fetch.
+     */
+    where?: ProductOwnerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductOwners to fetch.
+     */
+    orderBy?: ProductOwnerOrderByWithRelationInput | ProductOwnerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProductOwners.
+     */
+    cursor?: ProductOwnerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductOwners from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductOwners.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductOwners.
+     */
+    distinct?: ProductOwnerScalarFieldEnum | ProductOwnerScalarFieldEnum[]
+  }
+
+  /**
+   * ProductOwner findFirstOrThrow
+   */
+  export type ProductOwnerFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOwner
+     */
+    select?: ProductOwnerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductOwner
+     */
+    omit?: ProductOwnerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductOwnerInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductOwner to fetch.
+     */
+    where?: ProductOwnerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductOwners to fetch.
+     */
+    orderBy?: ProductOwnerOrderByWithRelationInput | ProductOwnerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProductOwners.
+     */
+    cursor?: ProductOwnerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductOwners from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductOwners.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductOwners.
+     */
+    distinct?: ProductOwnerScalarFieldEnum | ProductOwnerScalarFieldEnum[]
+  }
+
+  /**
+   * ProductOwner findMany
+   */
+  export type ProductOwnerFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOwner
+     */
+    select?: ProductOwnerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductOwner
+     */
+    omit?: ProductOwnerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductOwnerInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductOwners to fetch.
+     */
+    where?: ProductOwnerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductOwners to fetch.
+     */
+    orderBy?: ProductOwnerOrderByWithRelationInput | ProductOwnerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProductOwners.
+     */
+    cursor?: ProductOwnerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductOwners from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductOwners.
+     */
+    skip?: number
+    distinct?: ProductOwnerScalarFieldEnum | ProductOwnerScalarFieldEnum[]
+  }
+
+  /**
+   * ProductOwner create
+   */
+  export type ProductOwnerCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOwner
+     */
+    select?: ProductOwnerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductOwner
+     */
+    omit?: ProductOwnerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductOwnerInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProductOwner.
+     */
+    data: XOR<ProductOwnerCreateInput, ProductOwnerUncheckedCreateInput>
+  }
+
+  /**
+   * ProductOwner createMany
+   */
+  export type ProductOwnerCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProductOwners.
+     */
+    data: ProductOwnerCreateManyInput | ProductOwnerCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProductOwner createManyAndReturn
+   */
+  export type ProductOwnerCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOwner
+     */
+    select?: ProductOwnerSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductOwner
+     */
+    omit?: ProductOwnerOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProductOwners.
+     */
+    data: ProductOwnerCreateManyInput | ProductOwnerCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProductOwner update
+   */
+  export type ProductOwnerUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOwner
+     */
+    select?: ProductOwnerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductOwner
+     */
+    omit?: ProductOwnerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductOwnerInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProductOwner.
+     */
+    data: XOR<ProductOwnerUpdateInput, ProductOwnerUncheckedUpdateInput>
+    /**
+     * Choose, which ProductOwner to update.
+     */
+    where: ProductOwnerWhereUniqueInput
+  }
+
+  /**
+   * ProductOwner updateMany
+   */
+  export type ProductOwnerUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProductOwners.
+     */
+    data: XOR<ProductOwnerUpdateManyMutationInput, ProductOwnerUncheckedUpdateManyInput>
+    /**
+     * Filter which ProductOwners to update
+     */
+    where?: ProductOwnerWhereInput
+    /**
+     * Limit how many ProductOwners to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProductOwner updateManyAndReturn
+   */
+  export type ProductOwnerUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOwner
+     */
+    select?: ProductOwnerSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductOwner
+     */
+    omit?: ProductOwnerOmit<ExtArgs> | null
+    /**
+     * The data used to update ProductOwners.
+     */
+    data: XOR<ProductOwnerUpdateManyMutationInput, ProductOwnerUncheckedUpdateManyInput>
+    /**
+     * Filter which ProductOwners to update
+     */
+    where?: ProductOwnerWhereInput
+    /**
+     * Limit how many ProductOwners to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProductOwner upsert
+   */
+  export type ProductOwnerUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOwner
+     */
+    select?: ProductOwnerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductOwner
+     */
+    omit?: ProductOwnerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductOwnerInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProductOwner to update in case it exists.
+     */
+    where: ProductOwnerWhereUniqueInput
+    /**
+     * In case the ProductOwner found by the `where` argument doesn't exist, create a new ProductOwner with this data.
+     */
+    create: XOR<ProductOwnerCreateInput, ProductOwnerUncheckedCreateInput>
+    /**
+     * In case the ProductOwner was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProductOwnerUpdateInput, ProductOwnerUncheckedUpdateInput>
+  }
+
+  /**
+   * ProductOwner delete
+   */
+  export type ProductOwnerDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOwner
+     */
+    select?: ProductOwnerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductOwner
+     */
+    omit?: ProductOwnerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductOwnerInclude<ExtArgs> | null
+    /**
+     * Filter which ProductOwner to delete.
+     */
+    where: ProductOwnerWhereUniqueInput
+  }
+
+  /**
+   * ProductOwner deleteMany
+   */
+  export type ProductOwnerDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProductOwners to delete
+     */
+    where?: ProductOwnerWhereInput
+    /**
+     * Limit how many ProductOwners to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProductOwner.sentMessages
+   */
+  export type ProductOwner$sentMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Message
+     */
+    select?: MessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Message
+     */
+    omit?: MessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageInclude<ExtArgs> | null
+    where?: MessageWhereInput
+    orderBy?: MessageOrderByWithRelationInput | MessageOrderByWithRelationInput[]
+    cursor?: MessageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MessageScalarFieldEnum | MessageScalarFieldEnum[]
+  }
+
+  /**
+   * ProductOwner.receivedMessages
+   */
+  export type ProductOwner$receivedMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Message
+     */
+    select?: MessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Message
+     */
+    omit?: MessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageInclude<ExtArgs> | null
+    where?: MessageWhereInput
+    orderBy?: MessageOrderByWithRelationInput | MessageOrderByWithRelationInput[]
+    cursor?: MessageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MessageScalarFieldEnum | MessageScalarFieldEnum[]
+  }
+
+  /**
+   * ProductOwner.Product
+   */
+  export type ProductOwner$ProductArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product
+     */
+    select?: ProductSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Product
+     */
+    omit?: ProductOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductInclude<ExtArgs> | null
+    where?: ProductWhereInput
+    orderBy?: ProductOrderByWithRelationInput | ProductOrderByWithRelationInput[]
+    cursor?: ProductWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProductScalarFieldEnum | ProductScalarFieldEnum[]
+  }
+
+  /**
+   * ProductOwner without action
+   */
+  export type ProductOwnerDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductOwner
+     */
+    select?: ProductOwnerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductOwner
+     */
+    omit?: ProductOwnerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductOwnerInclude<ExtArgs> | null
   }
 
 
@@ -6834,16 +9569,19 @@ export namespace Prisma {
   }
 
   export type ProductAvgAggregateOutputType = {
+    owerId: number | null
     basePrice: number | null
   }
 
   export type ProductSumAggregateOutputType = {
+    owerId: number | null
     basePrice: number | null
   }
 
   export type ProductMinAggregateOutputType = {
     id: string | null
     name: string | null
+    owerId: number | null
     description: string | null
     categoryId: string | null
     brandId: string | null
@@ -6856,6 +9594,7 @@ export namespace Prisma {
   export type ProductMaxAggregateOutputType = {
     id: string | null
     name: string | null
+    owerId: number | null
     description: string | null
     categoryId: string | null
     brandId: string | null
@@ -6868,6 +9607,7 @@ export namespace Prisma {
   export type ProductCountAggregateOutputType = {
     id: number
     name: number
+    owerId: number
     description: number
     categoryId: number
     brandId: number
@@ -6880,16 +9620,19 @@ export namespace Prisma {
 
 
   export type ProductAvgAggregateInputType = {
+    owerId?: true
     basePrice?: true
   }
 
   export type ProductSumAggregateInputType = {
+    owerId?: true
     basePrice?: true
   }
 
   export type ProductMinAggregateInputType = {
     id?: true
     name?: true
+    owerId?: true
     description?: true
     categoryId?: true
     brandId?: true
@@ -6902,6 +9645,7 @@ export namespace Prisma {
   export type ProductMaxAggregateInputType = {
     id?: true
     name?: true
+    owerId?: true
     description?: true
     categoryId?: true
     brandId?: true
@@ -6914,6 +9658,7 @@ export namespace Prisma {
   export type ProductCountAggregateInputType = {
     id?: true
     name?: true
+    owerId?: true
     description?: true
     categoryId?: true
     brandId?: true
@@ -7013,6 +9758,7 @@ export namespace Prisma {
   export type ProductGroupByOutputType = {
     id: string
     name: string
+    owerId: number
     description: string
     categoryId: string
     brandId: string
@@ -7044,6 +9790,7 @@ export namespace Prisma {
   export type ProductSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    owerId?: boolean
     description?: boolean
     categoryId?: boolean
     brandId?: boolean
@@ -7051,6 +9798,7 @@ export namespace Prisma {
     thumnailImage?: boolean
     basePrice?: boolean
     createdAt?: boolean
+    ower?: boolean | ProductOwnerDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
     brand?: boolean | BrandDefaultArgs<ExtArgs>
     variants?: boolean | Product$variantsArgs<ExtArgs>
@@ -7062,6 +9810,7 @@ export namespace Prisma {
   export type ProductSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    owerId?: boolean
     description?: boolean
     categoryId?: boolean
     brandId?: boolean
@@ -7069,6 +9818,7 @@ export namespace Prisma {
     thumnailImage?: boolean
     basePrice?: boolean
     createdAt?: boolean
+    ower?: boolean | ProductOwnerDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
     brand?: boolean | BrandDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
@@ -7076,6 +9826,7 @@ export namespace Prisma {
   export type ProductSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    owerId?: boolean
     description?: boolean
     categoryId?: boolean
     brandId?: boolean
@@ -7083,6 +9834,7 @@ export namespace Prisma {
     thumnailImage?: boolean
     basePrice?: boolean
     createdAt?: boolean
+    ower?: boolean | ProductOwnerDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
     brand?: boolean | BrandDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["product"]>
@@ -7090,6 +9842,7 @@ export namespace Prisma {
   export type ProductSelectScalar = {
     id?: boolean
     name?: boolean
+    owerId?: boolean
     description?: boolean
     categoryId?: boolean
     brandId?: boolean
@@ -7099,8 +9852,9 @@ export namespace Prisma {
     createdAt?: boolean
   }
 
-  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "categoryId" | "brandId" | "gender" | "thumnailImage" | "basePrice" | "createdAt", ExtArgs["result"]["product"]>
+  export type ProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "owerId" | "description" | "categoryId" | "brandId" | "gender" | "thumnailImage" | "basePrice" | "createdAt", ExtArgs["result"]["product"]>
   export type ProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ower?: boolean | ProductOwnerDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
     brand?: boolean | BrandDefaultArgs<ExtArgs>
     variants?: boolean | Product$variantsArgs<ExtArgs>
@@ -7109,10 +9863,12 @@ export namespace Prisma {
     _count?: boolean | ProductCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ower?: boolean | ProductOwnerDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
     brand?: boolean | BrandDefaultArgs<ExtArgs>
   }
   export type ProductIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    ower?: boolean | ProductOwnerDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
     brand?: boolean | BrandDefaultArgs<ExtArgs>
   }
@@ -7120,6 +9876,7 @@ export namespace Prisma {
   export type $ProductPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Product"
     objects: {
+      ower: Prisma.$ProductOwnerPayload<ExtArgs>
       category: Prisma.$CategoryPayload<ExtArgs>
       brand: Prisma.$BrandPayload<ExtArgs>
       variants: Prisma.$ProductVariantPayload<ExtArgs>[]
@@ -7129,6 +9886,7 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
+      owerId: number
       description: string
       categoryId: string
       brandId: string
@@ -7530,6 +10288,7 @@ export namespace Prisma {
    */
   export interface Prisma__ProductClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    ower<T extends ProductOwnerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductOwnerDefaultArgs<ExtArgs>>): Prisma__ProductOwnerClient<$Result.GetResult<Prisma.$ProductOwnerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     category<T extends CategoryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CategoryDefaultArgs<ExtArgs>>): Prisma__CategoryClient<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     brand<T extends BrandDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BrandDefaultArgs<ExtArgs>>): Prisma__BrandClient<$Result.GetResult<Prisma.$BrandPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     variants<T extends Product$variantsArgs<ExtArgs> = {}>(args?: Subset<T, Product$variantsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductVariantPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -7566,6 +10325,7 @@ export namespace Prisma {
   interface ProductFieldRefs {
     readonly id: FieldRef<"Product", 'String'>
     readonly name: FieldRef<"Product", 'String'>
+    readonly owerId: FieldRef<"Product", 'Int'>
     readonly description: FieldRef<"Product", 'String'>
     readonly categoryId: FieldRef<"Product", 'String'>
     readonly brandId: FieldRef<"Product", 'String'>
@@ -17494,6 +20254,8 @@ export namespace Prisma {
     otp?: boolean
     otpCreatedAt?: boolean
     cart?: boolean | User$cartArgs<ExtArgs>
+    sentMessages?: boolean | User$sentMessagesArgs<ExtArgs>
+    receivedMessages?: boolean | User$receivedMessagesArgs<ExtArgs>
     CheckoutItem?: boolean | User$CheckoutItemArgs<ExtArgs>
     Rating?: boolean | User$RatingArgs<ExtArgs>
     Order?: boolean | User$OrderArgs<ExtArgs>
@@ -17549,6 +20311,8 @@ export namespace Prisma {
   export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "phoneNo" | "isVerified" | "userRole" | "updatedAt" | "createdAt" | "refreshToken" | "otp" | "otpCreatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     cart?: boolean | User$cartArgs<ExtArgs>
+    sentMessages?: boolean | User$sentMessagesArgs<ExtArgs>
+    receivedMessages?: boolean | User$receivedMessagesArgs<ExtArgs>
     CheckoutItem?: boolean | User$CheckoutItemArgs<ExtArgs>
     Rating?: boolean | User$RatingArgs<ExtArgs>
     Order?: boolean | User$OrderArgs<ExtArgs>
@@ -17562,6 +20326,8 @@ export namespace Prisma {
     name: "User"
     objects: {
       cart: Prisma.$CartPayload<ExtArgs>[]
+      sentMessages: Prisma.$MessagePayload<ExtArgs>[]
+      receivedMessages: Prisma.$MessagePayload<ExtArgs>[]
       CheckoutItem: Prisma.$CheckoutItemPayload<ExtArgs>[]
       Rating: Prisma.$RatingPayload<ExtArgs>[]
       Order: Prisma.$OrderPayload<ExtArgs>[]
@@ -17975,6 +20741,8 @@ export namespace Prisma {
   export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     cart<T extends User$cartArgs<ExtArgs> = {}>(args?: Subset<T, User$cartArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CartPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sentMessages<T extends User$sentMessagesArgs<ExtArgs> = {}>(args?: Subset<T, User$sentMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    receivedMessages<T extends User$receivedMessagesArgs<ExtArgs> = {}>(args?: Subset<T, User$receivedMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     CheckoutItem<T extends User$CheckoutItemArgs<ExtArgs> = {}>(args?: Subset<T, User$CheckoutItemArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CheckoutItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     Rating<T extends User$RatingArgs<ExtArgs> = {}>(args?: Subset<T, User$RatingArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RatingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     Order<T extends User$OrderArgs<ExtArgs> = {}>(args?: Subset<T, User$OrderArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$OrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -18429,6 +21197,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CartScalarFieldEnum | CartScalarFieldEnum[]
+  }
+
+  /**
+   * User.sentMessages
+   */
+  export type User$sentMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Message
+     */
+    select?: MessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Message
+     */
+    omit?: MessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageInclude<ExtArgs> | null
+    where?: MessageWhereInput
+    orderBy?: MessageOrderByWithRelationInput | MessageOrderByWithRelationInput[]
+    cursor?: MessageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MessageScalarFieldEnum | MessageScalarFieldEnum[]
+  }
+
+  /**
+   * User.receivedMessages
+   */
+  export type User$receivedMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Message
+     */
+    select?: MessageSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Message
+     */
+    omit?: MessageOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MessageInclude<ExtArgs> | null
+    where?: MessageWhereInput
+    orderBy?: MessageOrderByWithRelationInput | MessageOrderByWithRelationInput[]
+    cursor?: MessageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MessageScalarFieldEnum | MessageScalarFieldEnum[]
   }
 
   /**
@@ -19615,6 +22431,36 @@ export namespace Prisma {
   export type CheckoutItemScalarFieldEnum = (typeof CheckoutItemScalarFieldEnum)[keyof typeof CheckoutItemScalarFieldEnum]
 
 
+  export const MessageScalarFieldEnum: {
+    id: 'id',
+    type: 'type',
+    sentAt: 'sentAt',
+    text: 'text',
+    fileUrl: 'fileUrl',
+    senderUserId: 'senderUserId',
+    receiverUserId: 'receiverUserId',
+    senderOwnerId: 'senderOwnerId',
+    receiverOwnerId: 'receiverOwnerId'
+  };
+
+  export type MessageScalarFieldEnum = (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
+
+
+  export const ProductOwnerScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    email: 'email',
+    password: 'password',
+    updatedAt: 'updatedAt',
+    createdAt: 'createdAt',
+    token: 'token',
+    isVerified: 'isVerified',
+    expiredAt: 'expiredAt'
+  };
+
+  export type ProductOwnerScalarFieldEnum = (typeof ProductOwnerScalarFieldEnum)[keyof typeof ProductOwnerScalarFieldEnum]
+
+
   export const BrandScalarFieldEnum: {
     id: 'id',
     name: 'name'
@@ -19643,6 +22489,7 @@ export namespace Prisma {
   export const ProductScalarFieldEnum: {
     id: 'id',
     name: 'name',
+    owerId: 'owerId',
     description: 'description',
     categoryId: 'categoryId',
     brandId: 'brandId',
@@ -19879,6 +22726,27 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'MessasageType'
+   */
+  export type EnumMessasageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessasageType'>
+    
+
+
+  /**
+   * Reference to a field of type 'MessasageType[]'
+   */
+  export type ListEnumMessasageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessasageType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'Gender'
    */
   export type EnumGenderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Gender'>
@@ -19977,13 +22845,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-  /**
    * Reference to a field of type 'UserRole'
    */
   export type EnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole'>
@@ -20068,6 +22929,175 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"CheckoutItem"> | Date | string
     variantId?: StringWithAggregatesFilter<"CheckoutItem"> | string
     expiresAt?: DateTimeNullableWithAggregatesFilter<"CheckoutItem"> | Date | string | null
+  }
+
+  export type MessageWhereInput = {
+    AND?: MessageWhereInput | MessageWhereInput[]
+    OR?: MessageWhereInput[]
+    NOT?: MessageWhereInput | MessageWhereInput[]
+    id?: IntFilter<"Message"> | number
+    type?: EnumMessasageTypeFilter<"Message"> | $Enums.MessasageType
+    sentAt?: DateTimeFilter<"Message"> | Date | string
+    text?: StringNullableFilter<"Message"> | string | null
+    fileUrl?: StringNullableFilter<"Message"> | string | null
+    senderUserId?: IntNullableFilter<"Message"> | number | null
+    receiverUserId?: IntNullableFilter<"Message"> | number | null
+    senderOwnerId?: IntNullableFilter<"Message"> | number | null
+    receiverOwnerId?: IntNullableFilter<"Message"> | number | null
+    senderUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    receiverUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    senderOwner?: XOR<ProductOwnerNullableScalarRelationFilter, ProductOwnerWhereInput> | null
+    receiverOwner?: XOR<ProductOwnerNullableScalarRelationFilter, ProductOwnerWhereInput> | null
+  }
+
+  export type MessageOrderByWithRelationInput = {
+    id?: SortOrder
+    type?: SortOrder
+    sentAt?: SortOrder
+    text?: SortOrderInput | SortOrder
+    fileUrl?: SortOrderInput | SortOrder
+    senderUserId?: SortOrderInput | SortOrder
+    receiverUserId?: SortOrderInput | SortOrder
+    senderOwnerId?: SortOrderInput | SortOrder
+    receiverOwnerId?: SortOrderInput | SortOrder
+    senderUser?: UserOrderByWithRelationInput
+    receiverUser?: UserOrderByWithRelationInput
+    senderOwner?: ProductOwnerOrderByWithRelationInput
+    receiverOwner?: ProductOwnerOrderByWithRelationInput
+  }
+
+  export type MessageWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: MessageWhereInput | MessageWhereInput[]
+    OR?: MessageWhereInput[]
+    NOT?: MessageWhereInput | MessageWhereInput[]
+    type?: EnumMessasageTypeFilter<"Message"> | $Enums.MessasageType
+    sentAt?: DateTimeFilter<"Message"> | Date | string
+    text?: StringNullableFilter<"Message"> | string | null
+    fileUrl?: StringNullableFilter<"Message"> | string | null
+    senderUserId?: IntNullableFilter<"Message"> | number | null
+    receiverUserId?: IntNullableFilter<"Message"> | number | null
+    senderOwnerId?: IntNullableFilter<"Message"> | number | null
+    receiverOwnerId?: IntNullableFilter<"Message"> | number | null
+    senderUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    receiverUser?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
+    senderOwner?: XOR<ProductOwnerNullableScalarRelationFilter, ProductOwnerWhereInput> | null
+    receiverOwner?: XOR<ProductOwnerNullableScalarRelationFilter, ProductOwnerWhereInput> | null
+  }, "id">
+
+  export type MessageOrderByWithAggregationInput = {
+    id?: SortOrder
+    type?: SortOrder
+    sentAt?: SortOrder
+    text?: SortOrderInput | SortOrder
+    fileUrl?: SortOrderInput | SortOrder
+    senderUserId?: SortOrderInput | SortOrder
+    receiverUserId?: SortOrderInput | SortOrder
+    senderOwnerId?: SortOrderInput | SortOrder
+    receiverOwnerId?: SortOrderInput | SortOrder
+    _count?: MessageCountOrderByAggregateInput
+    _avg?: MessageAvgOrderByAggregateInput
+    _max?: MessageMaxOrderByAggregateInput
+    _min?: MessageMinOrderByAggregateInput
+    _sum?: MessageSumOrderByAggregateInput
+  }
+
+  export type MessageScalarWhereWithAggregatesInput = {
+    AND?: MessageScalarWhereWithAggregatesInput | MessageScalarWhereWithAggregatesInput[]
+    OR?: MessageScalarWhereWithAggregatesInput[]
+    NOT?: MessageScalarWhereWithAggregatesInput | MessageScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Message"> | number
+    type?: EnumMessasageTypeWithAggregatesFilter<"Message"> | $Enums.MessasageType
+    sentAt?: DateTimeWithAggregatesFilter<"Message"> | Date | string
+    text?: StringNullableWithAggregatesFilter<"Message"> | string | null
+    fileUrl?: StringNullableWithAggregatesFilter<"Message"> | string | null
+    senderUserId?: IntNullableWithAggregatesFilter<"Message"> | number | null
+    receiverUserId?: IntNullableWithAggregatesFilter<"Message"> | number | null
+    senderOwnerId?: IntNullableWithAggregatesFilter<"Message"> | number | null
+    receiverOwnerId?: IntNullableWithAggregatesFilter<"Message"> | number | null
+  }
+
+  export type ProductOwnerWhereInput = {
+    AND?: ProductOwnerWhereInput | ProductOwnerWhereInput[]
+    OR?: ProductOwnerWhereInput[]
+    NOT?: ProductOwnerWhereInput | ProductOwnerWhereInput[]
+    id?: IntFilter<"ProductOwner"> | number
+    name?: StringNullableFilter<"ProductOwner"> | string | null
+    email?: StringNullableFilter<"ProductOwner"> | string | null
+    password?: StringNullableFilter<"ProductOwner"> | string | null
+    updatedAt?: DateTimeFilter<"ProductOwner"> | Date | string
+    createdAt?: DateTimeFilter<"ProductOwner"> | Date | string
+    token?: StringFilter<"ProductOwner"> | string
+    isVerified?: BoolFilter<"ProductOwner"> | boolean
+    expiredAt?: DateTimeNullableFilter<"ProductOwner"> | Date | string | null
+    sentMessages?: MessageListRelationFilter
+    receivedMessages?: MessageListRelationFilter
+    Product?: ProductListRelationFilter
+  }
+
+  export type ProductOwnerOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrderInput | SortOrder
+    email?: SortOrderInput | SortOrder
+    password?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    createdAt?: SortOrder
+    token?: SortOrder
+    isVerified?: SortOrder
+    expiredAt?: SortOrderInput | SortOrder
+    sentMessages?: MessageOrderByRelationAggregateInput
+    receivedMessages?: MessageOrderByRelationAggregateInput
+    Product?: ProductOrderByRelationAggregateInput
+  }
+
+  export type ProductOwnerWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    email?: string
+    token?: string
+    AND?: ProductOwnerWhereInput | ProductOwnerWhereInput[]
+    OR?: ProductOwnerWhereInput[]
+    NOT?: ProductOwnerWhereInput | ProductOwnerWhereInput[]
+    name?: StringNullableFilter<"ProductOwner"> | string | null
+    password?: StringNullableFilter<"ProductOwner"> | string | null
+    updatedAt?: DateTimeFilter<"ProductOwner"> | Date | string
+    createdAt?: DateTimeFilter<"ProductOwner"> | Date | string
+    isVerified?: BoolFilter<"ProductOwner"> | boolean
+    expiredAt?: DateTimeNullableFilter<"ProductOwner"> | Date | string | null
+    sentMessages?: MessageListRelationFilter
+    receivedMessages?: MessageListRelationFilter
+    Product?: ProductListRelationFilter
+  }, "id" | "email" | "token">
+
+  export type ProductOwnerOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrderInput | SortOrder
+    email?: SortOrderInput | SortOrder
+    password?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    createdAt?: SortOrder
+    token?: SortOrder
+    isVerified?: SortOrder
+    expiredAt?: SortOrderInput | SortOrder
+    _count?: ProductOwnerCountOrderByAggregateInput
+    _avg?: ProductOwnerAvgOrderByAggregateInput
+    _max?: ProductOwnerMaxOrderByAggregateInput
+    _min?: ProductOwnerMinOrderByAggregateInput
+    _sum?: ProductOwnerSumOrderByAggregateInput
+  }
+
+  export type ProductOwnerScalarWhereWithAggregatesInput = {
+    AND?: ProductOwnerScalarWhereWithAggregatesInput | ProductOwnerScalarWhereWithAggregatesInput[]
+    OR?: ProductOwnerScalarWhereWithAggregatesInput[]
+    NOT?: ProductOwnerScalarWhereWithAggregatesInput | ProductOwnerScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"ProductOwner"> | number
+    name?: StringNullableWithAggregatesFilter<"ProductOwner"> | string | null
+    email?: StringNullableWithAggregatesFilter<"ProductOwner"> | string | null
+    password?: StringNullableWithAggregatesFilter<"ProductOwner"> | string | null
+    updatedAt?: DateTimeWithAggregatesFilter<"ProductOwner"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"ProductOwner"> | Date | string
+    token?: StringWithAggregatesFilter<"ProductOwner"> | string
+    isVerified?: BoolWithAggregatesFilter<"ProductOwner"> | boolean
+    expiredAt?: DateTimeNullableWithAggregatesFilter<"ProductOwner"> | Date | string | null
   }
 
   export type BrandWhereInput = {
@@ -20211,6 +23241,7 @@ export namespace Prisma {
     NOT?: ProductWhereInput | ProductWhereInput[]
     id?: StringFilter<"Product"> | string
     name?: StringFilter<"Product"> | string
+    owerId?: IntFilter<"Product"> | number
     description?: StringFilter<"Product"> | string
     categoryId?: StringFilter<"Product"> | string
     brandId?: StringFilter<"Product"> | string
@@ -20218,6 +23249,7 @@ export namespace Prisma {
     thumnailImage?: StringFilter<"Product"> | string
     basePrice?: FloatNullableFilter<"Product"> | number | null
     createdAt?: DateTimeFilter<"Product"> | Date | string
+    ower?: XOR<ProductOwnerScalarRelationFilter, ProductOwnerWhereInput>
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
     brand?: XOR<BrandScalarRelationFilter, BrandWhereInput>
     variants?: ProductVariantListRelationFilter
@@ -20228,6 +23260,7 @@ export namespace Prisma {
   export type ProductOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    owerId?: SortOrder
     description?: SortOrder
     categoryId?: SortOrder
     brandId?: SortOrder
@@ -20235,6 +23268,7 @@ export namespace Prisma {
     thumnailImage?: SortOrder
     basePrice?: SortOrderInput | SortOrder
     createdAt?: SortOrder
+    ower?: ProductOwnerOrderByWithRelationInput
     category?: CategoryOrderByWithRelationInput
     brand?: BrandOrderByWithRelationInput
     variants?: ProductVariantOrderByRelationAggregateInput
@@ -20248,6 +23282,7 @@ export namespace Prisma {
     OR?: ProductWhereInput[]
     NOT?: ProductWhereInput | ProductWhereInput[]
     name?: StringFilter<"Product"> | string
+    owerId?: IntFilter<"Product"> | number
     description?: StringFilter<"Product"> | string
     categoryId?: StringFilter<"Product"> | string
     brandId?: StringFilter<"Product"> | string
@@ -20255,6 +23290,7 @@ export namespace Prisma {
     thumnailImage?: StringFilter<"Product"> | string
     basePrice?: FloatNullableFilter<"Product"> | number | null
     createdAt?: DateTimeFilter<"Product"> | Date | string
+    ower?: XOR<ProductOwnerScalarRelationFilter, ProductOwnerWhereInput>
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
     brand?: XOR<BrandScalarRelationFilter, BrandWhereInput>
     variants?: ProductVariantListRelationFilter
@@ -20265,6 +23301,7 @@ export namespace Prisma {
   export type ProductOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    owerId?: SortOrder
     description?: SortOrder
     categoryId?: SortOrder
     brandId?: SortOrder
@@ -20285,6 +23322,7 @@ export namespace Prisma {
     NOT?: ProductScalarWhereWithAggregatesInput | ProductScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Product"> | string
     name?: StringWithAggregatesFilter<"Product"> | string
+    owerId?: IntWithAggregatesFilter<"Product"> | number
     description?: StringWithAggregatesFilter<"Product"> | string
     categoryId?: StringWithAggregatesFilter<"Product"> | string
     brandId?: StringWithAggregatesFilter<"Product"> | string
@@ -20886,6 +23924,8 @@ export namespace Prisma {
     otp?: StringNullableFilter<"User"> | string | null
     otpCreatedAt?: DateTimeNullableFilter<"User"> | Date | string | null
     cart?: CartListRelationFilter
+    sentMessages?: MessageListRelationFilter
+    receivedMessages?: MessageListRelationFilter
     CheckoutItem?: CheckoutItemListRelationFilter
     Rating?: RatingListRelationFilter
     Order?: OrderListRelationFilter
@@ -20906,6 +23946,8 @@ export namespace Prisma {
     otp?: SortOrderInput | SortOrder
     otpCreatedAt?: SortOrderInput | SortOrder
     cart?: CartOrderByRelationAggregateInput
+    sentMessages?: MessageOrderByRelationAggregateInput
+    receivedMessages?: MessageOrderByRelationAggregateInput
     CheckoutItem?: CheckoutItemOrderByRelationAggregateInput
     Rating?: RatingOrderByRelationAggregateInput
     Order?: OrderOrderByRelationAggregateInput
@@ -20929,6 +23971,8 @@ export namespace Prisma {
     otp?: StringNullableFilter<"User"> | string | null
     otpCreatedAt?: DateTimeNullableFilter<"User"> | Date | string | null
     cart?: CartListRelationFilter
+    sentMessages?: MessageListRelationFilter
+    receivedMessages?: MessageListRelationFilter
     CheckoutItem?: CheckoutItemListRelationFilter
     Rating?: RatingListRelationFilter
     Order?: OrderListRelationFilter
@@ -21100,6 +24144,176 @@ export namespace Prisma {
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type MessageCreateInput = {
+    type: $Enums.MessasageType
+    sentAt?: Date | string
+    text?: string | null
+    fileUrl?: string | null
+    senderUser?: UserCreateNestedOneWithoutSentMessagesInput
+    receiverUser?: UserCreateNestedOneWithoutReceivedMessagesInput
+    senderOwner?: ProductOwnerCreateNestedOneWithoutSentMessagesInput
+    receiverOwner?: ProductOwnerCreateNestedOneWithoutReceivedMessagesInput
+  }
+
+  export type MessageUncheckedCreateInput = {
+    id?: number
+    type: $Enums.MessasageType
+    sentAt?: Date | string
+    text?: string | null
+    fileUrl?: string | null
+    senderUserId?: number | null
+    receiverUserId?: number | null
+    senderOwnerId?: number | null
+    receiverOwnerId?: number | null
+  }
+
+  export type MessageUpdateInput = {
+    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    text?: NullableStringFieldUpdateOperationsInput | string | null
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    senderUser?: UserUpdateOneWithoutSentMessagesNestedInput
+    receiverUser?: UserUpdateOneWithoutReceivedMessagesNestedInput
+    senderOwner?: ProductOwnerUpdateOneWithoutSentMessagesNestedInput
+    receiverOwner?: ProductOwnerUpdateOneWithoutReceivedMessagesNestedInput
+  }
+
+  export type MessageUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    text?: NullableStringFieldUpdateOperationsInput | string | null
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    senderUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    receiverUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    senderOwnerId?: NullableIntFieldUpdateOperationsInput | number | null
+    receiverOwnerId?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type MessageCreateManyInput = {
+    id?: number
+    type: $Enums.MessasageType
+    sentAt?: Date | string
+    text?: string | null
+    fileUrl?: string | null
+    senderUserId?: number | null
+    receiverUserId?: number | null
+    senderOwnerId?: number | null
+    receiverOwnerId?: number | null
+  }
+
+  export type MessageUpdateManyMutationInput = {
+    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    text?: NullableStringFieldUpdateOperationsInput | string | null
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type MessageUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    text?: NullableStringFieldUpdateOperationsInput | string | null
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    senderUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    receiverUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    senderOwnerId?: NullableIntFieldUpdateOperationsInput | number | null
+    receiverOwnerId?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type ProductOwnerCreateInput = {
+    name?: string | null
+    email?: string | null
+    password?: string | null
+    updatedAt?: Date | string
+    createdAt?: Date | string
+    token: string
+    isVerified?: boolean
+    expiredAt?: Date | string | null
+    sentMessages?: MessageCreateNestedManyWithoutSenderOwnerInput
+    receivedMessages?: MessageCreateNestedManyWithoutReceiverOwnerInput
+    Product?: ProductCreateNestedManyWithoutOwerInput
+  }
+
+  export type ProductOwnerUncheckedCreateInput = {
+    id?: number
+    name?: string | null
+    email?: string | null
+    password?: string | null
+    updatedAt?: Date | string
+    createdAt?: Date | string
+    token: string
+    isVerified?: boolean
+    expiredAt?: Date | string | null
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderOwnerInput
+    receivedMessages?: MessageUncheckedCreateNestedManyWithoutReceiverOwnerInput
+    Product?: ProductUncheckedCreateNestedManyWithoutOwerInput
+  }
+
+  export type ProductOwnerUpdateInput = {
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    token?: StringFieldUpdateOperationsInput | string
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    expiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sentMessages?: MessageUpdateManyWithoutSenderOwnerNestedInput
+    receivedMessages?: MessageUpdateManyWithoutReceiverOwnerNestedInput
+    Product?: ProductUpdateManyWithoutOwerNestedInput
+  }
+
+  export type ProductOwnerUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    token?: StringFieldUpdateOperationsInput | string
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    expiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderOwnerNestedInput
+    receivedMessages?: MessageUncheckedUpdateManyWithoutReceiverOwnerNestedInput
+    Product?: ProductUncheckedUpdateManyWithoutOwerNestedInput
+  }
+
+  export type ProductOwnerCreateManyInput = {
+    id?: number
+    name?: string | null
+    email?: string | null
+    password?: string | null
+    updatedAt?: Date | string
+    createdAt?: Date | string
+    token: string
+    isVerified?: boolean
+    expiredAt?: Date | string | null
+  }
+
+  export type ProductOwnerUpdateManyMutationInput = {
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    token?: StringFieldUpdateOperationsInput | string
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    expiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type ProductOwnerUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    token?: StringFieldUpdateOperationsInput | string
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    expiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type BrandCreateInput = {
     id?: string
     name: string
@@ -21235,6 +24449,7 @@ export namespace Prisma {
     thumnailImage: string
     basePrice?: number | null
     createdAt?: Date | string
+    ower: ProductOwnerCreateNestedOneWithoutProductInput
     category: CategoryCreateNestedOneWithoutProductsInput
     brand: BrandCreateNestedOneWithoutProductsInput
     variants?: ProductVariantCreateNestedManyWithoutProductInput
@@ -21245,6 +24460,7 @@ export namespace Prisma {
   export type ProductUncheckedCreateInput = {
     id?: string
     name: string
+    owerId: number
     description: string
     categoryId: string
     brandId: string
@@ -21265,6 +24481,7 @@ export namespace Prisma {
     thumnailImage?: StringFieldUpdateOperationsInput | string
     basePrice?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ower?: ProductOwnerUpdateOneRequiredWithoutProductNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     brand?: BrandUpdateOneRequiredWithoutProductsNestedInput
     variants?: ProductVariantUpdateManyWithoutProductNestedInput
@@ -21275,6 +24492,7 @@ export namespace Prisma {
   export type ProductUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    owerId?: IntFieldUpdateOperationsInput | number
     description?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
     brandId?: StringFieldUpdateOperationsInput | string
@@ -21290,6 +24508,7 @@ export namespace Prisma {
   export type ProductCreateManyInput = {
     id?: string
     name: string
+    owerId: number
     description: string
     categoryId: string
     brandId: string
@@ -21312,6 +24531,7 @@ export namespace Prisma {
   export type ProductUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    owerId?: IntFieldUpdateOperationsInput | number
     description?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
     brandId?: StringFieldUpdateOperationsInput | string
@@ -21916,6 +25136,8 @@ export namespace Prisma {
     otp?: string | null
     otpCreatedAt?: Date | string | null
     cart?: CartCreateNestedManyWithoutUserInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderUserInput
+    receivedMessages?: MessageCreateNestedManyWithoutReceiverUserInput
     CheckoutItem?: CheckoutItemCreateNestedManyWithoutUserInput
     Rating?: RatingCreateNestedManyWithoutUserInput
     Order?: OrderCreateNestedManyWithoutUserInput
@@ -21936,6 +25158,8 @@ export namespace Prisma {
     otp?: string | null
     otpCreatedAt?: Date | string | null
     cart?: CartUncheckedCreateNestedManyWithoutUserInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderUserInput
+    receivedMessages?: MessageUncheckedCreateNestedManyWithoutReceiverUserInput
     CheckoutItem?: CheckoutItemUncheckedCreateNestedManyWithoutUserInput
     Rating?: RatingUncheckedCreateNestedManyWithoutUserInput
     Order?: OrderUncheckedCreateNestedManyWithoutUserInput
@@ -21955,6 +25179,8 @@ export namespace Prisma {
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cart?: CartUpdateManyWithoutUserNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderUserNestedInput
+    receivedMessages?: MessageUpdateManyWithoutReceiverUserNestedInput
     CheckoutItem?: CheckoutItemUpdateManyWithoutUserNestedInput
     Rating?: RatingUpdateManyWithoutUserNestedInput
     Order?: OrderUpdateManyWithoutUserNestedInput
@@ -21975,6 +25201,8 @@ export namespace Prisma {
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cart?: CartUncheckedUpdateManyWithoutUserNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderUserNestedInput
+    receivedMessages?: MessageUncheckedUpdateManyWithoutReceiverUserNestedInput
     CheckoutItem?: CheckoutItemUncheckedUpdateManyWithoutUserNestedInput
     Rating?: RatingUncheckedUpdateManyWithoutUserNestedInput
     Order?: OrderUncheckedUpdateManyWithoutUserNestedInput
@@ -22250,20 +25478,226 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type EnumMessasageTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.MessasageType | EnumMessasageTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MessasageType[] | ListEnumMessasageTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MessasageType[] | ListEnumMessasageTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMessasageTypeFilter<$PrismaModel> | $Enums.MessasageType
+  }
+
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type UserNullableScalarRelationFilter = {
+    is?: UserWhereInput | null
+    isNot?: UserWhereInput | null
+  }
+
+  export type ProductOwnerNullableScalarRelationFilter = {
+    is?: ProductOwnerWhereInput | null
+    isNot?: ProductOwnerWhereInput | null
+  }
+
+  export type MessageCountOrderByAggregateInput = {
+    id?: SortOrder
+    type?: SortOrder
+    sentAt?: SortOrder
+    text?: SortOrder
+    fileUrl?: SortOrder
+    senderUserId?: SortOrder
+    receiverUserId?: SortOrder
+    senderOwnerId?: SortOrder
+    receiverOwnerId?: SortOrder
+  }
+
+  export type MessageAvgOrderByAggregateInput = {
+    id?: SortOrder
+    senderUserId?: SortOrder
+    receiverUserId?: SortOrder
+    senderOwnerId?: SortOrder
+    receiverOwnerId?: SortOrder
+  }
+
+  export type MessageMaxOrderByAggregateInput = {
+    id?: SortOrder
+    type?: SortOrder
+    sentAt?: SortOrder
+    text?: SortOrder
+    fileUrl?: SortOrder
+    senderUserId?: SortOrder
+    receiverUserId?: SortOrder
+    senderOwnerId?: SortOrder
+    receiverOwnerId?: SortOrder
+  }
+
+  export type MessageMinOrderByAggregateInput = {
+    id?: SortOrder
+    type?: SortOrder
+    sentAt?: SortOrder
+    text?: SortOrder
+    fileUrl?: SortOrder
+    senderUserId?: SortOrder
+    receiverUserId?: SortOrder
+    senderOwnerId?: SortOrder
+    receiverOwnerId?: SortOrder
+  }
+
+  export type MessageSumOrderByAggregateInput = {
+    id?: SortOrder
+    senderUserId?: SortOrder
+    receiverUserId?: SortOrder
+    senderOwnerId?: SortOrder
+    receiverOwnerId?: SortOrder
+  }
+
+  export type EnumMessasageTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MessasageType | EnumMessasageTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MessasageType[] | ListEnumMessasageTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MessasageType[] | ListEnumMessasageTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMessasageTypeWithAggregatesFilter<$PrismaModel> | $Enums.MessasageType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMessasageTypeFilter<$PrismaModel>
+    _max?: NestedEnumMessasageTypeFilter<$PrismaModel>
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type MessageListRelationFilter = {
+    every?: MessageWhereInput
+    some?: MessageWhereInput
+    none?: MessageWhereInput
+  }
+
   export type ProductListRelationFilter = {
     every?: ProductWhereInput
     some?: ProductWhereInput
     none?: ProductWhereInput
   }
 
-  export type CategoryBrandListRelationFilter = {
-    every?: CategoryBrandWhereInput
-    some?: CategoryBrandWhereInput
-    none?: CategoryBrandWhereInput
+  export type MessageOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type ProductOrderByRelationAggregateInput = {
     _count?: SortOrder
+  }
+
+  export type ProductOwnerCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
+    updatedAt?: SortOrder
+    createdAt?: SortOrder
+    token?: SortOrder
+    isVerified?: SortOrder
+    expiredAt?: SortOrder
+  }
+
+  export type ProductOwnerAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type ProductOwnerMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
+    updatedAt?: SortOrder
+    createdAt?: SortOrder
+    token?: SortOrder
+    isVerified?: SortOrder
+    expiredAt?: SortOrder
+  }
+
+  export type ProductOwnerMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    password?: SortOrder
+    updatedAt?: SortOrder
+    createdAt?: SortOrder
+    token?: SortOrder
+    isVerified?: SortOrder
+    expiredAt?: SortOrder
+  }
+
+  export type ProductOwnerSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type CategoryBrandListRelationFilter = {
+    every?: CategoryBrandWhereInput
+    some?: CategoryBrandWhereInput
+    none?: CategoryBrandWhereInput
   }
 
   export type CategoryBrandOrderByRelationAggregateInput = {
@@ -22351,6 +25785,11 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
+  export type ProductOwnerScalarRelationFilter = {
+    is?: ProductOwnerWhereInput
+    isNot?: ProductOwnerWhereInput
+  }
+
   export type ProductVariantListRelationFilter = {
     every?: ProductVariantWhereInput
     some?: ProductVariantWhereInput
@@ -22384,6 +25823,7 @@ export namespace Prisma {
   export type ProductCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    owerId?: SortOrder
     description?: SortOrder
     categoryId?: SortOrder
     brandId?: SortOrder
@@ -22394,12 +25834,14 @@ export namespace Prisma {
   }
 
   export type ProductAvgOrderByAggregateInput = {
+    owerId?: SortOrder
     basePrice?: SortOrder
   }
 
   export type ProductMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    owerId?: SortOrder
     description?: SortOrder
     categoryId?: SortOrder
     brandId?: SortOrder
@@ -22412,6 +25854,7 @@ export namespace Prisma {
   export type ProductMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    owerId?: SortOrder
     description?: SortOrder
     categoryId?: SortOrder
     brandId?: SortOrder
@@ -22422,6 +25865,7 @@ export namespace Prisma {
   }
 
   export type ProductSumOrderByAggregateInput = {
+    owerId?: SortOrder
     basePrice?: SortOrder
   }
 
@@ -22613,21 +26057,6 @@ export namespace Prisma {
     variantId?: SortOrder
   }
 
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
   export type RatingCountOrderByAggregateInput = {
     id?: SortOrder
     productId?: SortOrder
@@ -22663,24 +26092,6 @@ export namespace Prisma {
   export type RatingSumOrderByAggregateInput = {
     userId?: SortOrder
     value?: SortOrder
-  }
-
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type DecimalFilter<$PrismaModel = never> = {
@@ -23007,11 +26418,6 @@ export namespace Prisma {
     userId?: SortOrder
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type EnumUserRoleFilter<$PrismaModel = never> = {
     equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
     in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
@@ -23080,14 +26486,6 @@ export namespace Prisma {
 
   export type UserSumOrderByAggregateInput = {
     id?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type EnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
@@ -23181,6 +26579,216 @@ export namespace Prisma {
     upsert?: ProductVariantUpsertWithoutCheckoutItemsInput
     connect?: ProductVariantWhereUniqueInput
     update?: XOR<XOR<ProductVariantUpdateToOneWithWhereWithoutCheckoutItemsInput, ProductVariantUpdateWithoutCheckoutItemsInput>, ProductVariantUncheckedUpdateWithoutCheckoutItemsInput>
+  }
+
+  export type UserCreateNestedOneWithoutSentMessagesInput = {
+    create?: XOR<UserCreateWithoutSentMessagesInput, UserUncheckedCreateWithoutSentMessagesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSentMessagesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutReceivedMessagesInput = {
+    create?: XOR<UserCreateWithoutReceivedMessagesInput, UserUncheckedCreateWithoutReceivedMessagesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReceivedMessagesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ProductOwnerCreateNestedOneWithoutSentMessagesInput = {
+    create?: XOR<ProductOwnerCreateWithoutSentMessagesInput, ProductOwnerUncheckedCreateWithoutSentMessagesInput>
+    connectOrCreate?: ProductOwnerCreateOrConnectWithoutSentMessagesInput
+    connect?: ProductOwnerWhereUniqueInput
+  }
+
+  export type ProductOwnerCreateNestedOneWithoutReceivedMessagesInput = {
+    create?: XOR<ProductOwnerCreateWithoutReceivedMessagesInput, ProductOwnerUncheckedCreateWithoutReceivedMessagesInput>
+    connectOrCreate?: ProductOwnerCreateOrConnectWithoutReceivedMessagesInput
+    connect?: ProductOwnerWhereUniqueInput
+  }
+
+  export type EnumMessasageTypeFieldUpdateOperationsInput = {
+    set?: $Enums.MessasageType
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+  }
+
+  export type UserUpdateOneWithoutSentMessagesNestedInput = {
+    create?: XOR<UserCreateWithoutSentMessagesInput, UserUncheckedCreateWithoutSentMessagesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutSentMessagesInput
+    upsert?: UserUpsertWithoutSentMessagesInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutSentMessagesInput, UserUpdateWithoutSentMessagesInput>, UserUncheckedUpdateWithoutSentMessagesInput>
+  }
+
+  export type UserUpdateOneWithoutReceivedMessagesNestedInput = {
+    create?: XOR<UserCreateWithoutReceivedMessagesInput, UserUncheckedCreateWithoutReceivedMessagesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutReceivedMessagesInput
+    upsert?: UserUpsertWithoutReceivedMessagesInput
+    disconnect?: UserWhereInput | boolean
+    delete?: UserWhereInput | boolean
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutReceivedMessagesInput, UserUpdateWithoutReceivedMessagesInput>, UserUncheckedUpdateWithoutReceivedMessagesInput>
+  }
+
+  export type ProductOwnerUpdateOneWithoutSentMessagesNestedInput = {
+    create?: XOR<ProductOwnerCreateWithoutSentMessagesInput, ProductOwnerUncheckedCreateWithoutSentMessagesInput>
+    connectOrCreate?: ProductOwnerCreateOrConnectWithoutSentMessagesInput
+    upsert?: ProductOwnerUpsertWithoutSentMessagesInput
+    disconnect?: ProductOwnerWhereInput | boolean
+    delete?: ProductOwnerWhereInput | boolean
+    connect?: ProductOwnerWhereUniqueInput
+    update?: XOR<XOR<ProductOwnerUpdateToOneWithWhereWithoutSentMessagesInput, ProductOwnerUpdateWithoutSentMessagesInput>, ProductOwnerUncheckedUpdateWithoutSentMessagesInput>
+  }
+
+  export type ProductOwnerUpdateOneWithoutReceivedMessagesNestedInput = {
+    create?: XOR<ProductOwnerCreateWithoutReceivedMessagesInput, ProductOwnerUncheckedCreateWithoutReceivedMessagesInput>
+    connectOrCreate?: ProductOwnerCreateOrConnectWithoutReceivedMessagesInput
+    upsert?: ProductOwnerUpsertWithoutReceivedMessagesInput
+    disconnect?: ProductOwnerWhereInput | boolean
+    delete?: ProductOwnerWhereInput | boolean
+    connect?: ProductOwnerWhereUniqueInput
+    update?: XOR<XOR<ProductOwnerUpdateToOneWithWhereWithoutReceivedMessagesInput, ProductOwnerUpdateWithoutReceivedMessagesInput>, ProductOwnerUncheckedUpdateWithoutReceivedMessagesInput>
+  }
+
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type MessageCreateNestedManyWithoutSenderOwnerInput = {
+    create?: XOR<MessageCreateWithoutSenderOwnerInput, MessageUncheckedCreateWithoutSenderOwnerInput> | MessageCreateWithoutSenderOwnerInput[] | MessageUncheckedCreateWithoutSenderOwnerInput[]
+    connectOrCreate?: MessageCreateOrConnectWithoutSenderOwnerInput | MessageCreateOrConnectWithoutSenderOwnerInput[]
+    createMany?: MessageCreateManySenderOwnerInputEnvelope
+    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+  }
+
+  export type MessageCreateNestedManyWithoutReceiverOwnerInput = {
+    create?: XOR<MessageCreateWithoutReceiverOwnerInput, MessageUncheckedCreateWithoutReceiverOwnerInput> | MessageCreateWithoutReceiverOwnerInput[] | MessageUncheckedCreateWithoutReceiverOwnerInput[]
+    connectOrCreate?: MessageCreateOrConnectWithoutReceiverOwnerInput | MessageCreateOrConnectWithoutReceiverOwnerInput[]
+    createMany?: MessageCreateManyReceiverOwnerInputEnvelope
+    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+  }
+
+  export type ProductCreateNestedManyWithoutOwerInput = {
+    create?: XOR<ProductCreateWithoutOwerInput, ProductUncheckedCreateWithoutOwerInput> | ProductCreateWithoutOwerInput[] | ProductUncheckedCreateWithoutOwerInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutOwerInput | ProductCreateOrConnectWithoutOwerInput[]
+    createMany?: ProductCreateManyOwerInputEnvelope
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+  }
+
+  export type MessageUncheckedCreateNestedManyWithoutSenderOwnerInput = {
+    create?: XOR<MessageCreateWithoutSenderOwnerInput, MessageUncheckedCreateWithoutSenderOwnerInput> | MessageCreateWithoutSenderOwnerInput[] | MessageUncheckedCreateWithoutSenderOwnerInput[]
+    connectOrCreate?: MessageCreateOrConnectWithoutSenderOwnerInput | MessageCreateOrConnectWithoutSenderOwnerInput[]
+    createMany?: MessageCreateManySenderOwnerInputEnvelope
+    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+  }
+
+  export type MessageUncheckedCreateNestedManyWithoutReceiverOwnerInput = {
+    create?: XOR<MessageCreateWithoutReceiverOwnerInput, MessageUncheckedCreateWithoutReceiverOwnerInput> | MessageCreateWithoutReceiverOwnerInput[] | MessageUncheckedCreateWithoutReceiverOwnerInput[]
+    connectOrCreate?: MessageCreateOrConnectWithoutReceiverOwnerInput | MessageCreateOrConnectWithoutReceiverOwnerInput[]
+    createMany?: MessageCreateManyReceiverOwnerInputEnvelope
+    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+  }
+
+  export type ProductUncheckedCreateNestedManyWithoutOwerInput = {
+    create?: XOR<ProductCreateWithoutOwerInput, ProductUncheckedCreateWithoutOwerInput> | ProductCreateWithoutOwerInput[] | ProductUncheckedCreateWithoutOwerInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutOwerInput | ProductCreateOrConnectWithoutOwerInput[]
+    createMany?: ProductCreateManyOwerInputEnvelope
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type MessageUpdateManyWithoutSenderOwnerNestedInput = {
+    create?: XOR<MessageCreateWithoutSenderOwnerInput, MessageUncheckedCreateWithoutSenderOwnerInput> | MessageCreateWithoutSenderOwnerInput[] | MessageUncheckedCreateWithoutSenderOwnerInput[]
+    connectOrCreate?: MessageCreateOrConnectWithoutSenderOwnerInput | MessageCreateOrConnectWithoutSenderOwnerInput[]
+    upsert?: MessageUpsertWithWhereUniqueWithoutSenderOwnerInput | MessageUpsertWithWhereUniqueWithoutSenderOwnerInput[]
+    createMany?: MessageCreateManySenderOwnerInputEnvelope
+    set?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    disconnect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    delete?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    update?: MessageUpdateWithWhereUniqueWithoutSenderOwnerInput | MessageUpdateWithWhereUniqueWithoutSenderOwnerInput[]
+    updateMany?: MessageUpdateManyWithWhereWithoutSenderOwnerInput | MessageUpdateManyWithWhereWithoutSenderOwnerInput[]
+    deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
+  }
+
+  export type MessageUpdateManyWithoutReceiverOwnerNestedInput = {
+    create?: XOR<MessageCreateWithoutReceiverOwnerInput, MessageUncheckedCreateWithoutReceiverOwnerInput> | MessageCreateWithoutReceiverOwnerInput[] | MessageUncheckedCreateWithoutReceiverOwnerInput[]
+    connectOrCreate?: MessageCreateOrConnectWithoutReceiverOwnerInput | MessageCreateOrConnectWithoutReceiverOwnerInput[]
+    upsert?: MessageUpsertWithWhereUniqueWithoutReceiverOwnerInput | MessageUpsertWithWhereUniqueWithoutReceiverOwnerInput[]
+    createMany?: MessageCreateManyReceiverOwnerInputEnvelope
+    set?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    disconnect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    delete?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    update?: MessageUpdateWithWhereUniqueWithoutReceiverOwnerInput | MessageUpdateWithWhereUniqueWithoutReceiverOwnerInput[]
+    updateMany?: MessageUpdateManyWithWhereWithoutReceiverOwnerInput | MessageUpdateManyWithWhereWithoutReceiverOwnerInput[]
+    deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
+  }
+
+  export type ProductUpdateManyWithoutOwerNestedInput = {
+    create?: XOR<ProductCreateWithoutOwerInput, ProductUncheckedCreateWithoutOwerInput> | ProductCreateWithoutOwerInput[] | ProductUncheckedCreateWithoutOwerInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutOwerInput | ProductCreateOrConnectWithoutOwerInput[]
+    upsert?: ProductUpsertWithWhereUniqueWithoutOwerInput | ProductUpsertWithWhereUniqueWithoutOwerInput[]
+    createMany?: ProductCreateManyOwerInputEnvelope
+    set?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    disconnect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    delete?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    update?: ProductUpdateWithWhereUniqueWithoutOwerInput | ProductUpdateWithWhereUniqueWithoutOwerInput[]
+    updateMany?: ProductUpdateManyWithWhereWithoutOwerInput | ProductUpdateManyWithWhereWithoutOwerInput[]
+    deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[]
+  }
+
+  export type MessageUncheckedUpdateManyWithoutSenderOwnerNestedInput = {
+    create?: XOR<MessageCreateWithoutSenderOwnerInput, MessageUncheckedCreateWithoutSenderOwnerInput> | MessageCreateWithoutSenderOwnerInput[] | MessageUncheckedCreateWithoutSenderOwnerInput[]
+    connectOrCreate?: MessageCreateOrConnectWithoutSenderOwnerInput | MessageCreateOrConnectWithoutSenderOwnerInput[]
+    upsert?: MessageUpsertWithWhereUniqueWithoutSenderOwnerInput | MessageUpsertWithWhereUniqueWithoutSenderOwnerInput[]
+    createMany?: MessageCreateManySenderOwnerInputEnvelope
+    set?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    disconnect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    delete?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    update?: MessageUpdateWithWhereUniqueWithoutSenderOwnerInput | MessageUpdateWithWhereUniqueWithoutSenderOwnerInput[]
+    updateMany?: MessageUpdateManyWithWhereWithoutSenderOwnerInput | MessageUpdateManyWithWhereWithoutSenderOwnerInput[]
+    deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
+  }
+
+  export type MessageUncheckedUpdateManyWithoutReceiverOwnerNestedInput = {
+    create?: XOR<MessageCreateWithoutReceiverOwnerInput, MessageUncheckedCreateWithoutReceiverOwnerInput> | MessageCreateWithoutReceiverOwnerInput[] | MessageUncheckedCreateWithoutReceiverOwnerInput[]
+    connectOrCreate?: MessageCreateOrConnectWithoutReceiverOwnerInput | MessageCreateOrConnectWithoutReceiverOwnerInput[]
+    upsert?: MessageUpsertWithWhereUniqueWithoutReceiverOwnerInput | MessageUpsertWithWhereUniqueWithoutReceiverOwnerInput[]
+    createMany?: MessageCreateManyReceiverOwnerInputEnvelope
+    set?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    disconnect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    delete?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    update?: MessageUpdateWithWhereUniqueWithoutReceiverOwnerInput | MessageUpdateWithWhereUniqueWithoutReceiverOwnerInput[]
+    updateMany?: MessageUpdateManyWithWhereWithoutReceiverOwnerInput | MessageUpdateManyWithWhereWithoutReceiverOwnerInput[]
+    deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
+  }
+
+  export type ProductUncheckedUpdateManyWithoutOwerNestedInput = {
+    create?: XOR<ProductCreateWithoutOwerInput, ProductUncheckedCreateWithoutOwerInput> | ProductCreateWithoutOwerInput[] | ProductUncheckedCreateWithoutOwerInput[]
+    connectOrCreate?: ProductCreateOrConnectWithoutOwerInput | ProductCreateOrConnectWithoutOwerInput[]
+    upsert?: ProductUpsertWithWhereUniqueWithoutOwerInput | ProductUpsertWithWhereUniqueWithoutOwerInput[]
+    createMany?: ProductCreateManyOwerInputEnvelope
+    set?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    disconnect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    delete?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    connect?: ProductWhereUniqueInput | ProductWhereUniqueInput[]
+    update?: ProductUpdateWithWhereUniqueWithoutOwerInput | ProductUpdateWithWhereUniqueWithoutOwerInput[]
+    updateMany?: ProductUpdateManyWithWhereWithoutOwerInput | ProductUpdateManyWithWhereWithoutOwerInput[]
+    deleteMany?: ProductScalarWhereInput | ProductScalarWhereInput[]
   }
 
   export type ProductCreateNestedManyWithoutBrandInput = {
@@ -23379,6 +26987,12 @@ export namespace Prisma {
     update?: XOR<XOR<CategoryUpdateToOneWithWhereWithoutBrandsInput, CategoryUpdateWithoutBrandsInput>, CategoryUncheckedUpdateWithoutBrandsInput>
   }
 
+  export type ProductOwnerCreateNestedOneWithoutProductInput = {
+    create?: XOR<ProductOwnerCreateWithoutProductInput, ProductOwnerUncheckedCreateWithoutProductInput>
+    connectOrCreate?: ProductOwnerCreateOrConnectWithoutProductInput
+    connect?: ProductOwnerWhereUniqueInput
+  }
+
   export type CategoryCreateNestedOneWithoutProductsInput = {
     create?: XOR<CategoryCreateWithoutProductsInput, CategoryUncheckedCreateWithoutProductsInput>
     connectOrCreate?: CategoryCreateOrConnectWithoutProductsInput
@@ -23443,6 +27057,14 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type ProductOwnerUpdateOneRequiredWithoutProductNestedInput = {
+    create?: XOR<ProductOwnerCreateWithoutProductInput, ProductOwnerUncheckedCreateWithoutProductInput>
+    connectOrCreate?: ProductOwnerCreateOrConnectWithoutProductInput
+    upsert?: ProductOwnerUpsertWithoutProductInput
+    connect?: ProductOwnerWhereUniqueInput
+    update?: XOR<XOR<ProductOwnerUpdateToOneWithWhereWithoutProductInput, ProductOwnerUpdateWithoutProductInput>, ProductOwnerUncheckedUpdateWithoutProductInput>
   }
 
   export type CategoryUpdateOneRequiredWithoutProductsNestedInput = {
@@ -23803,10 +27425,6 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
-  }
-
   export type ProductUpdateOneRequiredWithoutRatingsNestedInput = {
     create?: XOR<ProductCreateWithoutRatingsInput, ProductUncheckedCreateWithoutRatingsInput>
     connectOrCreate?: ProductCreateOrConnectWithoutRatingsInput
@@ -24050,6 +27668,20 @@ export namespace Prisma {
     connect?: CartWhereUniqueInput | CartWhereUniqueInput[]
   }
 
+  export type MessageCreateNestedManyWithoutSenderUserInput = {
+    create?: XOR<MessageCreateWithoutSenderUserInput, MessageUncheckedCreateWithoutSenderUserInput> | MessageCreateWithoutSenderUserInput[] | MessageUncheckedCreateWithoutSenderUserInput[]
+    connectOrCreate?: MessageCreateOrConnectWithoutSenderUserInput | MessageCreateOrConnectWithoutSenderUserInput[]
+    createMany?: MessageCreateManySenderUserInputEnvelope
+    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+  }
+
+  export type MessageCreateNestedManyWithoutReceiverUserInput = {
+    create?: XOR<MessageCreateWithoutReceiverUserInput, MessageUncheckedCreateWithoutReceiverUserInput> | MessageCreateWithoutReceiverUserInput[] | MessageUncheckedCreateWithoutReceiverUserInput[]
+    connectOrCreate?: MessageCreateOrConnectWithoutReceiverUserInput | MessageCreateOrConnectWithoutReceiverUserInput[]
+    createMany?: MessageCreateManyReceiverUserInputEnvelope
+    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+  }
+
   export type CheckoutItemCreateNestedManyWithoutUserInput = {
     create?: XOR<CheckoutItemCreateWithoutUserInput, CheckoutItemUncheckedCreateWithoutUserInput> | CheckoutItemCreateWithoutUserInput[] | CheckoutItemUncheckedCreateWithoutUserInput[]
     connectOrCreate?: CheckoutItemCreateOrConnectWithoutUserInput | CheckoutItemCreateOrConnectWithoutUserInput[]
@@ -24085,6 +27717,20 @@ export namespace Prisma {
     connect?: CartWhereUniqueInput | CartWhereUniqueInput[]
   }
 
+  export type MessageUncheckedCreateNestedManyWithoutSenderUserInput = {
+    create?: XOR<MessageCreateWithoutSenderUserInput, MessageUncheckedCreateWithoutSenderUserInput> | MessageCreateWithoutSenderUserInput[] | MessageUncheckedCreateWithoutSenderUserInput[]
+    connectOrCreate?: MessageCreateOrConnectWithoutSenderUserInput | MessageCreateOrConnectWithoutSenderUserInput[]
+    createMany?: MessageCreateManySenderUserInputEnvelope
+    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+  }
+
+  export type MessageUncheckedCreateNestedManyWithoutReceiverUserInput = {
+    create?: XOR<MessageCreateWithoutReceiverUserInput, MessageUncheckedCreateWithoutReceiverUserInput> | MessageCreateWithoutReceiverUserInput[] | MessageUncheckedCreateWithoutReceiverUserInput[]
+    connectOrCreate?: MessageCreateOrConnectWithoutReceiverUserInput | MessageCreateOrConnectWithoutReceiverUserInput[]
+    createMany?: MessageCreateManyReceiverUserInputEnvelope
+    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+  }
+
   export type CheckoutItemUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<CheckoutItemCreateWithoutUserInput, CheckoutItemUncheckedCreateWithoutUserInput> | CheckoutItemCreateWithoutUserInput[] | CheckoutItemUncheckedCreateWithoutUserInput[]
     connectOrCreate?: CheckoutItemCreateOrConnectWithoutUserInput | CheckoutItemCreateOrConnectWithoutUserInput[]
@@ -24113,10 +27759,6 @@ export namespace Prisma {
     connect?: AddressWhereUniqueInput | AddressWhereUniqueInput[]
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
   export type EnumUserRoleFieldUpdateOperationsInput = {
     set?: $Enums.UserRole
   }
@@ -24133,6 +27775,34 @@ export namespace Prisma {
     update?: CartUpdateWithWhereUniqueWithoutUserInput | CartUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: CartUpdateManyWithWhereWithoutUserInput | CartUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: CartScalarWhereInput | CartScalarWhereInput[]
+  }
+
+  export type MessageUpdateManyWithoutSenderUserNestedInput = {
+    create?: XOR<MessageCreateWithoutSenderUserInput, MessageUncheckedCreateWithoutSenderUserInput> | MessageCreateWithoutSenderUserInput[] | MessageUncheckedCreateWithoutSenderUserInput[]
+    connectOrCreate?: MessageCreateOrConnectWithoutSenderUserInput | MessageCreateOrConnectWithoutSenderUserInput[]
+    upsert?: MessageUpsertWithWhereUniqueWithoutSenderUserInput | MessageUpsertWithWhereUniqueWithoutSenderUserInput[]
+    createMany?: MessageCreateManySenderUserInputEnvelope
+    set?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    disconnect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    delete?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    update?: MessageUpdateWithWhereUniqueWithoutSenderUserInput | MessageUpdateWithWhereUniqueWithoutSenderUserInput[]
+    updateMany?: MessageUpdateManyWithWhereWithoutSenderUserInput | MessageUpdateManyWithWhereWithoutSenderUserInput[]
+    deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
+  }
+
+  export type MessageUpdateManyWithoutReceiverUserNestedInput = {
+    create?: XOR<MessageCreateWithoutReceiverUserInput, MessageUncheckedCreateWithoutReceiverUserInput> | MessageCreateWithoutReceiverUserInput[] | MessageUncheckedCreateWithoutReceiverUserInput[]
+    connectOrCreate?: MessageCreateOrConnectWithoutReceiverUserInput | MessageCreateOrConnectWithoutReceiverUserInput[]
+    upsert?: MessageUpsertWithWhereUniqueWithoutReceiverUserInput | MessageUpsertWithWhereUniqueWithoutReceiverUserInput[]
+    createMany?: MessageCreateManyReceiverUserInputEnvelope
+    set?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    disconnect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    delete?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    update?: MessageUpdateWithWhereUniqueWithoutReceiverUserInput | MessageUpdateWithWhereUniqueWithoutReceiverUserInput[]
+    updateMany?: MessageUpdateManyWithWhereWithoutReceiverUserInput | MessageUpdateManyWithWhereWithoutReceiverUserInput[]
+    deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
   }
 
   export type CheckoutItemUpdateManyWithoutUserNestedInput = {
@@ -24203,6 +27873,34 @@ export namespace Prisma {
     update?: CartUpdateWithWhereUniqueWithoutUserInput | CartUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: CartUpdateManyWithWhereWithoutUserInput | CartUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: CartScalarWhereInput | CartScalarWhereInput[]
+  }
+
+  export type MessageUncheckedUpdateManyWithoutSenderUserNestedInput = {
+    create?: XOR<MessageCreateWithoutSenderUserInput, MessageUncheckedCreateWithoutSenderUserInput> | MessageCreateWithoutSenderUserInput[] | MessageUncheckedCreateWithoutSenderUserInput[]
+    connectOrCreate?: MessageCreateOrConnectWithoutSenderUserInput | MessageCreateOrConnectWithoutSenderUserInput[]
+    upsert?: MessageUpsertWithWhereUniqueWithoutSenderUserInput | MessageUpsertWithWhereUniqueWithoutSenderUserInput[]
+    createMany?: MessageCreateManySenderUserInputEnvelope
+    set?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    disconnect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    delete?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    update?: MessageUpdateWithWhereUniqueWithoutSenderUserInput | MessageUpdateWithWhereUniqueWithoutSenderUserInput[]
+    updateMany?: MessageUpdateManyWithWhereWithoutSenderUserInput | MessageUpdateManyWithWhereWithoutSenderUserInput[]
+    deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
+  }
+
+  export type MessageUncheckedUpdateManyWithoutReceiverUserNestedInput = {
+    create?: XOR<MessageCreateWithoutReceiverUserInput, MessageUncheckedCreateWithoutReceiverUserInput> | MessageCreateWithoutReceiverUserInput[] | MessageUncheckedCreateWithoutReceiverUserInput[]
+    connectOrCreate?: MessageCreateOrConnectWithoutReceiverUserInput | MessageCreateOrConnectWithoutReceiverUserInput[]
+    upsert?: MessageUpsertWithWhereUniqueWithoutReceiverUserInput | MessageUpsertWithWhereUniqueWithoutReceiverUserInput[]
+    createMany?: MessageCreateManyReceiverUserInputEnvelope
+    set?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    disconnect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    delete?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+    update?: MessageUpdateWithWhereUniqueWithoutReceiverUserInput | MessageUpdateWithWhereUniqueWithoutReceiverUserInput[]
+    updateMany?: MessageUpdateManyWithWhereWithoutReceiverUserInput | MessageUpdateManyWithWhereWithoutReceiverUserInput[]
+    deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
   }
 
   export type CheckoutItemUncheckedUpdateManyWithoutUserNestedInput = {
@@ -24391,11 +28089,68 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedEnumGenderFilter<$PrismaModel = never> = {
-    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel>
-    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
-    not?: NestedEnumGenderFilter<$PrismaModel> | $Enums.Gender
+  export type NestedEnumMessasageTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.MessasageType | EnumMessasageTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MessasageType[] | ListEnumMessasageTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MessasageType[] | ListEnumMessasageTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMessasageTypeFilter<$PrismaModel> | $Enums.MessasageType
+  }
+
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedEnumMessasageTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MessasageType | EnumMessasageTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MessasageType[] | ListEnumMessasageTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MessasageType[] | ListEnumMessasageTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMessasageTypeWithAggregatesFilter<$PrismaModel> | $Enums.MessasageType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMessasageTypeFilter<$PrismaModel>
+    _max?: NestedEnumMessasageTypeFilter<$PrismaModel>
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type NestedFloatNullableFilter<$PrismaModel = never> = {
@@ -24407,6 +28162,26 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedEnumGenderFilter<$PrismaModel = never> = {
+    equals?: $Enums.Gender | EnumGenderFieldRefInput<$PrismaModel>
+    in?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Gender[] | ListEnumGenderFieldRefInput<$PrismaModel>
+    not?: NestedEnumGenderFilter<$PrismaModel> | $Enums.Gender
   }
 
   export type NestedEnumGenderWithAggregatesFilter<$PrismaModel = never> = {
@@ -24449,37 +28224,6 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
-  }
-
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type NestedDecimalFilter<$PrismaModel = never> = {
@@ -24583,24 +28327,11 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type NestedEnumUserRoleFilter<$PrismaModel = never> = {
     equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
     in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
     notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
     not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedEnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
@@ -24626,6 +28357,8 @@ export namespace Prisma {
     otp?: string | null
     otpCreatedAt?: Date | string | null
     cart?: CartCreateNestedManyWithoutUserInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderUserInput
+    receivedMessages?: MessageCreateNestedManyWithoutReceiverUserInput
     Rating?: RatingCreateNestedManyWithoutUserInput
     Order?: OrderCreateNestedManyWithoutUserInput
     Address?: AddressCreateNestedManyWithoutUserInput
@@ -24645,6 +28378,8 @@ export namespace Prisma {
     otp?: string | null
     otpCreatedAt?: Date | string | null
     cart?: CartUncheckedCreateNestedManyWithoutUserInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderUserInput
+    receivedMessages?: MessageUncheckedCreateNestedManyWithoutReceiverUserInput
     Rating?: RatingUncheckedCreateNestedManyWithoutUserInput
     Order?: OrderUncheckedCreateNestedManyWithoutUserInput
     Address?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -24712,6 +28447,8 @@ export namespace Prisma {
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cart?: CartUpdateManyWithoutUserNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderUserNestedInput
+    receivedMessages?: MessageUpdateManyWithoutReceiverUserNestedInput
     Rating?: RatingUpdateManyWithoutUserNestedInput
     Order?: OrderUpdateManyWithoutUserNestedInput
     Address?: AddressUpdateManyWithoutUserNestedInput
@@ -24731,6 +28468,8 @@ export namespace Prisma {
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cart?: CartUncheckedUpdateManyWithoutUserNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderUserNestedInput
+    receivedMessages?: MessageUncheckedUpdateManyWithoutReceiverUserNestedInput
     Rating?: RatingUncheckedUpdateManyWithoutUserNestedInput
     Order?: OrderUncheckedUpdateManyWithoutUserNestedInput
     Address?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -24775,6 +28514,523 @@ export namespace Prisma {
     OrderItem?: OrderItemUncheckedUpdateManyWithoutVariantNestedInput
   }
 
+  export type UserCreateWithoutSentMessagesInput = {
+    name: string
+    email?: string | null
+    password: string
+    phoneNo?: string | null
+    isVerified?: boolean
+    userRole?: $Enums.UserRole
+    updatedAt?: Date | string
+    createdAt?: Date | string
+    refreshToken?: string | null
+    otp?: string | null
+    otpCreatedAt?: Date | string | null
+    cart?: CartCreateNestedManyWithoutUserInput
+    receivedMessages?: MessageCreateNestedManyWithoutReceiverUserInput
+    CheckoutItem?: CheckoutItemCreateNestedManyWithoutUserInput
+    Rating?: RatingCreateNestedManyWithoutUserInput
+    Order?: OrderCreateNestedManyWithoutUserInput
+    Address?: AddressCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutSentMessagesInput = {
+    id?: number
+    name: string
+    email?: string | null
+    password: string
+    phoneNo?: string | null
+    isVerified?: boolean
+    userRole?: $Enums.UserRole
+    updatedAt?: Date | string
+    createdAt?: Date | string
+    refreshToken?: string | null
+    otp?: string | null
+    otpCreatedAt?: Date | string | null
+    cart?: CartUncheckedCreateNestedManyWithoutUserInput
+    receivedMessages?: MessageUncheckedCreateNestedManyWithoutReceiverUserInput
+    CheckoutItem?: CheckoutItemUncheckedCreateNestedManyWithoutUserInput
+    Rating?: RatingUncheckedCreateNestedManyWithoutUserInput
+    Order?: OrderUncheckedCreateNestedManyWithoutUserInput
+    Address?: AddressUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutSentMessagesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutSentMessagesInput, UserUncheckedCreateWithoutSentMessagesInput>
+  }
+
+  export type UserCreateWithoutReceivedMessagesInput = {
+    name: string
+    email?: string | null
+    password: string
+    phoneNo?: string | null
+    isVerified?: boolean
+    userRole?: $Enums.UserRole
+    updatedAt?: Date | string
+    createdAt?: Date | string
+    refreshToken?: string | null
+    otp?: string | null
+    otpCreatedAt?: Date | string | null
+    cart?: CartCreateNestedManyWithoutUserInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderUserInput
+    CheckoutItem?: CheckoutItemCreateNestedManyWithoutUserInput
+    Rating?: RatingCreateNestedManyWithoutUserInput
+    Order?: OrderCreateNestedManyWithoutUserInput
+    Address?: AddressCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutReceivedMessagesInput = {
+    id?: number
+    name: string
+    email?: string | null
+    password: string
+    phoneNo?: string | null
+    isVerified?: boolean
+    userRole?: $Enums.UserRole
+    updatedAt?: Date | string
+    createdAt?: Date | string
+    refreshToken?: string | null
+    otp?: string | null
+    otpCreatedAt?: Date | string | null
+    cart?: CartUncheckedCreateNestedManyWithoutUserInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderUserInput
+    CheckoutItem?: CheckoutItemUncheckedCreateNestedManyWithoutUserInput
+    Rating?: RatingUncheckedCreateNestedManyWithoutUserInput
+    Order?: OrderUncheckedCreateNestedManyWithoutUserInput
+    Address?: AddressUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutReceivedMessagesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutReceivedMessagesInput, UserUncheckedCreateWithoutReceivedMessagesInput>
+  }
+
+  export type ProductOwnerCreateWithoutSentMessagesInput = {
+    name?: string | null
+    email?: string | null
+    password?: string | null
+    updatedAt?: Date | string
+    createdAt?: Date | string
+    token: string
+    isVerified?: boolean
+    expiredAt?: Date | string | null
+    receivedMessages?: MessageCreateNestedManyWithoutReceiverOwnerInput
+    Product?: ProductCreateNestedManyWithoutOwerInput
+  }
+
+  export type ProductOwnerUncheckedCreateWithoutSentMessagesInput = {
+    id?: number
+    name?: string | null
+    email?: string | null
+    password?: string | null
+    updatedAt?: Date | string
+    createdAt?: Date | string
+    token: string
+    isVerified?: boolean
+    expiredAt?: Date | string | null
+    receivedMessages?: MessageUncheckedCreateNestedManyWithoutReceiverOwnerInput
+    Product?: ProductUncheckedCreateNestedManyWithoutOwerInput
+  }
+
+  export type ProductOwnerCreateOrConnectWithoutSentMessagesInput = {
+    where: ProductOwnerWhereUniqueInput
+    create: XOR<ProductOwnerCreateWithoutSentMessagesInput, ProductOwnerUncheckedCreateWithoutSentMessagesInput>
+  }
+
+  export type ProductOwnerCreateWithoutReceivedMessagesInput = {
+    name?: string | null
+    email?: string | null
+    password?: string | null
+    updatedAt?: Date | string
+    createdAt?: Date | string
+    token: string
+    isVerified?: boolean
+    expiredAt?: Date | string | null
+    sentMessages?: MessageCreateNestedManyWithoutSenderOwnerInput
+    Product?: ProductCreateNestedManyWithoutOwerInput
+  }
+
+  export type ProductOwnerUncheckedCreateWithoutReceivedMessagesInput = {
+    id?: number
+    name?: string | null
+    email?: string | null
+    password?: string | null
+    updatedAt?: Date | string
+    createdAt?: Date | string
+    token: string
+    isVerified?: boolean
+    expiredAt?: Date | string | null
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderOwnerInput
+    Product?: ProductUncheckedCreateNestedManyWithoutOwerInput
+  }
+
+  export type ProductOwnerCreateOrConnectWithoutReceivedMessagesInput = {
+    where: ProductOwnerWhereUniqueInput
+    create: XOR<ProductOwnerCreateWithoutReceivedMessagesInput, ProductOwnerUncheckedCreateWithoutReceivedMessagesInput>
+  }
+
+  export type UserUpsertWithoutSentMessagesInput = {
+    update: XOR<UserUpdateWithoutSentMessagesInput, UserUncheckedUpdateWithoutSentMessagesInput>
+    create: XOR<UserCreateWithoutSentMessagesInput, UserUncheckedCreateWithoutSentMessagesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutSentMessagesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutSentMessagesInput, UserUncheckedUpdateWithoutSentMessagesInput>
+  }
+
+  export type UserUpdateWithoutSentMessagesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    phoneNo?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    userRole?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cart?: CartUpdateManyWithoutUserNestedInput
+    receivedMessages?: MessageUpdateManyWithoutReceiverUserNestedInput
+    CheckoutItem?: CheckoutItemUpdateManyWithoutUserNestedInput
+    Rating?: RatingUpdateManyWithoutUserNestedInput
+    Order?: OrderUpdateManyWithoutUserNestedInput
+    Address?: AddressUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutSentMessagesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    phoneNo?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    userRole?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cart?: CartUncheckedUpdateManyWithoutUserNestedInput
+    receivedMessages?: MessageUncheckedUpdateManyWithoutReceiverUserNestedInput
+    CheckoutItem?: CheckoutItemUncheckedUpdateManyWithoutUserNestedInput
+    Rating?: RatingUncheckedUpdateManyWithoutUserNestedInput
+    Order?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    Address?: AddressUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUpsertWithoutReceivedMessagesInput = {
+    update: XOR<UserUpdateWithoutReceivedMessagesInput, UserUncheckedUpdateWithoutReceivedMessagesInput>
+    create: XOR<UserCreateWithoutReceivedMessagesInput, UserUncheckedCreateWithoutReceivedMessagesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutReceivedMessagesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutReceivedMessagesInput, UserUncheckedUpdateWithoutReceivedMessagesInput>
+  }
+
+  export type UserUpdateWithoutReceivedMessagesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    phoneNo?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    userRole?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cart?: CartUpdateManyWithoutUserNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderUserNestedInput
+    CheckoutItem?: CheckoutItemUpdateManyWithoutUserNestedInput
+    Rating?: RatingUpdateManyWithoutUserNestedInput
+    Order?: OrderUpdateManyWithoutUserNestedInput
+    Address?: AddressUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutReceivedMessagesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: StringFieldUpdateOperationsInput | string
+    phoneNo?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    userRole?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    otp?: NullableStringFieldUpdateOperationsInput | string | null
+    otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    cart?: CartUncheckedUpdateManyWithoutUserNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderUserNestedInput
+    CheckoutItem?: CheckoutItemUncheckedUpdateManyWithoutUserNestedInput
+    Rating?: RatingUncheckedUpdateManyWithoutUserNestedInput
+    Order?: OrderUncheckedUpdateManyWithoutUserNestedInput
+    Address?: AddressUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type ProductOwnerUpsertWithoutSentMessagesInput = {
+    update: XOR<ProductOwnerUpdateWithoutSentMessagesInput, ProductOwnerUncheckedUpdateWithoutSentMessagesInput>
+    create: XOR<ProductOwnerCreateWithoutSentMessagesInput, ProductOwnerUncheckedCreateWithoutSentMessagesInput>
+    where?: ProductOwnerWhereInput
+  }
+
+  export type ProductOwnerUpdateToOneWithWhereWithoutSentMessagesInput = {
+    where?: ProductOwnerWhereInput
+    data: XOR<ProductOwnerUpdateWithoutSentMessagesInput, ProductOwnerUncheckedUpdateWithoutSentMessagesInput>
+  }
+
+  export type ProductOwnerUpdateWithoutSentMessagesInput = {
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    token?: StringFieldUpdateOperationsInput | string
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    expiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receivedMessages?: MessageUpdateManyWithoutReceiverOwnerNestedInput
+    Product?: ProductUpdateManyWithoutOwerNestedInput
+  }
+
+  export type ProductOwnerUncheckedUpdateWithoutSentMessagesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    token?: StringFieldUpdateOperationsInput | string
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    expiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    receivedMessages?: MessageUncheckedUpdateManyWithoutReceiverOwnerNestedInput
+    Product?: ProductUncheckedUpdateManyWithoutOwerNestedInput
+  }
+
+  export type ProductOwnerUpsertWithoutReceivedMessagesInput = {
+    update: XOR<ProductOwnerUpdateWithoutReceivedMessagesInput, ProductOwnerUncheckedUpdateWithoutReceivedMessagesInput>
+    create: XOR<ProductOwnerCreateWithoutReceivedMessagesInput, ProductOwnerUncheckedCreateWithoutReceivedMessagesInput>
+    where?: ProductOwnerWhereInput
+  }
+
+  export type ProductOwnerUpdateToOneWithWhereWithoutReceivedMessagesInput = {
+    where?: ProductOwnerWhereInput
+    data: XOR<ProductOwnerUpdateWithoutReceivedMessagesInput, ProductOwnerUncheckedUpdateWithoutReceivedMessagesInput>
+  }
+
+  export type ProductOwnerUpdateWithoutReceivedMessagesInput = {
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    token?: StringFieldUpdateOperationsInput | string
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    expiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sentMessages?: MessageUpdateManyWithoutSenderOwnerNestedInput
+    Product?: ProductUpdateManyWithoutOwerNestedInput
+  }
+
+  export type ProductOwnerUncheckedUpdateWithoutReceivedMessagesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    token?: StringFieldUpdateOperationsInput | string
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    expiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderOwnerNestedInput
+    Product?: ProductUncheckedUpdateManyWithoutOwerNestedInput
+  }
+
+  export type MessageCreateWithoutSenderOwnerInput = {
+    type: $Enums.MessasageType
+    sentAt?: Date | string
+    text?: string | null
+    fileUrl?: string | null
+    senderUser?: UserCreateNestedOneWithoutSentMessagesInput
+    receiverUser?: UserCreateNestedOneWithoutReceivedMessagesInput
+    receiverOwner?: ProductOwnerCreateNestedOneWithoutReceivedMessagesInput
+  }
+
+  export type MessageUncheckedCreateWithoutSenderOwnerInput = {
+    id?: number
+    type: $Enums.MessasageType
+    sentAt?: Date | string
+    text?: string | null
+    fileUrl?: string | null
+    senderUserId?: number | null
+    receiverUserId?: number | null
+    receiverOwnerId?: number | null
+  }
+
+  export type MessageCreateOrConnectWithoutSenderOwnerInput = {
+    where: MessageWhereUniqueInput
+    create: XOR<MessageCreateWithoutSenderOwnerInput, MessageUncheckedCreateWithoutSenderOwnerInput>
+  }
+
+  export type MessageCreateManySenderOwnerInputEnvelope = {
+    data: MessageCreateManySenderOwnerInput | MessageCreateManySenderOwnerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MessageCreateWithoutReceiverOwnerInput = {
+    type: $Enums.MessasageType
+    sentAt?: Date | string
+    text?: string | null
+    fileUrl?: string | null
+    senderUser?: UserCreateNestedOneWithoutSentMessagesInput
+    receiverUser?: UserCreateNestedOneWithoutReceivedMessagesInput
+    senderOwner?: ProductOwnerCreateNestedOneWithoutSentMessagesInput
+  }
+
+  export type MessageUncheckedCreateWithoutReceiverOwnerInput = {
+    id?: number
+    type: $Enums.MessasageType
+    sentAt?: Date | string
+    text?: string | null
+    fileUrl?: string | null
+    senderUserId?: number | null
+    receiverUserId?: number | null
+    senderOwnerId?: number | null
+  }
+
+  export type MessageCreateOrConnectWithoutReceiverOwnerInput = {
+    where: MessageWhereUniqueInput
+    create: XOR<MessageCreateWithoutReceiverOwnerInput, MessageUncheckedCreateWithoutReceiverOwnerInput>
+  }
+
+  export type MessageCreateManyReceiverOwnerInputEnvelope = {
+    data: MessageCreateManyReceiverOwnerInput | MessageCreateManyReceiverOwnerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProductCreateWithoutOwerInput = {
+    id?: string
+    name: string
+    description: string
+    gender?: $Enums.Gender
+    thumnailImage: string
+    basePrice?: number | null
+    createdAt?: Date | string
+    category: CategoryCreateNestedOneWithoutProductsInput
+    brand: BrandCreateNestedOneWithoutProductsInput
+    variants?: ProductVariantCreateNestedManyWithoutProductInput
+    ratings?: RatingCreateNestedManyWithoutProductInput
+    cart?: CartCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductUncheckedCreateWithoutOwerInput = {
+    id?: string
+    name: string
+    description: string
+    categoryId: string
+    brandId: string
+    gender?: $Enums.Gender
+    thumnailImage: string
+    basePrice?: number | null
+    createdAt?: Date | string
+    variants?: ProductVariantUncheckedCreateNestedManyWithoutProductInput
+    ratings?: RatingUncheckedCreateNestedManyWithoutProductInput
+    cart?: CartUncheckedCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductCreateOrConnectWithoutOwerInput = {
+    where: ProductWhereUniqueInput
+    create: XOR<ProductCreateWithoutOwerInput, ProductUncheckedCreateWithoutOwerInput>
+  }
+
+  export type ProductCreateManyOwerInputEnvelope = {
+    data: ProductCreateManyOwerInput | ProductCreateManyOwerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MessageUpsertWithWhereUniqueWithoutSenderOwnerInput = {
+    where: MessageWhereUniqueInput
+    update: XOR<MessageUpdateWithoutSenderOwnerInput, MessageUncheckedUpdateWithoutSenderOwnerInput>
+    create: XOR<MessageCreateWithoutSenderOwnerInput, MessageUncheckedCreateWithoutSenderOwnerInput>
+  }
+
+  export type MessageUpdateWithWhereUniqueWithoutSenderOwnerInput = {
+    where: MessageWhereUniqueInput
+    data: XOR<MessageUpdateWithoutSenderOwnerInput, MessageUncheckedUpdateWithoutSenderOwnerInput>
+  }
+
+  export type MessageUpdateManyWithWhereWithoutSenderOwnerInput = {
+    where: MessageScalarWhereInput
+    data: XOR<MessageUpdateManyMutationInput, MessageUncheckedUpdateManyWithoutSenderOwnerInput>
+  }
+
+  export type MessageScalarWhereInput = {
+    AND?: MessageScalarWhereInput | MessageScalarWhereInput[]
+    OR?: MessageScalarWhereInput[]
+    NOT?: MessageScalarWhereInput | MessageScalarWhereInput[]
+    id?: IntFilter<"Message"> | number
+    type?: EnumMessasageTypeFilter<"Message"> | $Enums.MessasageType
+    sentAt?: DateTimeFilter<"Message"> | Date | string
+    text?: StringNullableFilter<"Message"> | string | null
+    fileUrl?: StringNullableFilter<"Message"> | string | null
+    senderUserId?: IntNullableFilter<"Message"> | number | null
+    receiverUserId?: IntNullableFilter<"Message"> | number | null
+    senderOwnerId?: IntNullableFilter<"Message"> | number | null
+    receiverOwnerId?: IntNullableFilter<"Message"> | number | null
+  }
+
+  export type MessageUpsertWithWhereUniqueWithoutReceiverOwnerInput = {
+    where: MessageWhereUniqueInput
+    update: XOR<MessageUpdateWithoutReceiverOwnerInput, MessageUncheckedUpdateWithoutReceiverOwnerInput>
+    create: XOR<MessageCreateWithoutReceiverOwnerInput, MessageUncheckedCreateWithoutReceiverOwnerInput>
+  }
+
+  export type MessageUpdateWithWhereUniqueWithoutReceiverOwnerInput = {
+    where: MessageWhereUniqueInput
+    data: XOR<MessageUpdateWithoutReceiverOwnerInput, MessageUncheckedUpdateWithoutReceiverOwnerInput>
+  }
+
+  export type MessageUpdateManyWithWhereWithoutReceiverOwnerInput = {
+    where: MessageScalarWhereInput
+    data: XOR<MessageUpdateManyMutationInput, MessageUncheckedUpdateManyWithoutReceiverOwnerInput>
+  }
+
+  export type ProductUpsertWithWhereUniqueWithoutOwerInput = {
+    where: ProductWhereUniqueInput
+    update: XOR<ProductUpdateWithoutOwerInput, ProductUncheckedUpdateWithoutOwerInput>
+    create: XOR<ProductCreateWithoutOwerInput, ProductUncheckedCreateWithoutOwerInput>
+  }
+
+  export type ProductUpdateWithWhereUniqueWithoutOwerInput = {
+    where: ProductWhereUniqueInput
+    data: XOR<ProductUpdateWithoutOwerInput, ProductUncheckedUpdateWithoutOwerInput>
+  }
+
+  export type ProductUpdateManyWithWhereWithoutOwerInput = {
+    where: ProductScalarWhereInput
+    data: XOR<ProductUpdateManyMutationInput, ProductUncheckedUpdateManyWithoutOwerInput>
+  }
+
+  export type ProductScalarWhereInput = {
+    AND?: ProductScalarWhereInput | ProductScalarWhereInput[]
+    OR?: ProductScalarWhereInput[]
+    NOT?: ProductScalarWhereInput | ProductScalarWhereInput[]
+    id?: StringFilter<"Product"> | string
+    name?: StringFilter<"Product"> | string
+    owerId?: IntFilter<"Product"> | number
+    description?: StringFilter<"Product"> | string
+    categoryId?: StringFilter<"Product"> | string
+    brandId?: StringFilter<"Product"> | string
+    gender?: EnumGenderFilter<"Product"> | $Enums.Gender
+    thumnailImage?: StringFilter<"Product"> | string
+    basePrice?: FloatNullableFilter<"Product"> | number | null
+    createdAt?: DateTimeFilter<"Product"> | Date | string
+  }
+
   export type ProductCreateWithoutBrandInput = {
     id?: string
     name: string
@@ -24783,6 +29039,7 @@ export namespace Prisma {
     thumnailImage: string
     basePrice?: number | null
     createdAt?: Date | string
+    ower: ProductOwnerCreateNestedOneWithoutProductInput
     category: CategoryCreateNestedOneWithoutProductsInput
     variants?: ProductVariantCreateNestedManyWithoutProductInput
     ratings?: RatingCreateNestedManyWithoutProductInput
@@ -24792,6 +29049,7 @@ export namespace Prisma {
   export type ProductUncheckedCreateWithoutBrandInput = {
     id?: string
     name: string
+    owerId: number
     description: string
     categoryId: string
     gender?: $Enums.Gender
@@ -24847,21 +29105,6 @@ export namespace Prisma {
     data: XOR<ProductUpdateManyMutationInput, ProductUncheckedUpdateManyWithoutBrandInput>
   }
 
-  export type ProductScalarWhereInput = {
-    AND?: ProductScalarWhereInput | ProductScalarWhereInput[]
-    OR?: ProductScalarWhereInput[]
-    NOT?: ProductScalarWhereInput | ProductScalarWhereInput[]
-    id?: StringFilter<"Product"> | string
-    name?: StringFilter<"Product"> | string
-    description?: StringFilter<"Product"> | string
-    categoryId?: StringFilter<"Product"> | string
-    brandId?: StringFilter<"Product"> | string
-    gender?: EnumGenderFilter<"Product"> | $Enums.Gender
-    thumnailImage?: StringFilter<"Product"> | string
-    basePrice?: FloatNullableFilter<"Product"> | number | null
-    createdAt?: DateTimeFilter<"Product"> | Date | string
-  }
-
   export type CategoryBrandUpsertWithWhereUniqueWithoutBrandInput = {
     where: CategoryBrandWhereUniqueInput
     update: XOR<CategoryBrandUpdateWithoutBrandInput, CategoryBrandUncheckedUpdateWithoutBrandInput>
@@ -24912,6 +29155,7 @@ export namespace Prisma {
     thumnailImage: string
     basePrice?: number | null
     createdAt?: Date | string
+    ower: ProductOwnerCreateNestedOneWithoutProductInput
     brand: BrandCreateNestedOneWithoutProductsInput
     variants?: ProductVariantCreateNestedManyWithoutProductInput
     ratings?: RatingCreateNestedManyWithoutProductInput
@@ -24921,6 +29165,7 @@ export namespace Prisma {
   export type ProductUncheckedCreateWithoutCategoryInput = {
     id?: string
     name: string
+    owerId: number
     description: string
     brandId: string
     gender?: $Enums.Gender
@@ -25058,6 +29303,38 @@ export namespace Prisma {
     products?: ProductUncheckedUpdateManyWithoutCategoryNestedInput
   }
 
+  export type ProductOwnerCreateWithoutProductInput = {
+    name?: string | null
+    email?: string | null
+    password?: string | null
+    updatedAt?: Date | string
+    createdAt?: Date | string
+    token: string
+    isVerified?: boolean
+    expiredAt?: Date | string | null
+    sentMessages?: MessageCreateNestedManyWithoutSenderOwnerInput
+    receivedMessages?: MessageCreateNestedManyWithoutReceiverOwnerInput
+  }
+
+  export type ProductOwnerUncheckedCreateWithoutProductInput = {
+    id?: number
+    name?: string | null
+    email?: string | null
+    password?: string | null
+    updatedAt?: Date | string
+    createdAt?: Date | string
+    token: string
+    isVerified?: boolean
+    expiredAt?: Date | string | null
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderOwnerInput
+    receivedMessages?: MessageUncheckedCreateNestedManyWithoutReceiverOwnerInput
+  }
+
+  export type ProductOwnerCreateOrConnectWithoutProductInput = {
+    where: ProductOwnerWhereUniqueInput
+    create: XOR<ProductOwnerCreateWithoutProductInput, ProductOwnerUncheckedCreateWithoutProductInput>
+  }
+
   export type CategoryCreateWithoutProductsInput = {
     id?: string
     name: string
@@ -25182,6 +29459,44 @@ export namespace Prisma {
   export type CartCreateManyProductInputEnvelope = {
     data: CartCreateManyProductInput | CartCreateManyProductInput[]
     skipDuplicates?: boolean
+  }
+
+  export type ProductOwnerUpsertWithoutProductInput = {
+    update: XOR<ProductOwnerUpdateWithoutProductInput, ProductOwnerUncheckedUpdateWithoutProductInput>
+    create: XOR<ProductOwnerCreateWithoutProductInput, ProductOwnerUncheckedCreateWithoutProductInput>
+    where?: ProductOwnerWhereInput
+  }
+
+  export type ProductOwnerUpdateToOneWithWhereWithoutProductInput = {
+    where?: ProductOwnerWhereInput
+    data: XOR<ProductOwnerUpdateWithoutProductInput, ProductOwnerUncheckedUpdateWithoutProductInput>
+  }
+
+  export type ProductOwnerUpdateWithoutProductInput = {
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    token?: StringFieldUpdateOperationsInput | string
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    expiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sentMessages?: MessageUpdateManyWithoutSenderOwnerNestedInput
+    receivedMessages?: MessageUpdateManyWithoutReceiverOwnerNestedInput
+  }
+
+  export type ProductOwnerUncheckedUpdateWithoutProductInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    token?: StringFieldUpdateOperationsInput | string
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    expiredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderOwnerNestedInput
+    receivedMessages?: MessageUncheckedUpdateManyWithoutReceiverOwnerNestedInput
   }
 
   export type CategoryUpsertWithoutProductsInput = {
@@ -25330,6 +29645,8 @@ export namespace Prisma {
     refreshToken?: string | null
     otp?: string | null
     otpCreatedAt?: Date | string | null
+    sentMessages?: MessageCreateNestedManyWithoutSenderUserInput
+    receivedMessages?: MessageCreateNestedManyWithoutReceiverUserInput
     CheckoutItem?: CheckoutItemCreateNestedManyWithoutUserInput
     Rating?: RatingCreateNestedManyWithoutUserInput
     Order?: OrderCreateNestedManyWithoutUserInput
@@ -25349,6 +29666,8 @@ export namespace Prisma {
     refreshToken?: string | null
     otp?: string | null
     otpCreatedAt?: Date | string | null
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderUserInput
+    receivedMessages?: MessageUncheckedCreateNestedManyWithoutReceiverUserInput
     CheckoutItem?: CheckoutItemUncheckedCreateNestedManyWithoutUserInput
     Rating?: RatingUncheckedCreateNestedManyWithoutUserInput
     Order?: OrderUncheckedCreateNestedManyWithoutUserInput
@@ -25368,6 +29687,7 @@ export namespace Prisma {
     thumnailImage: string
     basePrice?: number | null
     createdAt?: Date | string
+    ower: ProductOwnerCreateNestedOneWithoutProductInput
     category: CategoryCreateNestedOneWithoutProductsInput
     brand: BrandCreateNestedOneWithoutProductsInput
     variants?: ProductVariantCreateNestedManyWithoutProductInput
@@ -25377,6 +29697,7 @@ export namespace Prisma {
   export type ProductUncheckedCreateWithoutCartInput = {
     id?: string
     name: string
+    owerId: number
     description: string
     categoryId: string
     brandId: string
@@ -25449,6 +29770,8 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sentMessages?: MessageUpdateManyWithoutSenderUserNestedInput
+    receivedMessages?: MessageUpdateManyWithoutReceiverUserNestedInput
     CheckoutItem?: CheckoutItemUpdateManyWithoutUserNestedInput
     Rating?: RatingUpdateManyWithoutUserNestedInput
     Order?: OrderUpdateManyWithoutUserNestedInput
@@ -25468,6 +29791,8 @@ export namespace Prisma {
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderUserNestedInput
+    receivedMessages?: MessageUncheckedUpdateManyWithoutReceiverUserNestedInput
     CheckoutItem?: CheckoutItemUncheckedUpdateManyWithoutUserNestedInput
     Rating?: RatingUncheckedUpdateManyWithoutUserNestedInput
     Order?: OrderUncheckedUpdateManyWithoutUserNestedInput
@@ -25493,6 +29818,7 @@ export namespace Prisma {
     thumnailImage?: StringFieldUpdateOperationsInput | string
     basePrice?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ower?: ProductOwnerUpdateOneRequiredWithoutProductNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     brand?: BrandUpdateOneRequiredWithoutProductsNestedInput
     variants?: ProductVariantUpdateManyWithoutProductNestedInput
@@ -25502,6 +29828,7 @@ export namespace Prisma {
   export type ProductUncheckedUpdateWithoutCartInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    owerId?: IntFieldUpdateOperationsInput | number
     description?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
     brandId?: StringFieldUpdateOperationsInput | string
@@ -25560,6 +29887,7 @@ export namespace Prisma {
     thumnailImage: string
     basePrice?: number | null
     createdAt?: Date | string
+    ower: ProductOwnerCreateNestedOneWithoutProductInput
     category: CategoryCreateNestedOneWithoutProductsInput
     brand: BrandCreateNestedOneWithoutProductsInput
     ratings?: RatingCreateNestedManyWithoutProductInput
@@ -25569,6 +29897,7 @@ export namespace Prisma {
   export type ProductUncheckedCreateWithoutVariantsInput = {
     id?: string
     name: string
+    owerId: number
     description: string
     categoryId: string
     brandId: string
@@ -25704,6 +30033,7 @@ export namespace Prisma {
     thumnailImage?: StringFieldUpdateOperationsInput | string
     basePrice?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ower?: ProductOwnerUpdateOneRequiredWithoutProductNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     brand?: BrandUpdateOneRequiredWithoutProductsNestedInput
     ratings?: RatingUpdateManyWithoutProductNestedInput
@@ -25713,6 +30043,7 @@ export namespace Prisma {
   export type ProductUncheckedUpdateWithoutVariantsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    owerId?: IntFieldUpdateOperationsInput | number
     description?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
     brandId?: StringFieldUpdateOperationsInput | string
@@ -25902,6 +30233,7 @@ export namespace Prisma {
     thumnailImage: string
     basePrice?: number | null
     createdAt?: Date | string
+    ower: ProductOwnerCreateNestedOneWithoutProductInput
     category: CategoryCreateNestedOneWithoutProductsInput
     brand: BrandCreateNestedOneWithoutProductsInput
     variants?: ProductVariantCreateNestedManyWithoutProductInput
@@ -25911,6 +30243,7 @@ export namespace Prisma {
   export type ProductUncheckedCreateWithoutRatingsInput = {
     id?: string
     name: string
+    owerId: number
     description: string
     categoryId: string
     brandId: string
@@ -25940,6 +30273,8 @@ export namespace Prisma {
     otp?: string | null
     otpCreatedAt?: Date | string | null
     cart?: CartCreateNestedManyWithoutUserInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderUserInput
+    receivedMessages?: MessageCreateNestedManyWithoutReceiverUserInput
     CheckoutItem?: CheckoutItemCreateNestedManyWithoutUserInput
     Order?: OrderCreateNestedManyWithoutUserInput
     Address?: AddressCreateNestedManyWithoutUserInput
@@ -25959,6 +30294,8 @@ export namespace Prisma {
     otp?: string | null
     otpCreatedAt?: Date | string | null
     cart?: CartUncheckedCreateNestedManyWithoutUserInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderUserInput
+    receivedMessages?: MessageUncheckedCreateNestedManyWithoutReceiverUserInput
     CheckoutItem?: CheckoutItemUncheckedCreateNestedManyWithoutUserInput
     Order?: OrderUncheckedCreateNestedManyWithoutUserInput
     Address?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -25988,6 +30325,7 @@ export namespace Prisma {
     thumnailImage?: StringFieldUpdateOperationsInput | string
     basePrice?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ower?: ProductOwnerUpdateOneRequiredWithoutProductNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     brand?: BrandUpdateOneRequiredWithoutProductsNestedInput
     variants?: ProductVariantUpdateManyWithoutProductNestedInput
@@ -25997,6 +30335,7 @@ export namespace Prisma {
   export type ProductUncheckedUpdateWithoutRatingsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    owerId?: IntFieldUpdateOperationsInput | number
     description?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
     brandId?: StringFieldUpdateOperationsInput | string
@@ -26032,6 +30371,8 @@ export namespace Prisma {
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cart?: CartUpdateManyWithoutUserNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderUserNestedInput
+    receivedMessages?: MessageUpdateManyWithoutReceiverUserNestedInput
     CheckoutItem?: CheckoutItemUpdateManyWithoutUserNestedInput
     Order?: OrderUpdateManyWithoutUserNestedInput
     Address?: AddressUpdateManyWithoutUserNestedInput
@@ -26051,6 +30392,8 @@ export namespace Prisma {
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cart?: CartUncheckedUpdateManyWithoutUserNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderUserNestedInput
+    receivedMessages?: MessageUncheckedUpdateManyWithoutReceiverUserNestedInput
     CheckoutItem?: CheckoutItemUncheckedUpdateManyWithoutUserNestedInput
     Order?: OrderUncheckedUpdateManyWithoutUserNestedInput
     Address?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -26069,6 +30412,8 @@ export namespace Prisma {
     otp?: string | null
     otpCreatedAt?: Date | string | null
     cart?: CartCreateNestedManyWithoutUserInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderUserInput
+    receivedMessages?: MessageCreateNestedManyWithoutReceiverUserInput
     CheckoutItem?: CheckoutItemCreateNestedManyWithoutUserInput
     Rating?: RatingCreateNestedManyWithoutUserInput
     Address?: AddressCreateNestedManyWithoutUserInput
@@ -26088,6 +30433,8 @@ export namespace Prisma {
     otp?: string | null
     otpCreatedAt?: Date | string | null
     cart?: CartUncheckedCreateNestedManyWithoutUserInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderUserInput
+    receivedMessages?: MessageUncheckedCreateNestedManyWithoutReceiverUserInput
     CheckoutItem?: CheckoutItemUncheckedCreateNestedManyWithoutUserInput
     Rating?: RatingUncheckedCreateNestedManyWithoutUserInput
     Address?: AddressUncheckedCreateNestedManyWithoutUserInput
@@ -26208,6 +30555,8 @@ export namespace Prisma {
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cart?: CartUpdateManyWithoutUserNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderUserNestedInput
+    receivedMessages?: MessageUpdateManyWithoutReceiverUserNestedInput
     CheckoutItem?: CheckoutItemUpdateManyWithoutUserNestedInput
     Rating?: RatingUpdateManyWithoutUserNestedInput
     Address?: AddressUpdateManyWithoutUserNestedInput
@@ -26227,6 +30576,8 @@ export namespace Prisma {
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cart?: CartUncheckedUpdateManyWithoutUserNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderUserNestedInput
+    receivedMessages?: MessageUncheckedUpdateManyWithoutReceiverUserNestedInput
     CheckoutItem?: CheckoutItemUncheckedUpdateManyWithoutUserNestedInput
     Rating?: RatingUncheckedUpdateManyWithoutUserNestedInput
     Address?: AddressUncheckedUpdateManyWithoutUserNestedInput
@@ -26533,6 +30884,8 @@ export namespace Prisma {
     otp?: string | null
     otpCreatedAt?: Date | string | null
     cart?: CartCreateNestedManyWithoutUserInput
+    sentMessages?: MessageCreateNestedManyWithoutSenderUserInput
+    receivedMessages?: MessageCreateNestedManyWithoutReceiverUserInput
     CheckoutItem?: CheckoutItemCreateNestedManyWithoutUserInput
     Rating?: RatingCreateNestedManyWithoutUserInput
     Order?: OrderCreateNestedManyWithoutUserInput
@@ -26552,6 +30905,8 @@ export namespace Prisma {
     otp?: string | null
     otpCreatedAt?: Date | string | null
     cart?: CartUncheckedCreateNestedManyWithoutUserInput
+    sentMessages?: MessageUncheckedCreateNestedManyWithoutSenderUserInput
+    receivedMessages?: MessageUncheckedCreateNestedManyWithoutReceiverUserInput
     CheckoutItem?: CheckoutItemUncheckedCreateNestedManyWithoutUserInput
     Rating?: RatingUncheckedCreateNestedManyWithoutUserInput
     Order?: OrderUncheckedCreateNestedManyWithoutUserInput
@@ -26620,6 +30975,8 @@ export namespace Prisma {
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cart?: CartUpdateManyWithoutUserNestedInput
+    sentMessages?: MessageUpdateManyWithoutSenderUserNestedInput
+    receivedMessages?: MessageUpdateManyWithoutReceiverUserNestedInput
     CheckoutItem?: CheckoutItemUpdateManyWithoutUserNestedInput
     Rating?: RatingUpdateManyWithoutUserNestedInput
     Order?: OrderUpdateManyWithoutUserNestedInput
@@ -26639,6 +30996,8 @@ export namespace Prisma {
     otp?: NullableStringFieldUpdateOperationsInput | string | null
     otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     cart?: CartUncheckedUpdateManyWithoutUserNestedInput
+    sentMessages?: MessageUncheckedUpdateManyWithoutSenderUserNestedInput
+    receivedMessages?: MessageUncheckedUpdateManyWithoutReceiverUserNestedInput
     CheckoutItem?: CheckoutItemUncheckedUpdateManyWithoutUserNestedInput
     Rating?: RatingUncheckedUpdateManyWithoutUserNestedInput
     Order?: OrderUncheckedUpdateManyWithoutUserNestedInput
@@ -26697,6 +31056,68 @@ export namespace Prisma {
 
   export type CartCreateManyUserInputEnvelope = {
     data: CartCreateManyUserInput | CartCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MessageCreateWithoutSenderUserInput = {
+    type: $Enums.MessasageType
+    sentAt?: Date | string
+    text?: string | null
+    fileUrl?: string | null
+    receiverUser?: UserCreateNestedOneWithoutReceivedMessagesInput
+    senderOwner?: ProductOwnerCreateNestedOneWithoutSentMessagesInput
+    receiverOwner?: ProductOwnerCreateNestedOneWithoutReceivedMessagesInput
+  }
+
+  export type MessageUncheckedCreateWithoutSenderUserInput = {
+    id?: number
+    type: $Enums.MessasageType
+    sentAt?: Date | string
+    text?: string | null
+    fileUrl?: string | null
+    receiverUserId?: number | null
+    senderOwnerId?: number | null
+    receiverOwnerId?: number | null
+  }
+
+  export type MessageCreateOrConnectWithoutSenderUserInput = {
+    where: MessageWhereUniqueInput
+    create: XOR<MessageCreateWithoutSenderUserInput, MessageUncheckedCreateWithoutSenderUserInput>
+  }
+
+  export type MessageCreateManySenderUserInputEnvelope = {
+    data: MessageCreateManySenderUserInput | MessageCreateManySenderUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MessageCreateWithoutReceiverUserInput = {
+    type: $Enums.MessasageType
+    sentAt?: Date | string
+    text?: string | null
+    fileUrl?: string | null
+    senderUser?: UserCreateNestedOneWithoutSentMessagesInput
+    senderOwner?: ProductOwnerCreateNestedOneWithoutSentMessagesInput
+    receiverOwner?: ProductOwnerCreateNestedOneWithoutReceivedMessagesInput
+  }
+
+  export type MessageUncheckedCreateWithoutReceiverUserInput = {
+    id?: number
+    type: $Enums.MessasageType
+    sentAt?: Date | string
+    text?: string | null
+    fileUrl?: string | null
+    senderUserId?: number | null
+    senderOwnerId?: number | null
+    receiverOwnerId?: number | null
+  }
+
+  export type MessageCreateOrConnectWithoutReceiverUserInput = {
+    where: MessageWhereUniqueInput
+    create: XOR<MessageCreateWithoutReceiverUserInput, MessageUncheckedCreateWithoutReceiverUserInput>
+  }
+
+  export type MessageCreateManyReceiverUserInputEnvelope = {
+    data: MessageCreateManyReceiverUserInput | MessageCreateManyReceiverUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -26842,6 +31263,38 @@ export namespace Prisma {
     data: XOR<CartUpdateManyMutationInput, CartUncheckedUpdateManyWithoutUserInput>
   }
 
+  export type MessageUpsertWithWhereUniqueWithoutSenderUserInput = {
+    where: MessageWhereUniqueInput
+    update: XOR<MessageUpdateWithoutSenderUserInput, MessageUncheckedUpdateWithoutSenderUserInput>
+    create: XOR<MessageCreateWithoutSenderUserInput, MessageUncheckedCreateWithoutSenderUserInput>
+  }
+
+  export type MessageUpdateWithWhereUniqueWithoutSenderUserInput = {
+    where: MessageWhereUniqueInput
+    data: XOR<MessageUpdateWithoutSenderUserInput, MessageUncheckedUpdateWithoutSenderUserInput>
+  }
+
+  export type MessageUpdateManyWithWhereWithoutSenderUserInput = {
+    where: MessageScalarWhereInput
+    data: XOR<MessageUpdateManyMutationInput, MessageUncheckedUpdateManyWithoutSenderUserInput>
+  }
+
+  export type MessageUpsertWithWhereUniqueWithoutReceiverUserInput = {
+    where: MessageWhereUniqueInput
+    update: XOR<MessageUpdateWithoutReceiverUserInput, MessageUncheckedUpdateWithoutReceiverUserInput>
+    create: XOR<MessageCreateWithoutReceiverUserInput, MessageUncheckedCreateWithoutReceiverUserInput>
+  }
+
+  export type MessageUpdateWithWhereUniqueWithoutReceiverUserInput = {
+    where: MessageWhereUniqueInput
+    data: XOR<MessageUpdateWithoutReceiverUserInput, MessageUncheckedUpdateWithoutReceiverUserInput>
+  }
+
+  export type MessageUpdateManyWithWhereWithoutReceiverUserInput = {
+    where: MessageScalarWhereInput
+    data: XOR<MessageUpdateManyMutationInput, MessageUncheckedUpdateManyWithoutReceiverUserInput>
+  }
+
   export type CheckoutItemUpsertWithWhereUniqueWithoutUserInput = {
     where: CheckoutItemWhereUniqueInput
     update: XOR<CheckoutItemUpdateWithoutUserInput, CheckoutItemUncheckedUpdateWithoutUserInput>
@@ -26923,9 +31376,150 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Address"> | Date | string
   }
 
+  export type MessageCreateManySenderOwnerInput = {
+    id?: number
+    type: $Enums.MessasageType
+    sentAt?: Date | string
+    text?: string | null
+    fileUrl?: string | null
+    senderUserId?: number | null
+    receiverUserId?: number | null
+    receiverOwnerId?: number | null
+  }
+
+  export type MessageCreateManyReceiverOwnerInput = {
+    id?: number
+    type: $Enums.MessasageType
+    sentAt?: Date | string
+    text?: string | null
+    fileUrl?: string | null
+    senderUserId?: number | null
+    receiverUserId?: number | null
+    senderOwnerId?: number | null
+  }
+
+  export type ProductCreateManyOwerInput = {
+    id?: string
+    name: string
+    description: string
+    categoryId: string
+    brandId: string
+    gender?: $Enums.Gender
+    thumnailImage: string
+    basePrice?: number | null
+    createdAt?: Date | string
+  }
+
+  export type MessageUpdateWithoutSenderOwnerInput = {
+    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    text?: NullableStringFieldUpdateOperationsInput | string | null
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    senderUser?: UserUpdateOneWithoutSentMessagesNestedInput
+    receiverUser?: UserUpdateOneWithoutReceivedMessagesNestedInput
+    receiverOwner?: ProductOwnerUpdateOneWithoutReceivedMessagesNestedInput
+  }
+
+  export type MessageUncheckedUpdateWithoutSenderOwnerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    text?: NullableStringFieldUpdateOperationsInput | string | null
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    senderUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    receiverUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    receiverOwnerId?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type MessageUncheckedUpdateManyWithoutSenderOwnerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    text?: NullableStringFieldUpdateOperationsInput | string | null
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    senderUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    receiverUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    receiverOwnerId?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type MessageUpdateWithoutReceiverOwnerInput = {
+    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    text?: NullableStringFieldUpdateOperationsInput | string | null
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    senderUser?: UserUpdateOneWithoutSentMessagesNestedInput
+    receiverUser?: UserUpdateOneWithoutReceivedMessagesNestedInput
+    senderOwner?: ProductOwnerUpdateOneWithoutSentMessagesNestedInput
+  }
+
+  export type MessageUncheckedUpdateWithoutReceiverOwnerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    text?: NullableStringFieldUpdateOperationsInput | string | null
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    senderUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    receiverUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    senderOwnerId?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type MessageUncheckedUpdateManyWithoutReceiverOwnerInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    text?: NullableStringFieldUpdateOperationsInput | string | null
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    senderUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    receiverUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    senderOwnerId?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type ProductUpdateWithoutOwerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+    thumnailImage?: StringFieldUpdateOperationsInput | string
+    basePrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
+    brand?: BrandUpdateOneRequiredWithoutProductsNestedInput
+    variants?: ProductVariantUpdateManyWithoutProductNestedInput
+    ratings?: RatingUpdateManyWithoutProductNestedInput
+    cart?: CartUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductUncheckedUpdateWithoutOwerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    categoryId?: StringFieldUpdateOperationsInput | string
+    brandId?: StringFieldUpdateOperationsInput | string
+    gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+    thumnailImage?: StringFieldUpdateOperationsInput | string
+    basePrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    variants?: ProductVariantUncheckedUpdateManyWithoutProductNestedInput
+    ratings?: RatingUncheckedUpdateManyWithoutProductNestedInput
+    cart?: CartUncheckedUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductUncheckedUpdateManyWithoutOwerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: StringFieldUpdateOperationsInput | string
+    categoryId?: StringFieldUpdateOperationsInput | string
+    brandId?: StringFieldUpdateOperationsInput | string
+    gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+    thumnailImage?: StringFieldUpdateOperationsInput | string
+    basePrice?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ProductCreateManyBrandInput = {
     id?: string
     name: string
+    owerId: number
     description: string
     categoryId: string
     gender?: $Enums.Gender
@@ -26946,6 +31540,7 @@ export namespace Prisma {
     thumnailImage?: StringFieldUpdateOperationsInput | string
     basePrice?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ower?: ProductOwnerUpdateOneRequiredWithoutProductNestedInput
     category?: CategoryUpdateOneRequiredWithoutProductsNestedInput
     variants?: ProductVariantUpdateManyWithoutProductNestedInput
     ratings?: RatingUpdateManyWithoutProductNestedInput
@@ -26955,6 +31550,7 @@ export namespace Prisma {
   export type ProductUncheckedUpdateWithoutBrandInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    owerId?: IntFieldUpdateOperationsInput | number
     description?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
@@ -26969,6 +31565,7 @@ export namespace Prisma {
   export type ProductUncheckedUpdateManyWithoutBrandInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    owerId?: IntFieldUpdateOperationsInput | number
     description?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
@@ -26996,6 +31593,7 @@ export namespace Prisma {
   export type ProductCreateManyCategoryInput = {
     id?: string
     name: string
+    owerId: number
     description: string
     brandId: string
     gender?: $Enums.Gender
@@ -27024,6 +31622,7 @@ export namespace Prisma {
     thumnailImage?: StringFieldUpdateOperationsInput | string
     basePrice?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ower?: ProductOwnerUpdateOneRequiredWithoutProductNestedInput
     brand?: BrandUpdateOneRequiredWithoutProductsNestedInput
     variants?: ProductVariantUpdateManyWithoutProductNestedInput
     ratings?: RatingUpdateManyWithoutProductNestedInput
@@ -27033,6 +31632,7 @@ export namespace Prisma {
   export type ProductUncheckedUpdateWithoutCategoryInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    owerId?: IntFieldUpdateOperationsInput | number
     description?: StringFieldUpdateOperationsInput | string
     brandId?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
@@ -27047,6 +31647,7 @@ export namespace Prisma {
   export type ProductUncheckedUpdateManyWithoutCategoryInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    owerId?: IntFieldUpdateOperationsInput | number
     description?: StringFieldUpdateOperationsInput | string
     brandId?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderFieldUpdateOperationsInput | $Enums.Gender
@@ -27371,6 +31972,28 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type MessageCreateManySenderUserInput = {
+    id?: number
+    type: $Enums.MessasageType
+    sentAt?: Date | string
+    text?: string | null
+    fileUrl?: string | null
+    receiverUserId?: number | null
+    senderOwnerId?: number | null
+    receiverOwnerId?: number | null
+  }
+
+  export type MessageCreateManyReceiverUserInput = {
+    id?: number
+    type: $Enums.MessasageType
+    sentAt?: Date | string
+    text?: string | null
+    fileUrl?: string | null
+    senderUserId?: number | null
+    senderOwnerId?: number | null
+    receiverOwnerId?: number | null
+  }
+
   export type CheckoutItemCreateManyUserInput = {
     id?: string
     quantity: number
@@ -27433,6 +32056,70 @@ export namespace Prisma {
     variantId?: StringFieldUpdateOperationsInput | string
     quantity?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MessageUpdateWithoutSenderUserInput = {
+    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    text?: NullableStringFieldUpdateOperationsInput | string | null
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiverUser?: UserUpdateOneWithoutReceivedMessagesNestedInput
+    senderOwner?: ProductOwnerUpdateOneWithoutSentMessagesNestedInput
+    receiverOwner?: ProductOwnerUpdateOneWithoutReceivedMessagesNestedInput
+  }
+
+  export type MessageUncheckedUpdateWithoutSenderUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    text?: NullableStringFieldUpdateOperationsInput | string | null
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiverUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    senderOwnerId?: NullableIntFieldUpdateOperationsInput | number | null
+    receiverOwnerId?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type MessageUncheckedUpdateManyWithoutSenderUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    text?: NullableStringFieldUpdateOperationsInput | string | null
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    receiverUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    senderOwnerId?: NullableIntFieldUpdateOperationsInput | number | null
+    receiverOwnerId?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type MessageUpdateWithoutReceiverUserInput = {
+    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    text?: NullableStringFieldUpdateOperationsInput | string | null
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    senderUser?: UserUpdateOneWithoutSentMessagesNestedInput
+    senderOwner?: ProductOwnerUpdateOneWithoutSentMessagesNestedInput
+    receiverOwner?: ProductOwnerUpdateOneWithoutReceivedMessagesNestedInput
+  }
+
+  export type MessageUncheckedUpdateWithoutReceiverUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    text?: NullableStringFieldUpdateOperationsInput | string | null
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    senderUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    senderOwnerId?: NullableIntFieldUpdateOperationsInput | number | null
+    receiverOwnerId?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type MessageUncheckedUpdateManyWithoutReceiverUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    text?: NullableStringFieldUpdateOperationsInput | string | null
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    senderUserId?: NullableIntFieldUpdateOperationsInput | number | null
+    senderOwnerId?: NullableIntFieldUpdateOperationsInput | number | null
+    receiverOwnerId?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type CheckoutItemUpdateWithoutUserInput = {

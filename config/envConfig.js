@@ -11,6 +11,9 @@ const env = cleanEnv(process.env, {
   REDIS_HOST: str(),
   REDIS_PORT: str(),
   REDIS_PASSWORD: str(),
+  JWT_SECRET_TOKEN: str(),
+  JWT_SECRET_TOKEN_EXPIRES_IN: str(),
+  FRONTEND_URL: str(),
 });
 
 module.exports = env;

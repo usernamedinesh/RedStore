@@ -46,8 +46,25 @@ const sendOtp = async (recipient, otp) => {
     }
   } catch (error) {
     console.error("Error sending OTP to", recipient, error);
-    throw error;
+    next(error);
   }
 };
 
-module.exports = sendOtp;
+const sendRegLinkForOwener = async (email, token) => {
+  const accountCreationUrl = `${env.FRONTEND_URL}/create-account?token=${token}`;
+  const info = await transporter.sendMail({
+    from: `"Our Official email" <${env.MAIL_EMAIL}>`, // Sender's email
+    to: email, // Recipient's email
+    subject: "Account Creation Link",
+    html: `<p>Click the link below to create your account:</p><a href="${accountCreationUrl}">Create Account</a>`, // Use the custom HTML template
+  });
+  console.log("Account creation link sent successfully to:", email);
+  console.log("Message sent: %s", info.messageId);
+  try {
+  } catch (error) {
+    console.error("Error sending registration link to", email, error);
+    next(error);
+  }
+};
+
+module.exports = { sendOtp, sendRegLinkForOwener };

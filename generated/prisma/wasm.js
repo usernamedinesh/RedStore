@@ -127,6 +127,30 @@ exports.Prisma.CheckoutItemScalarFieldEnum = {
   expiresAt: 'expiresAt'
 };
 
+exports.Prisma.MessageScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  sentAt: 'sentAt',
+  text: 'text',
+  fileUrl: 'fileUrl',
+  senderUserId: 'senderUserId',
+  receiverUserId: 'receiverUserId',
+  senderOwnerId: 'senderOwnerId',
+  receiverOwnerId: 'receiverOwnerId'
+};
+
+exports.Prisma.ProductOwnerScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  password: 'password',
+  updatedAt: 'updatedAt',
+  createdAt: 'createdAt',
+  token: 'token',
+  isVerified: 'isVerified',
+  expiredAt: 'expiredAt'
+};
+
 exports.Prisma.BrandScalarFieldEnum = {
   id: 'id',
   name: 'name'
@@ -146,6 +170,7 @@ exports.Prisma.CategoryBrandScalarFieldEnum = {
 exports.Prisma.ProductScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  owerId: 'owerId',
   description: 'description',
   categoryId: 'categoryId',
   brandId: 'brandId',
@@ -285,6 +310,13 @@ exports.Prisma.JsonNullValueFilter = {
   JsonNull: Prisma.JsonNull,
   AnyNull: Prisma.AnyNull
 };
+exports.MessasageType = exports.$Enums.MessasageType = {
+  TEXT: 'TEXT',
+  IMAGE: 'IMAGE',
+  VIDEO: 'VIDEO',
+  AUDIO: 'AUDIO'
+};
+
 exports.Gender = exports.$Enums.Gender = {
   MEN: 'MEN',
   WOMEN: 'WOMEN',
@@ -322,6 +354,8 @@ exports.UserRole = exports.$Enums.UserRole = {
 
 exports.Prisma.ModelName = {
   CheckoutItem: 'CheckoutItem',
+  Message: 'Message',
+  ProductOwner: 'ProductOwner',
   Brand: 'Brand',
   Category: 'Category',
   CategoryBrand: 'CategoryBrand',

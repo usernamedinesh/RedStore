@@ -27,6 +27,8 @@ model CategoryBrand {
 model Product {
     id            String           @id @default(uuid()) @map("product_id")
     name          String
+    owerId        Int              @map("ower_id") // lets first create the user then i will uncomment this 
+    ower          ProductOwner     @relation(fields: [owerId], references: [id]) // new added 
     description   String
     category      Category         @relation(fields: [categoryId], references: [id])
     categoryId    String           @map("category_id")

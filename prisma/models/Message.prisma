@@ -1,0 +1,30 @@
+// Text, Image, Video, Audio :=> is this enough?
+
+model Message {
+    id     Int           @id @default(autoincrement())
+    type   MessasageType
+    sentAt DateTime      @default(now())
+
+    // store the text and image
+    text    String? @map("text_content")
+    fileUrl String? @map("file_url")
+
+    senderUserId   Int?
+    receiverUserId Int?
+
+    senderOwnerId   Int?
+    receiverOwnerId Int?
+
+    // Relations with explicit names
+    senderUser    User?         @relation("UserSentMessages", fields: [senderUserId], references: [id])
+    receiverUser  User?         @relation("UserReceivedMessages", fields: [receiverUserId], references: [id])
+    senderOwner   ProductOwner? @relation("OwnerSentMessages", fields: [senderOwnerId], references: [id])
+    receiverOwner ProductOwner? @relation("OwnerReceivedMessages", fields: [receiverOwnerId], references: [id])
+}
+
+enum MessasageType {
+    TEXT
+    IMAGE
+    VIDEO
+    AUDIO
+}

@@ -17,5 +17,8 @@ model User {
     refreshToken String?
     otp          String?
     otpCreatedAt DateTime?
+
+    sentMessages     Message[] @relation("UserSentMessages")
+    receivedMessages Message[] @relation("UserReceivedMessages")
     // expiresAt  DateTime @default(dbgenerated("(NOW() + interval '5 minutes')"))
 }

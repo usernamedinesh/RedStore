@@ -29,6 +29,53 @@ model CheckoutItem {
   @@map("checkout_items")
 }
 
+// Text, Image, Video, Audio :=> is this enough?
+
+model Message {
+  id     Int           @id @default(autoincrement())
+  type   MessasageType
+  sentAt DateTime      @default(now())
+
+  // store the text and image
+  text    String? @map("text_content")
+  fileUrl String? @map("file_url")
+
+  senderUserId   Int?
+  receiverUserId Int?
+
+  senderOwnerId   Int?
+  receiverOwnerId Int?
+
+  // Relations with explicit names
+  senderUser    User?         @relation("UserSentMessages", fields: [senderUserId], references: [id])
+  receiverUser  User?         @relation("UserReceivedMessages", fields: [receiverUserId], references: [id])
+  senderOwner   ProductOwner? @relation("OwnerSentMessages", fields: [senderOwnerId], references: [id])
+  receiverOwner ProductOwner? @relation("OwnerReceivedMessages", fields: [receiverOwnerId], references: [id])
+}
+
+enum MessasageType {
+  TEXT
+  IMAGE
+  VIDEO
+  AUDIO
+}
+
+model ProductOwner {
+  id         Int       @id @default(autoincrement())
+  name       String?
+  email      String?   @unique
+  password   String?
+  updatedAt  DateTime  @updatedAt
+  createdAt  DateTime  @default(now())
+  token      String    @unique
+  isVerified Boolean   @default(false)
+  expiredAt  DateTime?
+
+  sentMessages     Message[] @relation("OwnerSentMessages")
+  receivedMessages Message[] @relation("OwnerReceivedMessages")
+  Product          Product[]
+}
+
 model Brand {
   id         String          @id @default(uuid())
   name       String
@@ -58,6 +105,8 @@ model CategoryBrand {
 model Product {
   id            String           @id @default(uuid()) @map("product_id")
   name          String
+  owerId        Int              @map("ower_id") // lets first create the user then i will uncomment this 
+  ower          ProductOwner     @relation(fields: [owerId], references: [id]) // new added 
   description   String
   category      Category         @relation(fields: [categoryId], references: [id])
   categoryId    String           @map("category_id")
@@ -246,24 +295,27 @@ enum UserRole {
 }
 
 model User {
-  id           Int            @id @default(autoincrement())
+  id           Int       @id @default(autoincrement())
   name         String
-  email        String?        @unique
+  email        String?   @unique
   password     String
-  phoneNo      String?        @unique
-  isVerified   Boolean        @default(false) // remove this too 
-  userRole     UserRole       @default(USER)
-  updatedAt    DateTime       @updatedAt
-  createdAt    DateTime       @default(now())
+  phoneNo      String?   @unique
+  isVerified   Boolean   @default(false) // remove this too 
+  userRole     UserRole  @default(USER)
+  updatedAt    DateTime  @updatedAt
+  createdAt    DateTime  @default(now())
   cart         Cart[]
   refreshToken String?
   otp          String?
   otpCreatedAt DateTime?
+
+  sentMessages     Message[]      @relation("UserSentMessages")
+  receivedMessages Message[]      @relation("UserReceivedMessages")
   // expiresAt  DateTime @default(dbgenerated("(NOW() + interval '5 minutes')"))
-  CheckoutItem CheckoutItem[]
-  Rating       Rating[]
-  Order        Order[]
-  Address      Address[]
+  CheckoutItem     CheckoutItem[]
+  Rating           Rating[]
+  Order            Order[]
+  Address          Address[]
 }
 
 // This is temperory for storing otp and email
