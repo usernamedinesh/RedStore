@@ -209,7 +209,6 @@ exports.handleRegister = catchAsync(async (req, res, next) => {
 
     // Hash the provided password
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log("owner", owner);
 
     const updatedOwner = await prisma.productOwner.update({
       where: {
@@ -235,7 +234,6 @@ exports.handleRegister = catchAsync(async (req, res, next) => {
         // Do NOT select password, token, expiredAt
       },
     });
-    console.log("sucess!");
     // Return success response
     successResponse(
       res,
