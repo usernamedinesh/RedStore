@@ -14,6 +14,7 @@ const env = cleanEnv(process.env, {
   JWT_SECRET_TOKEN: str(),
   JWT_SECRET_TOKEN_EXPIRES_IN: str(),
   FRONTEND_URL: str(),
+  SECRET_KEY: str(),
 });
 
 module.exports = env;

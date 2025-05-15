@@ -20,6 +20,11 @@
  *   -- 5. /api/auth/forgot-password
  *   -- 6. /api/auth/reset-passwordo
  *   -- 7. /api/auth/verify-email
+ *
+ *   -- ATTENSION --
+ *   In the func handleRequest:
+ *   In going to encrypt the token and send to the client
+ *   In th func handleRegister im gonna decrypt it
  */
 
 const { PrismaClient } = require("../../generated/prisma/");
@@ -33,6 +38,8 @@ const {
   verifiedTokenForEmail,
 } = require("../../utils/generateToken");
 const { sendRegLinkForOwener } = require("../../service/sendOtp");
+const runCryptoTask = require("../../worker/encryptDecrypt");
+const env = require("../../config/envConfig");
 
 /* validate the imput using Joi */
 const checkInputSchema = Joi.object({
@@ -79,7 +86,7 @@ exports.handleRequest = catchAsync(async (req, res, next) => {
      */
 
     /* generate the token */
-    const token = genTokenUsingEmail(email);
+    let token = genTokenUsingEmail(email);
 
     /* save the email and token to the database */
     const newOwer = await prisma.productOwner.create({
@@ -91,6 +98,9 @@ exports.handleRequest = catchAsync(async (req, res, next) => {
     });
 
     /* send the email to the user{ower} */
+    /* encrypt the token  */
+    token = await runCryptoTask("encrypt", token, env.SECRET_KEY);
+    console.log("encryptedToken: ", token);
     sendRegLinkForOwener(email, token);
     successResponse(res, { newOwer }, "send link to email successfully", 201);
   } catch (error) {
@@ -104,45 +114,39 @@ exports.handleRequest = catchAsync(async (req, res, next) => {
 
 // --- Controller Function to Handle Product Owner Registration ---
 // Endpoint: POST /register/:token
-exports.handleRegister = catchAsync(async (req, res, next) => {
-  // Get the token from URL parameters
-  const { token } = req.params;
 
-  // Validate presence of token in URL parameters
+exports.handleRegister = catchAsync(async (req, res, next) => {
+  let { token } = req.params;
+
   if (!token) {
-    // Use a consistent error response format, ideally via your error handling middleware
     const err = new Error("Token is required in URL parameters.");
-    err.statusCode = 400; // Custom property for status code
+    err.statusCode = 400;
     return next(err);
-    // Or return a JSON response directly:
-    // return res.status(400).json({ success: false, message: "Token is required in URL parameters." });
   }
 
-  // Validate request body (name and password) using Joi
-  // Using abortEarly: false to collect all validation errors
   const { error, value } = checkInputSchema.validate(req.body, {
     abortEarly: false,
     allowUnknown: true, // Allow fields not defined in checkInputSchema
   });
 
   if (error) {
-    // Return a 400 Bad Request with validation details
     return res.status(400).json({
       success: false,
       message: "Validation Error",
-      errors: error.details.map((d) => d.message), // Return all error messages
+      errors: error.details.map((d) => d.message),
     });
-    // Alternatively, pass the validation error to your next error handler:
-    // const validationError = new Error("Validation Error");
-    // validationError.details = error.details.map(d => d.message);
-    // validationError.statusCode = 400;
-    // return next(validationError);
   }
 
-  // Extract validated name and password
-  const { name, password } = value; // Assuming name and password are in the validated value
+  const { name, password } = value;
 
   try {
+    /* get the actual token here
+     * decrypt the token
+     *
+     * it will decrypt the token from the encrypted token
+     */
+    token = await runCryptoTask("decrypt", token, env.SECRET_KEY);
+
     /*
      * -- Token Verification and Owner Lookup --
      * Check if the token is valid, not expired, and corresponds to an owner
@@ -157,7 +161,7 @@ exports.handleRegister = catchAsync(async (req, res, next) => {
       console.error("Token verification failed:", tokenError.message);
       // Return a specific error for invalid token format/signature
       const err = new Error("Invalid or malformed token.");
-      err.statusCode = 400; // Bad Request
+      err.statusCode = 400;
       return next(err);
     }
     // Check if the decoded payload contains the expected email
@@ -166,31 +170,28 @@ exports.handleRegister = catchAsync(async (req, res, next) => {
       err.statusCode = 400; // Bad Request
       return next(err);
     }
-    const emailFromToken = decoded.email; // Get email from the verified token
+    const emailFromToken = decoded.email;
 
     // 2. Find the ProductOwner record using the token stored in the database
     // IMPORTANT: This assumes the raw token from the URL is stored in the DB.
     // For better security, store a HASHED token in the DB and compare here.
     const owner = await prisma.productOwner.findUnique({
       where: {
-        token: token, // Querying by the raw token (less secure)
-        // If using hashed tokens, you would query by email or another identifier
-        // and then compare the raw token to the hashed token from the DB.
+        token: token,
       },
     });
 
     // 3. Perform checks on the found owner record
     if (!owner) {
-      // If no owner found with that token, it's an invalid token/link
       const err = new Error("Invalid token or token not found.");
-      err.statusCode = 404; // Not Found
+      err.statusCode = 404;
       return next(err);
     }
 
     if (owner.email) {
       // If the owner record already has an email, they are already registered/verified
       const err = new Error("This account has already been registered.");
-      err.statusCode = 400; // Bad Request
+      err.statusCode = 400;
       return next(err);
     }
 
@@ -212,15 +213,14 @@ exports.handleRegister = catchAsync(async (req, res, next) => {
 
     const updatedOwner = await prisma.productOwner.update({
       where: {
-        token: token, // Ensure we update the correct record based on the token
-        // If using hashed tokens, the where clause would be different (e.g., by ID or email)
+        token: token,
       },
       data: {
         name: name,
         email: emailFromToken, // Use the email from the verified token payload
         password: hashedPassword,
         isVerified: true,
-        token: "null", // <-- Corrected: Set token to null instead of ""
+        // token: "null", // i cant make it null because of unique
         expiredAt: null, // Clear the expiry time
       },
       select: {
