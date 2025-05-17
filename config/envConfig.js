@@ -15,6 +15,11 @@ const env = cleanEnv(process.env, {
   JWT_SECRET_TOKEN_EXPIRES_IN: str(),
   FRONTEND_URL: str(),
   SECRET_KEY: str(),
+  AWS_ACCESS_KEY_ID: str(),
+  AWS_SECRET_ACCESS_KEY: str(),
+  AWS_REGION: str(),
+  S3_BUCKET_NAME: str(),
+  CLOUDFRONT_URL: str(),
 });
 
 module.exports = env;
