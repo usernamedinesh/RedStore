@@ -1,5 +1,5 @@
 const s3 = require("../config/awsConfig");
-const fs = require("fs");
+const fs = require("fs/promises");
 const { promisify } = require("util");
 const unlink = promisify(fs.unlink);
 const env = require("../config/envConfig");
@@ -7,8 +7,8 @@ const env = require("../config/envConfig");
 async function uploadToS3(file, s3key, folder = "") {
   try {
     const fullKey = folder ? `${folder}/${s3key}` : s3key;
-    const fileContent = fs.readFileSync(file.path);
-
+    const fileContent = await fs.readFile(file.path);
+    console.log("From uploadToS3: ", fileContent, fullKey);
     const params = {
       Bucket: env.S3_BUCKET_NAME,
       Key: fullKey,
@@ -16,15 +16,18 @@ async function uploadToS3(file, s3key, folder = "") {
       ContentType: file.mimetype,
       ACL: "public-read", // or remove if using private bucket + CloudFront
     };
+    console.log("params: ", params);
+    const fileURL = await s3.upload(params).promise();
+    console.log("url", fileURL);
 
-    await s3.upload(params).promise();
+    console.log("is upload working ?");
     await unlink(file.path);
-
+    console.log("is unlink working .");
     return `${env.CLOUDFRONT_URL}/${fullKey}`;
   } catch (error) {
-    if (fs.existsSync(file.path)) {
-      await unlink(file.path).catch(console.error);
-    }
+    // if (fs.existsSync(file.path)) {
+    //   await unlink(file.path).catch(console.error);
+    // }
     console.error("Error uploading file to S3", error);
     throw error;
   }

@@ -9,6 +9,7 @@ const {
   sendOtpFornewpassword,
   newPassword,
 } = require("../controllers/reset-password");
+const { uploadToS3 } = require("../service/upload_to_s3");
 
 router.post("/register", user.register);
 router.post("/verify", user.verifyOtp);
@@ -31,20 +32,38 @@ router.get("/me", authMiddleware, (req, res) => {
  */
 const upload = multer({ storage });
 
-router.post("/upload-single", upload.single("image"), (req, res) => {
-  if (!req.file) {
-    return res
-      .status(400)
-      .json({ success: false, message: "No file uploaded" });
-  }
+router.post(
+  "/upload-single",
+  upload.single("image"),
+  async (req, res, next) => {
+    const file = req.file;
+    if (!req.file) {
+      return res
+        .status(400)
+        .json({ success: false, message: "No file uploaded" });
+    }
 
-  res.json({
-    success: true,
-    message: "File uploaded successfully",
-    filename: req.file.filename,
-    path: `/uploads/${req.file.filename}`,
-  });
-});
+    /*
+     * LETS ADD S3
+     */
+    const s3Key = `profile_pic/${12345} - ${file.originalname}`;
+    const folderName = "profile_pic";
+    let imageUrl;
+    try {
+      imageUrl = await uploadToS3(file, s3Key, folderName);
+      console.log("ImageUrl: ", imageUrl);
+      res.json({
+        success: true,
+        data: imageUrl,
+        message: "File uploaded successfully",
+        filename: req.file.filename,
+        path: `/uploads/${req.file.filename}`,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 router.post("/upload-multiple", upload.array("images", 5), (req, res) => {
   if (!req.files || req.files.length === 0) {
