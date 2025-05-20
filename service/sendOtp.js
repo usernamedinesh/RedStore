@@ -27,7 +27,7 @@ const transporter = nodemailer.createTransport({
 //     throw error;
 //   }
 // };
-const sendOtp = async (recipient, otp) => {
+const sendOtp = async (recipient, otp, next) => {
   try {
     if (isEmail(recipient)) {
       // Send via email

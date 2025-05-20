@@ -1,4 +1,5 @@
 const { PrismaClient } = require("../generated/prisma");
+const CustomError = require("../utils/customError");
 const bcrypt = require("bcryptjs");
 const catchAsync = require("../utils/catchAsync");
 const {
@@ -66,7 +67,7 @@ exports.verifyOtp = catchAsync(async (req, res, next) => {
         where: { email },
       });
       if (emailExist) {
-        return next(new Error("user is already registered"));
+        return next(new CustomError("user is already registered", 400));
       }
     } else if (isPhone(phoneOremail)) {
       phoneNo = phoneOremail;
@@ -75,7 +76,7 @@ exports.verifyOtp = catchAsync(async (req, res, next) => {
       });
 
       if (phoneExist) {
-        return next(new Error("user is already registered"));
+        return next(new CustomError("user is already registered", 400));
       }
     } else {
       return next(new Error("Invalid phone or email format"));
@@ -108,7 +109,7 @@ exports.register = catchAsync(async (req, res, next) => {
     // Check if user already exists
     const existingUser = await prisma.user.findFirst({ where: findCondition });
     if (existingUser) {
-      return next(new Error("Email already exists"));
+      return next(new CustomError("Email already exists", 400));
     }
     /* here check email is exit or not in temp if exist then match the otp */
     // check both phoneNo or email
@@ -123,7 +124,13 @@ exports.register = catchAsync(async (req, res, next) => {
       /*if otp is matched then check expiration time */
       /* check here if the otp is matched or not */
       if (isOtpExpired(emailInTemp.expiresAt)) {
-        return next(new Error("OTP is expired. please request a new one."));
+        // return res.status(400).json({
+        //   success: false,
+        //   message: "OTP IS EXPIRED BABY",
+        // });
+        return next(
+          new CustomError("OTP is expired. please request a new one.", 400),
+        );
       }
       if (otp !== emailInTemp.otp) {
         return next(new Error("OTP is not matched"));
