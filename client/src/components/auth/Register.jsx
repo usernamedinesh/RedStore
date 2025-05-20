@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { verifyEmailOrPhone } from "../../api/authApi";
+import { redirect, useNavigate } from "react-router";
 
 const Register = () => {
+  const navigate = useNavigate();
   const [inputValue, setInputValue] = useState("");
   const [error, setError] = useState("");
   const [checkEmailOrPhone, setCheckEmailOrPhone] = useState("email");
@@ -24,7 +26,14 @@ const Register = () => {
         setError(response.error);
       } else if (response.status === 201) {
         console.log("Verification successful!", response.data);
-        console.log("Now I can go to the next page.");
+        //TODO: render an component to file data
+        navigate(`/success/${checkEmailOrPhone}`, {
+          state: {
+            emailOrPhone: inputValue,
+            type: checkEmailOrPhone,
+            fromRegister: true,
+          },
+        });
       }
     } catch (err) {
       console.error("Error during verification:", err);

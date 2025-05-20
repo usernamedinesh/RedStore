@@ -2,6 +2,7 @@ import "./App.css";
 import { createBrowserRouter } from "react-router";
 import Login from "./components/auth/Login.jsx";
 import Signup from "./components/auth/Register.jsx";
+import { FormRegister } from "./components/auth/FinalRegister.jsx";
 
 const App = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ const App = createBrowserRouter([
   {
     path: "/signup",
     element: <Signup />,
+  },
+  {
+    path: "/success/:id",
+    element: <FormRegister />,
   },
 ]);
 
