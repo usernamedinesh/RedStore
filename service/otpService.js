@@ -1,7 +1,7 @@
 // Service to handle OTP saving and sending
 
 const { PrismaClient } = require("../generated/prisma");
-const sendOtp = require("./sendOtp");
+const { sendOtp } = require("./sendOtp");
 const prisma = new PrismaClient();
 
 exports.sendOtpWithSave = async ({ otp, email, phoneNo }) => {
