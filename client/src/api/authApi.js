@@ -32,7 +32,11 @@ export const register = async (userdata) => {
     const response = await axios.post(`${API_URL}/api/register`, {
       ...userdata,
     });
-    return response.data;
+    return response;
+    // console.log("response: ", response);
+    // if (response.status === 201) {
+    //   return response.date;
+    // }
   } catch (error) {
     console.error("Error registering user:", error);
     throw error;
@@ -49,7 +53,7 @@ export const login = async (userdata) => {
     const response = await axios.post(`${API_URL}/api/login`, {
       ...userdata,
     });
-    return response.data;
+    return response;
   } catch (error) {
     console.error("Error logging user:", error);
     throw error;
