@@ -1,1 +1,30 @@
 @import "tailwindcss";
+
+/* 3. Border  button  Reveal */
+.btn-border-reveal {
+  background-color: #78f1d9;
+  color: #010a05;
+  border: 2px solid #606573;
+  position: relative;
+  width: 300px;
+}
+
+.btn-border-reveal::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: #8d5d62;
+  transition: width 0.3s ease;
+  z-index: -1;
+}
+
+.btn-border-reveal:hover::after {
+  width: 100%;
+}
+
+.btn-border-reveal:hover {
+  color: white;
+}
