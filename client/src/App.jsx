@@ -1,27 +1,19 @@
-import "./App.css";
-import { createBrowserRouter } from "react-router";
-import Login from "./components/auth/Login.jsx";
-import Signup from "./components/auth/Register.jsx";
-import { FormRegister } from "./components/auth/FinalRegister.jsx";
+import { useEffect } from "react";
+import { RouterProvider } from "react-router";
+import router from "./routes.jsx";
 
-const App = createBrowserRouter([
-  {
-    path: "/",
-    element: <h1>Hello world</h1>,
-  },
+function App() {
+  useEffect(() => {
+    const colorMode = JSON.parse(window.localStorage.getItem("color-theme"));
+    const className = "dark";
+    const bodyClass = document.body.classList;
 
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/signup",
-    element: <Signup />,
-  },
-  {
-    path: "/success/:id",
-    element: <FormRegister />,
-  },
-]);
+    colorMode === "dark"
+      ? bodyClass.add(className)
+      : bodyClass.remove(className);
+  }, []);
+
+  return <RouterProvider router={router} />;
+}
 
 export default App;
