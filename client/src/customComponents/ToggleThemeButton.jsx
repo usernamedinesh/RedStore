@@ -17,7 +17,7 @@ export default function ToggleThemeButton() {
       onClick={handleClick}
       className={`p-2 rounded-full transition-transform duration-150 ${
         clicked ? "scale-90" : "scale-100"
-      } bg-gray-200 dark:bg-gray-700 text-yellow-500 dark:text-white`}
+      } hover:scale-110 bg-gray-300 dark:bg-gray-900 text-yellow-500 dark:text-white`}
       aria-label="Toggle Theme"
     >
       {theme === "dark" ? <FaSun size={20} /> : <FaMoon size={20} />}
