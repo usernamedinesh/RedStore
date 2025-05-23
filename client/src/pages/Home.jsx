@@ -1,10 +1,11 @@
 import Typewriter from "typewriter-effect";
 import NavBar from "./Navbar";
+import Footer from "./Footer";
 
 const Home = () => {
   return (
     <>
-      <div className="bg-[var(--my-bg)] text-black dark:bg-[var(--my-bg)]  dark:text-white ">
+      <div className="bg-[var(--my-bg)] text-black dark:bg-[var(--my-bg)]  dark:text-white mb-3.5 ">
         <NavBar />
         <div>
           <h1 className="text-3xl font-bold text-red-500 text-center mt-10">
@@ -24,6 +25,7 @@ const Home = () => {
             Tailwind CSS.
           </p>
         </div>
+        <Footer />
       </div>
     </>
   );
