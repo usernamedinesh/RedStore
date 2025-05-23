@@ -64,7 +64,7 @@ const Login = () => {
   };
 
   return (
-    <div className="h-screen w-full bg-sky-200 flex flex-col items-center justify-center space-y-6 p-4">
+    <div className="dark:bg-[var(--my-bg)]  dark:text-white h-screen w-full bg-sky-200 flex flex-col items-center justify-center space-y-6 p-4">
       <h3 className="text-2xl font-semibold"> Login Here</h3>
 
       <div className="flex bg-sky-200 rounded w-1/2 max-w-sm justify-evenly">

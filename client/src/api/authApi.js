@@ -1,4 +1,6 @@
 // here all api calls for auth
+// NOTE:
+// axios.post('/refresh', {}, { withCredentials: true }) true mean include cookie  in request
 import axios from "axios";
 import { API_URL } from "./api.js";
 

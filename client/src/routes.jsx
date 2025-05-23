@@ -5,6 +5,7 @@ import Signup from "./components/auth/Register.jsx";
 import { FormRegister } from "./components/auth/FinalRegister.jsx";
 import Home from "./pages/Home.jsx";
 import Product from "./components/product/product.jsx";
+import Account from "./pages/Account.jsx";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
   {
     path: "/product/:id",
     element: <FormRegister />,
+  },
+  {
+    path: "/account",
+    element: <Account />,
   },
   {
     //not found page
