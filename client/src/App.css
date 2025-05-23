@@ -1,4 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+* body {
+  background-color: #dee4e7;
+}
+
+:root {
+  --background: 255, 255, 255; /* white */
+  /* --my-bg: #f5f5f5; */
+  --my-bg: #dee4e7;
+
+  --text-color: 0, 0, 0; /* black */
+}
+
+.dark {
+  --my-bg: #121212;
+  text-color: 255, 255, 255;
+}
 
 /* 3. Border  button  Reveal */
 .btn-border-reveal {
