@@ -22,6 +22,17 @@ const router = createBrowserRouter([
     path: "/success/:id",
     element: <FormRegister />,
   },
+  {
+    //not found page
+    path: "*",
+    element: (
+      <div className="flex items-center justify-center h-screen bg-gray-100 dark:bg-gray-800">
+        <h1 className="text-4xl font-bold text-red-500">
+          404 - Page Not Found
+        </h1>
+      </div>
+    ),
+  },
 ]);
 
 export default router;

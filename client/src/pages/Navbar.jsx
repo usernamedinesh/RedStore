@@ -2,6 +2,7 @@ import { useState } from "react";
 import { NavLink } from "react-router";
 import { HiOutlineMenuAlt3, HiX } from "react-icons/hi";
 import ToggleThemeButton from "../customComponents/ToggleThemeButton";
+import logoVideo from "../../public/logo.png";
 
 const links = [
   { to: "/", label: "Home", end: true },
@@ -34,7 +35,7 @@ export default function NavBar() {
       <div className="container mx-auto px-4 flex items-center justify-between h-16">
         {/* Logo */}
         <NavLink to="/" className="text-xl font-bold">
-          LOGO
+          <img src={logoVideo} className="h-10 rounded-sm " />
         </NavLink>
 
         {/* Desktop links */}
