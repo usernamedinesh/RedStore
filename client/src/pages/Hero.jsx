@@ -17,7 +17,7 @@ function HeroPage() {
               come.
             </p>
             <NavLink
-              to="/product"
+              to="/products"
               className="inline-block cursor-pointer dark:bg-[var(--my-bg)] px-10 py-3 bg-white text-red-500 font-bold rounded-full hover:bg-gray-300 mx-25 dark:hover:bg-gray-900 transition-transform duration-300 transform hover:scale-105 shadow-2xl"
               end
             >

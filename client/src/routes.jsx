@@ -4,6 +4,7 @@ import Login from "./components/auth/Login.jsx";
 import Signup from "./components/auth/Register.jsx";
 import { FormRegister } from "./components/auth/FinalRegister.jsx";
 import Home from "./pages/Home.jsx";
+import Product from "./components/product/product.jsx";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,14 @@ const router = createBrowserRouter([
   },
   {
     path: "/success/:id",
+    element: <FormRegister />,
+  },
+  {
+    path: "/products",
+    element: <Product />,
+  },
+  {
+    path: "/product/:id",
     element: <FormRegister />,
   },
   {
