@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useParams, Navigate, useNavigate } from "react-router";
 import { register } from "../../api/authApi";
+import { toast } from "react-toastify";
 
 export const FormRegister = () => {
   const { id } = useParams();
@@ -63,6 +64,7 @@ export const FormRegister = () => {
       const response = await register(payload);
       if (response.status === 201) {
         setLoading(false);
+        toast.success(response.data.message);
         const resp = response.data;
         /*
          * Registration successful
@@ -81,6 +83,7 @@ export const FormRegister = () => {
       const errorMessage =
         error?.response?.data?.message || "Something went wrong!";
       console.error("Error from server:", errorMessage);
+      toast.error(errorMessage);
       setError(errorMessage); // show meaningful error message to user
     }
   };

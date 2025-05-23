@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { verifyEmailOrPhone } from "../../api/authApi";
-import { redirect, useNavigate } from "react-router";
+import {  useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -20,24 +21,33 @@ const Register = () => {
 
     try {
       const response = await verifyEmailOrPhone(inputValue);
-      console.log("Response from API:", response.status);
+      console.log("Response from API:", response.status); //NOTE: remove
 
       if (response.error) {
         setError(response.error);
       } else if (response.status === 201) {
-        console.log("Verification successful!", response.data);
-        //TODO: render an component to file data
+        toast.success("otp sent successfully!");
+        console.log("Verification successful!", response.data); //NOTE: remove
+        /*
+         * NOTE:
+         *  lest store  the {fromRegister: true}
+         *  IN sessionStorage
+         */
+        sessionStorage.setItem("fromRegister", true);
         navigate(`/success/${checkEmailOrPhone}`, {
           state: {
-            emailOrPhone: inputValue,
+            emailOrPhone: inputValue, // i dont need to send this  btw
             type: checkEmailOrPhone,
             fromRegister: true,
           },
         });
       }
     } catch (err) {
-      console.error("Error during verification:", err);
-      setError("Something went wrong. Please try again.");
+      toast.error("Error while sending otp");
+      const errorMessage =
+        err?.response.data.message || "something went wrong!";
+      console.error("Error from server:", errorMessage);
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

@@ -1,19 +1,9 @@
-import { useEffect } from "react";
-import { RouterProvider } from "react-router";
-import router from "./routes.jsx";
+import "./App.css";
 
 function App() {
-  useEffect(() => {
-    const colorMode = JSON.parse(window.localStorage.getItem("color-theme"));
-    const className = "dark";
-    const bodyClass = document.body.classList;
-
-    colorMode === "dark"
-      ? bodyClass.add(className)
-      : bodyClass.remove(className);
-  }, []);
-
-  return <RouterProvider router={router} />;
+  return (
+    <div className=" bg-[var(--my-bg)] text-black dark:bg-[var(--my-bg)]  dark:text-white shadow-md"></div>
+  );
 }
 
 export default App;

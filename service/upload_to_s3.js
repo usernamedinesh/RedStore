@@ -6,6 +6,9 @@ const env = require("../config/envConfig");
 
 async function uploadToS3(file, s3key, folder = "") {
   try {
+    //TODO: not working perfectly need
+    //may be due to aws privacy policy
+
     const fullKey = folder ? `${folder}/${s3key}` : s3key;
     const fileContent = await fs.readFile(file.path);
     console.log("From uploadToS3: ", fileContent, fullKey);

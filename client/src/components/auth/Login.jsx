@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { login } from "../../api/authApi";
+import { toast } from "react-toastify";
 
 /* DATA :
  
@@ -30,10 +31,18 @@ const Login = () => {
     try {
       const response = await login(payload);
       if (response.status === 200) {
+        toast.success("Login Successfull!", {
+          position: top,
+        });
+        //TODO:
+        //store the token and id  in redux
         console.log("login successfull");
-        alert(response.data.message);
       }
     } catch (err) {
+      if (err.response.status === 400) {
+        // means otp is expired or wrong otp
+        toast.error(err?.response?.data?.message);
+      }
       const errorMessage =
         err?.response.data.message || "something went wrong!";
       console.error("Error from server:", errorMessage);
