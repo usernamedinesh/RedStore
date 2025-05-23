@@ -3,8 +3,12 @@ import Footer from "./Footer";
 import TypeWriter from "../customComponents/Typewriter";
 import HeroPage from "./Hero";
 import FeatureProduct from "../components/product/featureProduct";
+import FloatingSignupButton from "../customComponents/FloatingSingupBtn";
+import { useSelector } from "react-redux";
 
 const Home = () => {
+  const { userId } = useSelector((state) => state.auth);
+
   return (
     <>
       <div className="bg-[var(--my-bg)] text-black dark:bg-[var(--my-bg)]  dark:text-white mb-3.5 ">
@@ -18,6 +22,7 @@ const Home = () => {
             Tailwind CSS.
           </p>
         </div>
+        {!userId && <FloatingSignupButton />}
         <Footer />
       </div>
     </>
