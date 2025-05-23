@@ -15,7 +15,7 @@ function HeroPage() {
               consistency. Consistent hard work gains success. Greatness will
               come.
             </p>
-            <button className="px-6 py-3 bg-white text-red-500 font-bold rounded-full shadow hover:bg-gray-100 transition">
+            <button className="px-10 py-3 bg-white text-red-500 font-bold rounded-full shadow hover:bg-gray-100 transition mx-25">
               Explore Now
             </button>
           </div>

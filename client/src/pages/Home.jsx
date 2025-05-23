@@ -2,6 +2,7 @@ import NavBar from "./Navbar";
 import Footer from "./Footer";
 import TypeWriter from "../customComponents/Typewriter";
 import HeroPage from "./Hero";
+import FeatureProduct from "../components/product/featureProduct";
 
 const Home = () => {
   return (
@@ -11,6 +12,7 @@ const Home = () => {
         <div>
           <TypeWriter />
           <HeroPage />
+          <FeatureProduct />
           <p className="text-center ">
             This is a simple example of a home page using React Router and
             Tailwind CSS.
