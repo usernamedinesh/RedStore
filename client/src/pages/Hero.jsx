@@ -36,7 +36,7 @@ function HeroPage() {
       <div className="flex justify-center mt-6 animate-bounce mb-4 ">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="h-8 w-8 text-white dark:text-white"
+          className="h-8 w-8 text-black dark:text-white"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
