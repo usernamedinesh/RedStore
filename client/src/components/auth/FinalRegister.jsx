@@ -3,9 +3,12 @@ import { useEffect, useState } from "react";
 import { useLocation, useParams, Navigate, useNavigate } from "react-router";
 import { register } from "../../api/authApi";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { auth } from "../../redux/slice/auth/authSlice";
 
 export const FormRegister = () => {
-  const { id } = useParams();
+  const dispatch = useDispatch();
+  // const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
   const { state } = location;
@@ -68,14 +71,11 @@ export const FormRegister = () => {
         const resp = response.data;
         /*
          * Registration successful
-         TODO:
-        * ---@parmas{id: response.data.accessToken}
-        *  ---@params{user: response.data.user}
-        *  store in redux store
-         * I need thing here  {id} and {accessToken}
+         * ---@parmas{id: response.data.accessToken}
+         *  ---@params{user: response.data.user}
+         *  store in redux store
          */
-        console.log("accessToken: ", resp.accessToken);
-        console.log("id: ", resp.user.id);
+        dispatch(auth({ userId: resp.user.id, token: resp.accessToken }));
         navigate("/");
       }
     } catch (error) {

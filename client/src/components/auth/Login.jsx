@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { login } from "../../api/authApi";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { auth } from "../../redux/slice/auth/authSlice";
 
 /* DATA :
  
@@ -10,6 +12,7 @@ import { toast } from "react-toastify";
  
  */
 const Login = () => {
+  const dispatch = useDispatch();
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [password, SetPassword] = useState("");
   const [checkEmailOrPhone, setCheckEmailOrPhone] = useState("email");
@@ -34,8 +37,10 @@ const Login = () => {
         toast.success("Login Successfull!", {
           position: top,
         });
-        //TODO:
-        //store the token and id  in redux
+
+        const resp = response.data;
+        //stored in redux
+        dispatch(auth({ userId: resp.user.id, token: resp.accessToken }));
         console.log("login successfull");
       }
     } catch (err) {
