@@ -1,6 +1,6 @@
-import logo from "../../public/logo-white.png";
-import app_store from "../../public/app-store.png";
-import play_store from "../../public/play-store.png";
+import logo from "../assets/logo-white.png";
+import app_store from "../assets/app-store.png";
+import play_store from "../assets/play-store.png";
 import { NavLink } from "react-router";
 
 function Footer() {

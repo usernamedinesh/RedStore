@@ -2,7 +2,7 @@ import { useState } from "react";
 import { NavLink } from "react-router";
 import { HiOutlineMenuAlt3, HiX } from "react-icons/hi";
 import ToggleThemeButton from "../customComponents/ToggleThemeButton";
-import logoVideo from "../../public/logo.png";
+import logoVideo from "../assets/logo.png";
 
 const links = [
   { to: "/", label: "Home", end: true },
