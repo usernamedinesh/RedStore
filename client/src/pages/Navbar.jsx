@@ -22,7 +22,7 @@ export default function NavBar() {
           to={to}
           end={end}
           className={`block px-4  hover-underline ${extraClasses}`}
-          onClick={() => setOpen(false)} // close menu after click
+          onClick={() => setOpen(false)}
         >
           {label}
         </NavLink>
