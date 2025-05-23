@@ -1,3 +1,4 @@
+import { NavLink } from "react-router";
 import heroImage from "../assets/hero-banner.png";
 
 function HeroPage() {
@@ -15,9 +16,13 @@ function HeroPage() {
               consistency. Consistent hard work gains success. Greatness will
               come.
             </p>
-            <button className="px-10 py-3 bg-white text-red-500 font-bold rounded-full shadow hover:bg-gray-100 transition mx-25">
+            <NavLink
+              to="/product"
+              className="inline-block cursor-pointer dark:bg-[var(--my-bg)] px-10 py-3 bg-white text-red-500 font-bold rounded-full hover:bg-gray-300 mx-25 dark:hover:bg-gray-900 transition-transform duration-300 transform hover:scale-105 shadow-2xl"
+              end
+            >
               Explore Now
-            </button>
+            </NavLink>
           </div>
 
           {/* Hero image */}
