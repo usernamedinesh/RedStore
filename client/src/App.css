@@ -3,6 +3,7 @@
 @tailwind utilities;
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
+
 * body {
   background-color: #dee4e7;
 }

@@ -3,6 +3,8 @@ import { login } from "../../api/authApi";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { auth } from "../../redux/slice/auth/authSlice";
+import {useNavigate} from "react-router";
+
 
 /* DATA :
  
@@ -12,6 +14,7 @@ import { auth } from "../../redux/slice/auth/authSlice";
  
  */
 const Login = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [password, SetPassword] = useState("");
@@ -37,19 +40,23 @@ const Login = () => {
         toast.success("Login Successfull!", {
           position: top,
         });
-
         const resp = response.data;
+        console.log("resp: ", resp)
+        console.log("token  : ",resp.data.accessToken)
+        console.log("user  : ",resp.data.user.id)
+            
         //stored in redux
-        dispatch(auth({ userId: resp.user.id, token: resp.accessToken }));
+        dispatch(auth({ userId: resp.data.user.id, token: resp.data.accessToken }));
         console.log("login successfull");
+        // navigate to the /  
+          navigate("/");
       }
     } catch (err) {
-      if (err.response.status === 400) {
+        //  if (err.response.status === 400) {
         // means otp is expired or wrong otp
-        toast.error(err?.response?.data?.message);
-      }
-      const errorMessage =
-        err?.response.data.message || "something went wrong!";
+        //  toast.error(err?.response?.data?.message);
+      //}
+      const errorMessage =  err?.response?.data?.message || "something went wrong!";
       console.error("Error from server:", errorMessage);
       SetError(errorMessage);
     } finally {

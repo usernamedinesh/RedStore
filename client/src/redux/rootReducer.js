@@ -1,5 +1,13 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import authReducer from "./slice/auth/authSlice";
+import storage from "redux-persist/lib/storage";
+
+const rootPersistConfig = {
+   key: "root",
+   storage,
+   keyPrefix: "redux-",
+};
+
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -7,4 +15,4 @@ const rootReducer = combineReducers({
   // add here
 });
 
-export default rootReducer;
+export {rootReducer, rootPersistConfig};
