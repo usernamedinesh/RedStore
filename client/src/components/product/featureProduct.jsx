@@ -27,7 +27,7 @@ export default function Carousel() {
   };
 
   return (
-    <div className="relative w-full ">
+    <div className="relative w-full mb-15 ">
       {/* Carousel Wrapper */}
       <div className="relative h-[300px] overflow-hidden rounded-lg md:h-[600px]">
         <div>
