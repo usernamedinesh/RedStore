@@ -16,7 +16,7 @@ function Latestproduct() {
     isFetching,
   } = useQuery({
     // queryKey: takes an array as unique key
-    queryKey: ["latestProduct", { page: 1, limit: 4 }],
+    queryKey: ["latestProduct", { page: 1, limit: 3 }],
     // function that fetch the data
     queryFn: () => getAllProduct(1, 4),
     // Optional: Keep data fresh for only 1 minute (less than default)
@@ -42,17 +42,17 @@ function Latestproduct() {
       <h2 className="text-center text-2xl md:text-3xl font-bold mb-6">
         Latest Products {isFetching ? "(Updating...)" : ""}
       </h2>{" "}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 max-w-screen-xl w-full">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 max-w-screen-xl w-full px-2">
         {latestProduct.map((product) => (
           <div
             key={product.id}
             className="border p-4 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300
-                       flex flex-col items-center text-center" /* Added flex, items-center, text-center */
+                       flex flex-col items-center text-center"
           >
             <img
               src={product.imageUrl}
               alt={product.name}
-              className="w-full h-32 object-contain mb-2 block mx-auto" /* object-contain to prevent cropping, block mx-auto for centering if image isn't w-full */
+              className="w-full h-32 object-contain mb-2 block mx-auto"
             />
             <h3 className="font-bold text-lg mb-1">{product.name}</h3>{" "}
             {/* Added font size for name */}
