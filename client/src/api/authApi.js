@@ -2,7 +2,7 @@
 // NOTE:
 // axios.post('/refresh', {}, { withCredentials: true }) true mean include cookie  in request
 import axios from "axios";
-import { API_URL } from "./axiosInstance";
+import axiosInstance, { API_URL } from "./axiosInstance";
 
 /*
  * VERIFY EMAIL OR PHONE
@@ -58,6 +58,48 @@ export const login = async (userdata) => {
     return response;
   } catch (error) {
     console.error("Error logging user:", error);
+    throw error;
+  }
+};
+
+/*
+ * FOR OWNER REQUEST FOR OTP
+ * EMAIL ONLY
+ *
+ *
+ */
+
+export const requestForOTP = async (email) => {
+  try {
+    const response = await axiosInstance.post("/api/auth/request", { email });
+    return response;
+  } catch (error) {
+    console.error("Error requesting OTP:", error);
+    throw error;
+  }
+};
+
+export const registerForOwnrAccount = async (userData) => {
+  try {
+    const response = await axiosInstance.post("/api/auth/register", {
+      userData,
+    });
+    return response;
+  } catch (error) {
+    console.error("Error requesting OTP:", error);
+    throw error;
+  }
+};
+
+export const loginToOwnrAccount = async (email, password) => {
+  try {
+    const response = await axiosInstance.post("/api/auth/register", {
+      email,
+      password,
+    });
+    return response;
+  } catch (error) {
+    console.error("Error requesting OTP:", error);
     throw error;
   }
 };
