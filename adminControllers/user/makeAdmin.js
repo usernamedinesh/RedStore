@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 async function makeAdmin() {
   try {
     await prisma.user.update({
-      where: { email: "myaovalor@gmail.com" },
+      where: { email: "dipenboro432@gmail.com" },
       data: {
         userRole: "ADMIN",
       },
