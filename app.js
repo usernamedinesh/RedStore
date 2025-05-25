@@ -6,6 +6,7 @@ const adminRoute = require("./router/admin/user");
 const adminProductRoute = require("./router/admin/productRoute");
 const addressRoute = require("./router/order");
 const adminCart = require("./router/admin/addTocart");
+const productRoute = require("./router//product.route");
 
 const notFoundHandler = require("./middleware/notFound");
 const corsMiddleware = require("./middleware/cors");
@@ -22,7 +23,7 @@ app.use(passport.initialize());
 app.use(corsMiddleware);
 
 app.use("/owner", productOwerRoute);
-app.use("/api", userRoute);
+app.use("/api", userRoute, productRoute);
 app.use("/api/user", addressRoute);
 app.use("/admin", adminRoute, adminProductRoute, adminCart);
 
