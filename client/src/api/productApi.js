@@ -1,21 +1,37 @@
-import axios from "axios";
-import { API_URL } from "./api.js";
+import axiosInstance from "./axiosInstance.js";
 
 /*
  * GET ALL PRODUCT
  * {params} : page number and count
  * TODO: update the url remove admin
+ *
  * GET /product?page=2&limit=15
  */
-export const getAllProduct = async (page, limit = 10, token) => {
+export const getAllProduct = async (page = 1, limit = 10) => {
   try {
-    const response = await axios.get(
-      `${API_URL}/admin/product?page=${page}&limit=${limit}`,
-      //Pass Bearer Token in header
+    const response = await axiosInstance.get(
+      `/admin/product?page=${page}&limit=${limit}`,
     );
-    return response;
+    return response.data;
   } catch (error) {
-    console.error("Error verifying email or phone:", error);
+    console.error("Error fetching all product : ", error);
     throw error;
   }
 };
+
+/*
+ * GET SINGLE PRODUCT BY ID
+ */
+export const getProductById = async (id) => {
+  try {
+    const response = await axiosInstance.get(`/admin/product/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching product by ID: ", error);
+    throw error;
+  }
+};
+
+/*
+ * GET CATEGORY OF PRODUCT
+ */
