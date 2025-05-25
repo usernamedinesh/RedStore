@@ -17,7 +17,7 @@ router.post("/category", authMiddleware, createCategory);
 /* get all product */
 /* axios.get(`/api/products?page=${pagination.page}&limit=${pagination.limit}`); */
 /*TEST: GET /product?page=2&limit=15 */
-router.get("/product", authMiddleware, getAllProducts);
+router.get("/product", getAllProducts);
 
 /* get single proudct */
 router.get("/product/:id", authMiddleware, SingleProduct);
