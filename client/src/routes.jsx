@@ -7,6 +7,7 @@ import Home from "./pages/Home.jsx";
 import Product from "./components/product/product.jsx";
 import Account from "./pages/Account.jsx";
 import CartPage from "./components/cart/Cart.jsx";
+import OwnerReqForOTP from "./components/ownrAuth/RequestForOTP.jsx";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
   {
     path: "/cart",
     element: <CartPage />,
+  },
+  {
+    path: "/register/owner",
+    element: <OwnerReqForOTP />,
   },
   {
     //not found page
