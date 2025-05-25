@@ -4,32 +4,64 @@
  * page = 1, products = 3
  */
 
-import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getAllProduct } from "../../api/productApi";
 
 function Latestproduct() {
-  const [latestProducts, setLatestProducts] = useState([]);
+  const {
+    data: productData,
+    isLoading,
+    isError,
+    error,
+    isFetching,
+  } = useQuery({
+    // queryKey: takes an array as unique key
+    queryKey: ["latestProduct", { page: 1, limit: 4 }],
+    // function that fetch the data
+    queryFn: () => getAllProduct(1, 4),
+    // Optional: Keep data fresh for only 1 minute (less than default)
+  });
+
+  // Handle loading and error state
+  if (isLoading) {
+    return <div className="text-center">Loading latest product ..</div>;
+  }
+  if (isError) {
+    return (
+      <div className="text-center">
+        Error loading latest product: {error.response.data.message}
+      </div>
+    );
+  }
+  // Access product array from the data.produces
+  const latestProduct = productData?.data?.data?.products || [];
+  console.log("Latest Products:", latestProduct);
+
   return (
-    <>
-      {!latestProducts.length ? (
-        <div>
-          <h1>Loading...</h1>
-        </div>
-      ) : (
-        <div className="latest-products">
-          <h2>Latest Products</h2>
-          <div className="product-list">
-            {latestProducts.map((product) => (
-              <div key={product.id} className="product-item">
-                <img src={product.image} alt={product.name} />
-                <h3>{product.name}</h3>
-                <p>{product.description}</p>
-                <span>${product.price}</span>
-              </div>
-            ))}
+    <div className="flex flex-col justify-center items-center">
+      <h2 className="text-center text-2xl md:text-3xl font-bold mb-6">
+        Latest Products {isFetching ? "(Updating...)" : ""}
+      </h2>{" "}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 max-w-screen-xl w-full">
+        {latestProduct.map((product) => (
+          <div
+            key={product.id}
+            className="border p-4 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300
+                       flex flex-col items-center text-center" /* Added flex, items-center, text-center */
+          >
+            <img
+              src={product.imageUrl}
+              alt={product.name}
+              className="w-full h-32 object-contain mb-2 block mx-auto" /* object-contain to prevent cropping, block mx-auto for centering if image isn't w-full */
+            />
+            <h3 className="font-bold text-lg mb-1">{product.name}</h3>{" "}
+            {/* Added font size for name */}
+            <p className="text-gray-700">${product.variants[0].price}</p>{" "}
+            {/* Added text color for price */}
           </div>
-        </div>
-      )}
-    </>
+        ))}
+      </div>
+    </div>
   );
 }
 

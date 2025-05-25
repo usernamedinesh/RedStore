@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstance.js";
+import axiosInstance from "./axiosInstance";
 
 /*
  * GET ALL PRODUCT
@@ -10,9 +10,10 @@ import axiosInstance from "./axiosInstance.js";
 export const getAllProduct = async (page = 1, limit = 10) => {
   try {
     const response = await axiosInstance.get(
-      `/admin/product?page=${page}&limit=${limit}`,
+      `/api/product?page=${page}&limit=${limit}`,
     );
-    return response.data;
+    console.log("All products fetched successfully:", response.data);
+    return response;
   } catch (error) {
     console.error("Error fetching all product : ", error);
     throw error;
@@ -24,7 +25,7 @@ export const getAllProduct = async (page = 1, limit = 10) => {
  */
 export const getProductById = async (id) => {
   try {
-    const response = await axiosInstance.get(`/admin/product/${id}`);
+    const response = await axiosInstance.get(`/api/product/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching product by ID: ", error);
