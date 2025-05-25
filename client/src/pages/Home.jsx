@@ -5,6 +5,7 @@ import HeroPage from "./Hero";
 import FeatureProduct from "../components/product/featureProduct";
 import FloatingSignupButton from "../customComponents/FloatingSingupBtn";
 import { useSelector } from "react-redux";
+import Latestproduct from "../components/product/latestProduct";
 
 const Home = () => {
   const { userId } = useSelector((state) => state.auth);
@@ -17,6 +18,7 @@ const Home = () => {
           <TypeWriter />
           <HeroPage />
           <FeatureProduct />
+          <Latestproduct />
           <p className="text-center ">
             This is a simple example of a home page using React Router and
             Tailwind CSS.
