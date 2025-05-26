@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { requestForOTP } from "../../api/authApi";
-
+import { toast } from "react-toastify";
 function OwnerReqForOTP() {
   const [email, setEmail] = useState();
   const [loading, setLoading] = useState(false);
@@ -12,9 +12,21 @@ function OwnerReqForOTP() {
     setError(null);
     try {
       const response = await requestForOTP(email);
-      console.log("OTP request response:", response);
-      if (!response.ok) {
-        throw new Error("Failed to request OTP");
+      if (response.success) {
+        setError(null);
+        setLoading(false);
+        toast.success("OTP sent successfully! Please check your email.", {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+      if (response.error?.status === 400) {
+        setError(response.error.message);
       }
     } catch (err) {
       setError(err.message);
