@@ -51,18 +51,20 @@ exports.login = catchAsync(async (req, res, next) => {
     if (!user) {
       //  user is not user
       // then check he is OWNER
-      const owner = await Prisma.productOwner.findMany({
-        where: { findCondition },
+      const owner = await Prisma.productOwner.findFirst({
+        where: findCondition,
       });
       if (owner) {
+        console.log("password", password);
         // check if password matched
-        const isMatched = await bcrypt.compare(password, user.password);
+        const isMatched = await bcrypt.compare(password, owner.password);
         if (!isMatched) {
           return next(new Error("Incorrect Password"));
         }
+        console.log("working fine", isMatched);
         let isOwner;
         // then send the response
-        successResponse(
+        return successResponse(
           res,
           { isOwner: true, owner },
           "owner login successfully",
