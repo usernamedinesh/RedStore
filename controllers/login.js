@@ -49,7 +49,28 @@ exports.login = catchAsync(async (req, res, next) => {
     });
 
     if (!user) {
-      return next(new Error("User not exist "));
+      //  user is not user
+      // then check he is OWNER
+      const owner = await Prisma.productOwner.findMany({
+        where: { findCondition },
+      });
+      if (owner) {
+        // check if password matched
+        const isMatched = await bcrypt.compare(password, user.password);
+        if (!isMatched) {
+          return next(new Error("Incorrect Password"));
+        }
+        let isOwner;
+        // then send the response
+        successResponse(
+          res,
+          { isOwner: true, owner },
+          "owner login successfully",
+          200,
+        );
+      } else {
+        return next(new Error("User not exist "));
+      }
     }
 
     // check if password matched
