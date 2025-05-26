@@ -18,7 +18,7 @@ function Latestproduct() {
     // queryKey: takes an array as unique key
     queryKey: ["latestProduct", { page: 1, limit: 3 }],
     // function that fetch the data
-    queryFn: () => getAllProduct(1, 4),
+    queryFn: () => getAllProduct(1, 3),
     // Optional: Keep data fresh for only 1 minute (less than default)
   });
 
@@ -54,9 +54,9 @@ function Latestproduct() {
               alt={product.name}
               className="w-full h-32 object-contain mb-2 block mx-auto"
             />
-            <h3 className="font-bold text-lg mb-1">{product.name}</h3>{" "}
+            <h3 className="font-bold text-lg mb-1">{product.name}</h3>
             {/* Added font size for name */}
-            <p className="text-gray-700">${product.variants[0].price}</p>{" "}
+            <p className="text-gray-700">${product.variants[0].price}</p>
             {/* Added text color for price */}
           </div>
         ))}

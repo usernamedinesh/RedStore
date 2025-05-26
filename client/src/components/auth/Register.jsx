@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { verifyEmailOrPhone } from "../../api/authApi";
-import {  useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
 const Register = () => {
@@ -60,10 +60,10 @@ const Register = () => {
   };
 
   return (
-    <div className="h-screen w-full bg-sky-200 flex flex-col items-center justify-center space-y-6 p-4">
+    <div className="h-screen w-full  flex flex-col items-center justify-center space-y-6 p-4 bg-[var(--my-bg)] dark:bg-[var(--my-bg)] text-black dark:text-white">
       <h3 className="text-2xl font-semibold">Register Here</h3>
 
-      <div className="flex bg-sky-200 rounded w-1/2 max-w-sm justify-evenly">
+      <div className="flex  rounded w-1/2 max-w-sm justify-evenly">
         <button
           type="button"
           onClick={() => isPhoneOrMail("email")}

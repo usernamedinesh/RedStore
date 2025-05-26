@@ -3,8 +3,7 @@ import { login } from "../../api/authApi";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { auth } from "../../redux/slice/auth/authSlice";
-import {useNavigate} from "react-router";
-
+import { useNavigate } from "react-router";
 
 /* DATA :
  
@@ -41,22 +40,25 @@ const Login = () => {
           position: top,
         });
         const resp = response.data;
-        console.log("resp: ", resp)
-        console.log("token  : ",resp.data.accessToken)
-        console.log("user  : ",resp.data.user.id)
-            
+        console.log("resp: ", resp);
+        console.log("token  : ", resp.data.accessToken);
+        console.log("user  : ", resp.data.user.id);
+
         //stored in redux
-        dispatch(auth({ userId: resp.data.user.id, token: resp.data.accessToken }));
+        dispatch(
+          auth({ userId: resp.data.user.id, token: resp.data.accessToken }),
+        );
         console.log("login successfull");
-        // navigate to the /  
-          navigate("/");
+        // navigate to the /
+        navigate("/");
       }
     } catch (err) {
-        //  if (err.response.status === 400) {
-        // means otp is expired or wrong otp
-        //  toast.error(err?.response?.data?.message);
+      //  if (err.response.status === 400) {
+      // means otp is expired or wrong otp
+      //  toast.error(err?.response?.data?.message);
       //}
-      const errorMessage =  err?.response?.data?.message || "something went wrong!";
+      const errorMessage =
+        err?.response?.data?.message || "something went wrong!";
       console.error("Error from server:", errorMessage);
       SetError(errorMessage);
     } finally {
@@ -71,14 +73,18 @@ const Login = () => {
   };
 
   return (
-    <div className="dark:bg-[var(--my-bg)]  dark:text-white h-screen w-full bg-sky-200 flex flex-col items-center justify-center space-y-6 p-4">
-      <h3 className="text-2xl font-semibold"> Login Here</h3>
+    // <div className="dark:bg-[var(--my-bg)]  dark:text-white h-screen w-full bg-sky-200 flex flex-col items-center justify-center space-y-6 p-4">
 
-      <div className="flex bg-sky-200 rounded w-1/2 max-w-sm justify-evenly">
+    <div className="bg-[var(--my-bg)] dark:bg-[var(--my-bg)] text-black dark:text-white mb-3.5 px-6 py-8 rounded-lg shadow-md max-w-md mx-auto mt-10 border border-gray-300 dark:border-gray-700 ">
+      <h3 className="text-2xl font-semibold text-center"> Login Here</h3>
+
+      {/* <div className="flex bg-sky-200 rounded w-1/2 max-w-sm   mt-5 "> */}
+      {/* <div className="flex  rounded mt-5 mx-auto w-full sm:max-w-sm lg:max-w-xs ml-5 lg:justify-between gap-4 "> */}
+      <div className="flex  rounded mt-5 w-full gap-x-2">
         <button
           type="button"
           onClick={() => isPhoneOrMail("email")}
-          className={`px-8 py-2 rounded shadow transition-colors duration-200 ${
+          className={`flex-1 py-2 px-2 rounded shadow transition-colors duration-200 text-sm sm:text-base ${
             checkEmailOrPhone === "email"
               ? "bg-green-500 text-white"
               : "bg-white text-black"
@@ -89,7 +95,7 @@ const Login = () => {
         <button
           type="button"
           onClick={() => isPhoneOrMail("phone")}
-          className={`px-8 py-2 rounded shadow transition-colors duration-200 ${
+          className={`flex-1 py-2 px-2 rounded shadow transition-colors duration-200 text-sm sm:text-base ${
             checkEmailOrPhone === "phone"
               ? "bg-green-500 text-white"
               : "bg-white text-black"
@@ -98,7 +104,7 @@ const Login = () => {
           Phone
         </button>
       </div>
-      <div className="w-full max-w-sm">
+      <div className="w-full max-w-sm mt-5 ">
         <label htmlFor="input" className="block mb-2 font-medium">
           {checkEmailOrPhone === "email" ? "Email" : "Phone Number"}
         </label>
@@ -118,7 +124,7 @@ const Login = () => {
       </div>
 
       {loading && (
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center ">
           <svg
             className="animate-spin h-5 w-5 text-blue-500"
             xmlns="http://www.w3.org/2000/svg"
@@ -143,7 +149,7 @@ const Login = () => {
       )}
 
       <div className="w-full max-w-sm">
-        <label htmlFor="password" className="block mb-2 font-medium">
+        <label htmlFor="password" className="block mb-2 mt-5 font-medium">
           Password
         </label>
         <input
@@ -158,11 +164,11 @@ const Login = () => {
         />
       </div>
 
-      <div>
+      <div className=" text-center">
         <button
           type="submit"
           onClick={HandleLogin}
-          className="  btn-border-reveal h-10 w-[50px] text-white px-6 py-2 rounded  transition-colors duration-300 scale-100 hover:scale-105"
+          className=" mt-10 btn-border-reveal h-10 w-[50px] text-white  rounded  transition-colors duration-300 scale-100 hover:scale-105"
         >
           LOGIN
         </button>

@@ -89,7 +89,7 @@ export const FormRegister = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-green-100 p-4">
+    <div className="flex flex-col items-center justify-center h-screen  p-4  bg-[var(--my-bg)] dark:bg-[var(--my-bg)] text-black dark:text-white">
       <h1 className="text-2xl font-bold mb-4">Complete the From and submit</h1>
       <div className="w-full max-w-sm">
         {/* EMAIL EDITONLY */}
