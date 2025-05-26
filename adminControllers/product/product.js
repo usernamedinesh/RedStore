@@ -2,6 +2,7 @@
 
 const { client: redis, policies } = require("../../config/redisConfig");
 const { getProductKey, getProductTTL } = require("../../redis/cache.redis");
+const customError = require("../../utils/customError");
 
 const Joi = require("joi");
 const { PrismaClient } = require("../../generated/prisma");
@@ -181,17 +182,23 @@ exports.createProduct = async (req, res, next) => {
   }
 };
 
+/*
+ * ---get all products
+ *  [public route]
+ */
 exports.getAllProducts = catchAsync(async (req, res, next) => {
   try {
     // 1. Admin verification (optimized query)
     const user = await prisma.user.findUnique({
-      where: { id: req.user.id },
+      // where: { id: req.user.id },
+      where: { id: 2 }, // for testing purpost TODO: remove  this
       select: { userRole: true }, // Only fetch needed field
     });
 
+    /* lets remove this */
     if (!user || user.userRole !== "ADMIN") {
       return next(
-        new AppError("Access denied: Admin privileges required", 403),
+        new customError("Access denied: Admin privileges required", 403),
       );
     }
 
@@ -218,9 +225,10 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
           // Explicitly select fields for security
           id: true,
           name: true,
+          basePrice: true, // new added
           category: { select: { name: true } },
           brand: { select: { name: true } },
-          ower: true,
+          owner: true,
           variants: {
             select: {
               id: true,
