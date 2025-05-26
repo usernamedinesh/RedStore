@@ -6,9 +6,12 @@ const bcrypt = require("bcryptjs");
 const {
   generateAccessToken,
   generateRefreshToken,
+  genTokenUsingEmail,
 } = require("../utils/generateToken");
 const { successResponse } = require("../utils/response");
 const { isEmail, isPhone } = require("../validator/emailPhoneValidator");
+const runCryptoTask = require("../worker/encryptDecrypt");
+const env = require("../config/envConfig");
 
 const schema = Joi.object({
   email: Joi.string().email().messages({
@@ -63,10 +66,13 @@ exports.login = catchAsync(async (req, res, next) => {
         }
         console.log("working fine", isMatched);
         let isOwner;
+        // generate an token an enctrypt the token
+        let token = genTokenUsingEmail(owner.email);
+        token = await runCryptoTask("encrypt", token, env.SECRET_KEY);
         // then send the response
         return successResponse(
           res,
-          { isOwner: true, owner },
+          { isOwner: true, token },
           "owner login successfully",
           200,
         );

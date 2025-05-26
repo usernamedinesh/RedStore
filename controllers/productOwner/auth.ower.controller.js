@@ -33,6 +33,7 @@ const catchAsync = require("../../utils/catchAsync");
 const Joi = require("joi");
 const bcrypt = require("bcryptjs");
 const { successResponse } = require("../../utils/response");
+const CustomError = require("../../utils/customError");
 const {
   genTokenUsingEmail,
   verifiedTokenForEmail,
@@ -72,7 +73,7 @@ exports.handleRequest = catchAsync(async (req, res, next) => {
     const emailExists = await prisma.productOwner.findUnique({
       where: { email: email },
     });
-
+    console.log("emailExists: ", emailExists);
     if (emailExists) {
       return next({
         status: 400,
@@ -238,7 +239,7 @@ exports.handleRegister = catchAsync(async (req, res, next) => {
     successResponse(
       res,
       updatedOwner, // Return the updated owner details (excluding sensitive fields)
-      "Product owner registered successfully",
+      "OWNER registered successfully",
       200, // Use 200 OK for update success, or 201 Created if you consider this the final creation step
     );
   } catch (error) {
@@ -330,5 +331,63 @@ exports.handleRemoveOwner = catchAsync(async (req, res, next) => {
   } catch (error) {
     console.error("Error while removing owner");
     next(error);
+  }
+});
+
+exports.getOwnersProduct = catchAsync(async (req, res, next) => {
+  try {
+    //get the owner if from the req.user.id
+    const userId = req.user.id;
+
+    //ONLY product have the its creator ID
+    const products = await prisma.product.findUnique({
+      where: { ownerId: Number(userId) },
+      // do i need to select i dont think so
+    });
+    // OWNER doesnot have the product id
+    // Product have the OWNERR id
+
+    if (products.length === 0 || !products) {
+      return next(CustomError("product not exist ", 404));
+    }
+    successResponse(res, products, "fetched fetched by owner ", 200);
+  } catch (error) {
+    console.error("Errow while fetching product of Itself");
+    next(error);
+  }
+});
+
+exports.verifyTokenForOnwer = catchAsync(async (req, res, next) => {
+  try {
+    const { token } = req.body;
+    console.log("Token received for verification:", token);
+    if (!token) {
+      return next(new Error("Token is required"));
+    }
+    // Decrypt the token
+    const decryptedToken = await runCryptoTask(
+      "decrypt",
+      token,
+      env.SECRET_KEY,
+    );
+
+    // Verify the token
+    const verifiedData = verifiedTokenForEmail(decryptedToken);
+    if (!verifiedData || !verifiedData.email) {
+      return next(new Error("Invalid or expired token"));
+    }
+
+    // Check if the owner exists with the email from the token
+    const owner = await prisma.productOwner.findUnique({
+      where: { email: verifiedData.email },
+    });
+    if (!owner) {
+      return next(new Error("Owner not found"));
+    }
+    // If everything is fine, return the owner data
+    successResponse(res, owner, "Owner account verified successfully", 200);
+  } catch (error) {
+    console.error("Error while verifying owner account");
+    return next;
   }
 });
