@@ -29,13 +29,12 @@ function Latestproduct() {
   if (isError) {
     return (
       <div className="text-center">
-        Error loading latest product: {error.response.data.message}
+        Error loading latest product: {error?.response?.data?.message}
       </div>
     );
   }
   // Access product array from the data.produces
   const latestProduct = productData?.data?.data?.products || [];
-  console.log("Latest Products:", latestProduct);
 
   return (
     <div className="flex flex-col justify-center items-center">
