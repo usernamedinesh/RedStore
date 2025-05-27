@@ -12,10 +12,13 @@ export function Home() {
 
   useEffect(() => {
     const hasRun = sessionStorage.getItem("verifyPageHasRun");
-    if (hasRun) {
+    if (hasRun === "true") {
+      console.log("Verify page has already run, skipping verification logic.");
+      return;
+    }
+    if (!hasRun) {
       console.log("Running verify logic...");
       sessionStorage.setItem("verifyPageHasRun", "true");
-      return;
     }
     const path = new URLSearchParams(window.location.search);
     const token = path.get("token");

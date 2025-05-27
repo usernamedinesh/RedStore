@@ -1,14 +1,14 @@
 import { useAppContext } from "../customComponents/context";
 
 export function Me() {
-  const { data, setLogout } = useAppContext();
+  const { data, logout } = useAppContext();
   console.log("User from me page  data:", data);
   if (!data || Object.keys(data).length === 0) {
-    window.location.href = "http://localhost:5173/login";
+    console.log("No user data found, redirecting to login page.");
+    // window.location.href = "http://localhost:5173/login";
   }
   function handleLogout() {
-    localStorage.removeItem("appData");
-    setLogout();
+    logout();
     window.location.href = "http://localhost:5173/login";
   }
   return (
