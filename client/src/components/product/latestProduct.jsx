@@ -55,7 +55,7 @@ function Latestproduct() {
                      flex flex-col items-center text-center duration-300 ease-in-out 
                      hover:-translate-y-1 hover:scale-105 transition-all h-full "
           >
-            <NavLink to={`/product/${product.id}`}>
+            <NavLink to={`/product/${product.id}`} state={{ product }}>
               <img
                 src={product.imageUrl}
                 alt={product.name}
