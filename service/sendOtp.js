@@ -52,6 +52,7 @@ const sendOtp = async (recipient, otp, next) => {
 
 const sendRegLinkForOwener = async (email, token) => {
   const accountCreationUrl = `${env.FRONTEND_URL}/create-account?token=${token}`;
+  console.log("FRONTEND_URL: ", accountCreationUrl);
   const info = await transporter.sendMail({
     from: `"Our Official email" <${env.MAIL_EMAIL}>`, // Sender's email
     to: email, // Recipient's email

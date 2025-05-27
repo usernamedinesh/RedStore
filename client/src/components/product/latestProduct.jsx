@@ -6,6 +6,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { getAllProduct } from "../../api/productApi";
+import { NavLink } from "react-router";
 
 function Latestproduct() {
   const {
@@ -40,23 +41,26 @@ function Latestproduct() {
     <div className="flex flex-col justify-center items-center">
       <h2 className="text-center text-2xl md:text-3xl font-bold mb-6">
         Latest Products {isFetching ? "(Updating...)" : ""}
-      </h2>{" "}
+      </h2>
+
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 max-w-screen-xl w-full px-2">
         {latestProduct.map((product) => (
           <div
             key={product.id}
-            className="border p-4 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300
+            className="cursor-pointer border p-4 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300
                        flex flex-col items-center text-center"
           >
-            <img
-              src={product.imageUrl}
-              alt={product.name}
-              className="w-full h-32 object-contain mb-2 block mx-auto"
-            />
-            <h3 className="font-bold text-lg mb-1">{product.name}</h3>
-            {/* Added font size for name */}
-            <p className="text-gray-700">${product.variants[0].price}</p>
-            {/* Added text color for price */}
+            <div>
+              <NavLink to={`/product/${product.id}`}>
+                <img
+                  src={product.imageUrl}
+                  alt={product.name}
+                  className="w-full h-32 object-contain mb-2 block mx-auto"
+                />
+                <h3 className="font-bold text-lg mb-1">{product.name}</h3>
+                <p className="text-gray-700">${product.variants[0].price}</p>
+              </NavLink>
+            </div>
           </div>
         ))}
       </div>

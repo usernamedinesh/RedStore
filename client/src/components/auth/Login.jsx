@@ -3,7 +3,7 @@ import { login } from "../../api/authApi";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { auth } from "../../redux/slice/auth/authSlice";
-import { useNavigate } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 
 /* DATA :
  
@@ -36,27 +36,36 @@ const Login = () => {
     try {
       const response = await login(payload);
       if (response.status === 200) {
-        toast.success("Login Successfull!", {
-          position: top,
+        toast.success(response.data.message, {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
         });
-        const resp = response.data;
-        console.log("resp: ", resp);
-        console.log("token  : ", resp.data.accessToken);
-        console.log("user  : ", resp.data.user.id);
+        if (response.data.data.isOwner) {
+          // Check if it is OWNER
+          // IF OWNER then redirect to admin page
+          //stored in redux
+          //lets not store in redux cuse i can't use it in admin page
+          // If the user is an owner, redirect to the owner dashboard
+          // navigate("/");
+          const token = response.data.data.token;
+          window.location.href = `http://localhost:5174/verify/?token=${token}`;
+          return;
+        }
 
-        //stored in redux
+        const resp = response.data;
+        // store
         dispatch(
           auth({ userId: resp.data.user.id, token: resp.data.accessToken }),
         );
-        console.log("login successfull");
-        // navigate to the /
+        /* navigate to the home page */
         navigate("/");
       }
     } catch (err) {
-      //  if (err.response.status === 400) {
-      // means otp is expired or wrong otp
-      //  toast.error(err?.response?.data?.message);
-      //}
       const errorMessage =
         err?.response?.data?.message || "something went wrong!";
       console.error("Error from server:", errorMessage);
@@ -73,8 +82,6 @@ const Login = () => {
   };
 
   return (
-    // <div className="dark:bg-[var(--my-bg)]  dark:text-white h-screen w-full bg-sky-200 flex flex-col items-center justify-center space-y-6 p-4">
-
     <div className="bg-[var(--my-bg)] dark:bg-[var(--my-bg)] text-black dark:text-white mb-3.5 px-6 py-8 rounded-lg shadow-md max-w-md mx-auto mt-10 border border-gray-300 dark:border-gray-700 ">
       <h3 className="text-2xl font-semibold text-center"> Login Here</h3>
 

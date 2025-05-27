@@ -9,6 +9,7 @@ import Account from "./pages/Account.jsx";
 import CartPage from "./components/cart/Cart.jsx";
 import OwnerReqForOTP from "./components/ownrAuth/RequestForOTP.jsx";
 import CreateOwnerAccount from "./components/ownrAuth/createOwnerAccount.jsx";
+import { SingleProduct } from "./components/product/SingleProduct.jsx";
 
 const router = createBrowserRouter([
   {
@@ -33,7 +34,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/product/:id",
-    element: <FormRegister />,
+    element: <SingleProduct />,
   },
   {
     path: "/account",
@@ -51,6 +52,7 @@ const router = createBrowserRouter([
     path: "/create-account",
     element: <CreateOwnerAccount />,
   },
+
   {
     //not found page
     path: "*",

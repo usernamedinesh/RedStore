@@ -71,29 +71,34 @@ export const login = async (userdata) => {
 
 export const requestForOTP = async (email) => {
   try {
-    const response = await axiosInstance.post("/api/auth/request", { email });
-    return response;
+    const response = await axiosInstance.post("/owner/request", { email });
+    return response.data;
   } catch (error) {
     console.error("Error requesting OTP:", error);
-    throw error;
+    return (
+      error.response?.data || {
+        message: "An error occurred while requesting OTP.",
+      }
+    );
   }
 };
 
-export const registerForOwnrAccount = async (userData) => {
+export const registerForOwnrAccount = async (name, password, token) => {
   try {
-    const response = await axiosInstance.post("/api/auth/register", {
-      userData,
-    });
-    return response;
+    const response = await axiosInstance.post(
+      `/owner/create-account/${token}`,
+      { name, password },
+    );
+    return response.data;
   } catch (error) {
-    console.error("Error requesting OTP:", error);
-    throw error;
+    console.error("Error While Creating Owner Account:", error);
+    return error.response?.data;
   }
 };
 
 export const loginToOwnrAccount = async (email, password) => {
   try {
-    const response = await axiosInstance.post("/api/auth/register", {
+    const response = await axiosInstance.post("/owner/login", {
       email,
       password,
     });
@@ -101,5 +106,15 @@ export const loginToOwnrAccount = async (email, password) => {
   } catch (error) {
     console.error("Error requesting OTP:", error);
     throw error;
+  }
+};
+
+export const getProductByOwner = async () => {
+  try {
+    const response = await axiosInstance.get("/admin/products");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching products by owner:", error);
+    return error;
   }
 };

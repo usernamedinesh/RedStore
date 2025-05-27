@@ -359,7 +359,7 @@ exports.getOwnersProduct = catchAsync(async (req, res, next) => {
 
 exports.verifyTokenForOnwer = catchAsync(async (req, res, next) => {
   try {
-    const { token } = req.body;
+    const { token } = req.params;
     console.log("Token received for verification:", token);
     if (!token) {
       return next(new Error("Token is required"));

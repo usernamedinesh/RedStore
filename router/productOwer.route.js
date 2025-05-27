@@ -29,6 +29,6 @@ router.delete("/remove/:ownerId", handleRemoveOwner);
 router.get("/products", authMiddleware, getOwnersProduct);
 
 /* verity owner account for dashboard */
-router.post("/verify-token", verifyTokenForOnwer);
+router.post("/verify-token/:token", verifyTokenForOnwer);
 
 module.exports = router;

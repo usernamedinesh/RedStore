@@ -11,7 +11,7 @@
 function Product() {
   return (
     <>
-      <div>
+      <div className=" dark:bg-[var(--my-bg)] text-black   dark:text-white shadow-md">
         <h1>Product Pages</h1>
       </div>
     </>

@@ -8,7 +8,8 @@ export function Me() {
   }
   function handleLogout() {
     localStorage.removeItem("appData");
-    window.location.reload();
+    setLogout();
+    window.location.href = "http://localhost:5173/login";
   }
   return (
     <div>

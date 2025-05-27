@@ -9,13 +9,18 @@ export const ContextProvider = ({ children }) => {
     const saved = localStorage.getItem("appData");
     return saved ? JSON.parse(saved) : {};
   });
+  const [logout, setLogout] = useState(() => {
+    setData("null");
+  });
   useEffect(() => {
     // Save to localStorage whenever `data` changes
     localStorage.setItem("appData", JSON.stringify(data));
   }, [data]);
 
   return (
-    <Context.Provider value={{ data, setData }}>{children}</Context.Provider>
+    <Context.Provider value={{ data, setData, setLogout }}>
+      {children}
+    </Context.Provider>
   );
 };
 

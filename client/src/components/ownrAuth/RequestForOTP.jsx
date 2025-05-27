@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { requestForOTP } from "../../api/authApi";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
+
 function OwnerReqForOTP() {
   const [email, setEmail] = useState();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -24,6 +27,7 @@ function OwnerReqForOTP() {
           draggable: true,
           progress: undefined,
         });
+        navigate("/");
       }
       if (response.error?.status === 400) {
         setError(response.error.message);

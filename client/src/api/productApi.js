@@ -12,7 +12,6 @@ export const getAllProduct = async (page = 1, limit = 10) => {
     const response = await axiosInstance.get(
       `/api/product?page=${page}&limit=${limit}`,
     );
-    console.log("All products fetched successfully:", response.data);
     return response;
   } catch (error) {
     console.error("Error fetching all product : ", error);

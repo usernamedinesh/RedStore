@@ -27,7 +27,7 @@ export function Home() {
     }
 
     axios
-      .post(`http://localhost:3000/owner/verify-token`, { token })
+      .post(`http://localhost:3000/owner/verify-token/${token}`)
       .then((response) => {
         if (response.data.success === true) {
           console.log(response.data.message);
