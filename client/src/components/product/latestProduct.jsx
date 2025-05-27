@@ -35,32 +35,35 @@ function Latestproduct() {
     );
   }
   // Access product array from the data.produces
-  const latestProduct = productData?.data?.data?.products || [];
+  const yesh = productData?.data?.data?.products || [];
+  const latestProduct = yesh.slice(0, 3);
 
   return (
-    <div className="flex flex-col justify-center items-center">
-      <h2 className="text-center text-2xl md:text-3xl font-bold mb-6">
-        Latest Products {isFetching ? "(Updating...)" : ""}
-      </h2>
+    <div className="flex flex-col justify-center items-center px-4">
+      <div>
+        <h1 className="text-center">
+          Latest Products {isFetching ? "(Updating...)" : ""}
+          <div className=" dark:bg-green-400 h-0.5 mb-3.5 bg-black" />
+        </h1>
+      </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 max-w-screen-xl w-full px-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-7  max-w-[1400px] mx-auto px-4 lg:h-[500px] w-[360px] sm:w-full">
         {latestProduct.map((product) => (
           <div
             key={product.id}
-            className="cursor-pointer border p-4 rounded-lg shadow-md hover:shadow-xl  
-                       flex flex-col items-center text-center  duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
+            className="cursor-pointer border p-4 rounded-lg shadow-md hover:shadow-xl 
+                     flex flex-col items-center text-center duration-300 ease-in-out 
+                     hover:-translate-y-1 hover:scale-105 transition-all h-full "
           >
-            <div className="">
-              <NavLink to={`/product/${product.id}`}>
-                <img
-                  src={product.imageUrl}
-                  alt={product.name}
-                  className="w-full h-32 object-contain mb-2 block mx-auto"
-                />
-                <h3 className="font-bold text-lg mb-1">{product.name}</h3>
-                <p className="text-gray-700">${product.variants[0].price}</p>
-              </NavLink>
-            </div>
+            <NavLink to={`/product/${product.id}`}>
+              <img
+                src={product.imageUrl}
+                alt={product.name}
+                className="w-full h-32 object-contain mb-2"
+              />
+              <h3 className="font-bold text-lg mb-1">{product.name}</h3>
+              <p className="text-gray-700">${product.variants[0].price}</p>
+            </NavLink>
           </div>
         ))}
       </div>

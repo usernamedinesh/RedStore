@@ -17,6 +17,15 @@ const config = {
         customTextLight: "#222222",
         customTextDark: "#ffffff",
       },
+      animation: {
+        marquee: "marquee 15s linear infinite",
+      },
+      keyframes: {
+        marquee: {
+          "0%": { transform: "translateX(100%)" },
+          "100%": { transform: "translateX(-100%)" },
+        },
+      },
     },
   },
   plugins: [],

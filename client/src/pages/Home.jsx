@@ -21,10 +21,15 @@ const Home = () => {
           <HeroPage />
           <FeatureProduct />
           <Latestproduct />
-          <p className="text-center mt-10">
-            This is a simple example of a home page using React Router and
-            Tailwind CSS.
-          </p>
+          <div className="overflow-hidden whitespace-nowrap max-w-xl mx-auto text-center mt-5 ">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-800 tracking-tight mb-2 dark:text-gray-200">
+              Choose Your Style
+            </h2>
+            <p className="inline-block animate-marquee text-base sm:text-lg text-gray-500 dark:text-gray-300 ">
+              Discover fashion tailored just for you. Select your gender to
+              explore collections curated with care.
+            </p>
+          </div>
         </div>
         <div className="mt-10">
           <ShowGender />
