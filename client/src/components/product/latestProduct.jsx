@@ -47,10 +47,10 @@ function Latestproduct() {
         {latestProduct.map((product) => (
           <div
             key={product.id}
-            className="cursor-pointer border p-4 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300
-                       flex flex-col items-center text-center"
+            className="cursor-pointer border p-4 rounded-lg shadow-md hover:shadow-xl  
+                       flex flex-col items-center text-center  duration-300 ease-in-out hover:-translate-y-1 hover:scale-110"
           >
-            <div>
+            <div className="">
               <NavLink to={`/product/${product.id}`}>
                 <img
                   src={product.imageUrl}
