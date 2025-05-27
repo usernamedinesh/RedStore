@@ -58,13 +58,11 @@ exports.login = catchAsync(async (req, res, next) => {
         where: findCondition,
       });
       if (owner) {
-        console.log("password", password);
         // check if password matched
         const isMatched = await bcrypt.compare(password, owner.password);
         if (!isMatched) {
           return next(new Error("Incorrect Password"));
         }
-        console.log("working fine", isMatched);
         let isOwner;
         // generate an token an enctrypt the token
         let token = genTokenUsingEmail(owner.email);
