@@ -334,29 +334,6 @@ exports.handleRemoveOwner = catchAsync(async (req, res, next) => {
   }
 });
 
-exports.getOwnersProduct = catchAsync(async (req, res, next) => {
-  try {
-    //get the owner if from the req.user.id
-    const userId = req.user.id;
-
-    //ONLY product have the its creator ID
-    const products = await prisma.product.findUnique({
-      where: { ownerId: Number(userId) },
-      // do i need to select i dont think so
-    });
-    // OWNER doesnot have the product id
-    // Product have the OWNERR id
-
-    if (products.length === 0 || !products) {
-      return next(CustomError("product not exist ", 404));
-    }
-    successResponse(res, products, "fetched fetched by owner ", 200);
-  } catch (error) {
-    console.error("Errow while fetching product of Itself");
-    next(error);
-  }
-});
-
 exports.verifyTokenForOnwer = catchAsync(async (req, res, next) => {
   try {
     const { token } = req.params;

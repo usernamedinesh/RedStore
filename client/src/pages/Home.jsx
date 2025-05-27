@@ -7,6 +7,7 @@ import FloatingSignupButton from "../customComponents/FloatingSingupBtn";
 import { useSelector } from "react-redux";
 import Latestproduct from "../components/product/latestProduct";
 import FloaintOwnerRegButton from "../customComponents/FloatingOwnrRegBtn";
+import { ShowGender } from "../components/gender";
 
 const Home = () => {
   const { userId } = useSelector((state) => state.auth);
@@ -24,6 +25,9 @@ const Home = () => {
             This is a simple example of a home page using React Router and
             Tailwind CSS.
           </p>
+        </div>
+        <div className="mt-10">
+          <ShowGender />
         </div>
         {!userId && (
           <div>

@@ -22,7 +22,6 @@ export function Home() {
     }
     const path = new URLSearchParams(window.location.search);
     const token = path.get("token");
-    console.log("token: ", token);
 
     if (!token) {
       window.location.href = "http://localhost:5173/login";
