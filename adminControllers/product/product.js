@@ -282,6 +282,11 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
   }
 });
 
+/*
+ * recently visited
+ * every time a user visits a product, store it to the modle or redis
+ * if i store in db it will be issue ? or not
+ */
 exports.SingleProduct = catchAsync(async (req, res, next) => {
   try {
     /* get single product here */
@@ -307,6 +312,8 @@ exports.SingleProduct = catchAsync(async (req, res, next) => {
     if (!product) {
       return next(new Error("Invalid prodcut id or product not found"));
     }
+    // here add the userId to visitor
+    // TODO:
     return successResponse(
       res,
       product,
