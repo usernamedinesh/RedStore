@@ -32,21 +32,36 @@ export function Product() {
 
   return (
     <>
-      <div>
+      <div className="h-[100vh] w-full">
         <div>Product page</div>
         {product.length > 0 ? (
-          <div className="product-list flex flex-wrap">
-            {product.map((item) => (
-              <div
-                key={item.id}
-                className="product-item  rounded-2xl bg-white shadow-lg hover:shadow-xl m-4 p-4"
-              >
-                <h3>{item.name}</h3>
-                <p>{item.description}</p>
-                <p>Price: ${item.price}</p>
-                <img src={item.imageUrl} alt={item.name} />
-              </div>
-            ))}
+          <div className="h-full">
+            <h2 className="text-xl font-bold mb-4">Popular Products</h2>
+            <div className="flex overflow-x-auto space-x-4 pb-4">
+              {product.map((item) => (
+                <div
+                  key={item.id}
+                  className="min-w-[200px] max-w-[200px] bg-white rounded shadow p-4 flex-shrink-0 h-[350px] flex flex-col justify-between"
+                >
+                  <img
+                    src={item.imageUrl}
+                    alt={item.name}
+                    className="h-40 object-cover rounded"
+                  />
+                  <div className="mt-2">
+                    <h3 className="text-sm font-semibold truncate">
+                      {item.name}
+                    </h3>
+                    <p className="text-sm text-gray-600 truncate">
+                      {item.description}
+                    </p>
+                    <p className="text-green-600 font-bold mt-1">
+                      ${item.price}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         ) : (
           <div className="no-products">

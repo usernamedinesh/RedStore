@@ -8,6 +8,7 @@ import "./style.css";
 // import VerifyPage from "./components/VerifyPage.jsx";
 import { Me } from "./components/Me.jsx";
 import { ContextProvider } from "./customComponents/context.jsx";
+import { Product } from "./components/Product.jsx";
 
 export function App() {
   return (
@@ -18,6 +19,8 @@ export function App() {
           <Router>
             <Route path="/verify/" component={Home} />
             {/* <Route path="/verify/" component={VerifyPage} /> */}
+
+            <Route path="/product" component={Product} />
             <Route path="/me" component={Me} />
             <Route default component={NotFound} />
           </Router>
