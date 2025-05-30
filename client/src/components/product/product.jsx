@@ -83,24 +83,26 @@ function Product() {
 
   return (
     <>
-      <div className="dark:bg-[var(--my-bg)] text-black dark:text-white shadow-md p-4">
-        <h1 className="text-3xl font-bold text-center mb-4">Product Pages</h1>
+      <div className="dark:bg-[var(--my-bg)] text-black dark:text-white  p-4">
+        {/* <h1 className="text-3xl font-bold text-center mb-4">Product Pages</h1> */}
 
         <div>
           <h2 className="text-center text-2xl md:text-3xl font-bold mb-6">
             {" "}
             {/* Changed h1 to h2 */}
-            All Products {isFetching ? "(Updating...)" : ""}
+            grab you favourite products {isFetching ? "(Updating...)" : ""}
             <div className="dark:bg-green-400 h-0.5 mb-3.5 bg-black" />
           </h2>
         </div>
 
-        <div className="flex flex-wrap gap-5 mb-8 justify-center">
+        <div className="flex flex-wrap gap-5 mb-8 justify-center  text-black ">
           {" "}
-          {/* Added flex-wrap and mb-8 */}
           {/* SELECTING Category & Gender Filters */}
           <div className="flex flex-col">
-            <label htmlFor="gender-select" className="mb-1 text-sm font-medium">
+            <label
+              htmlFor="gender-select"
+              className="mb-1 text-sm font-medium  text-black dark:text-white"
+            >
               Gender
             </label>
             <select
@@ -120,7 +122,7 @@ function Product() {
           <div className="flex flex-col">
             <label
               htmlFor="category-select"
-              className="mb-1 text-sm font-medium"
+              className="mb-1 text-sm font-medium text-black dark:text-white"
             >
               Category
             </label>
@@ -128,7 +130,7 @@ function Product() {
               id="category-select"
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="border rounded-md px-3 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className=" border rounded-md px-3 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">All Categories</option>
               {filterCategories.map((cat) => (
@@ -166,7 +168,7 @@ function Product() {
                     <img
                       src={p.variants[0].images[0].url}
                       alt={p.name}
-                      className="w-full h-32 object-contain mb-2 block mx-auto"
+                      className="w-full h-100 object-cover mb-2 block mx-auto"
                     />
                     <h3 className="font-bold text-lg mb-1">{p.name}</h3>
                     <p className="text-gray-700 dark:text-gray-300">
