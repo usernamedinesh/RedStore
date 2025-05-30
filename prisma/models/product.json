@@ -1,0 +1,31 @@
+{
+  "name": "Nike Air Max 270",
+  "description": "Lightweight and stylish running shoes from Nike.",
+  "categoryName": "category-shoes-id",
+  "brandName": "brand-nike-id",
+  "gender": "MEN",
+  "basePrice": 129.99,  // optional base price, can represent default or average
+  "variants": [
+    {
+      "size": 9,
+      "color": "Black",
+      "stock": 40,
+      "price": 134.99,
+      "sku": "NIKE270-BLK-9",
+         "images":[
+        "www.image.com"
+      ]
+    },
+    {
+      "size": 10,
+      "color": "White",
+      "stock": 30,
+      "price": 139.99,
+      "sku": "NIKE270-WHT-10",
+         "images":[
+        "www.image.com"
+      ]
+    }
+  ]
+}
+

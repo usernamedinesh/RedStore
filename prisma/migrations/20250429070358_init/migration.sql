@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "TempOtp" ALTER COLUMN "email" DROP NOT NULL,
+ALTER COLUMN "phoneNo" DROP NOT NULL;

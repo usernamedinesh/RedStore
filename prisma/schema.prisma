@@ -1,0 +1,331 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Models start here
+
+model CheckoutItem {
+  id     String @id @default(uuid())
+  //Relation 
+  user   User   @relation(fields: [userId], references: [id])
+  userId Int    @map("user_id")
+
+  quantity  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  variant   ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade) // delete automatically if product is deleted
+  variantId String         @map("variant_id")
+  expiresAt DateTime?      @map("expires_at")
+
+  @@index([userId])
+  @@index([variantId])
+  @@map("checkout_items")
+}
+
+// Text, Image, Video, Audio :=> is this enough?
+
+model Message {
+  id     Int           @id @default(autoincrement())
+  type   MessasageType
+  sentAt DateTime      @default(now())
+
+  // store the text and image
+  text    String? @map("text_content")
+  fileUrl String? @map("file_url")
+
+  senderUserId   Int?
+  receiverUserId Int?
+
+  senderOwnerId   Int?
+  receiverOwnerId Int?
+
+  // Relations with explicit names
+  senderUser    User?         @relation("UserSentMessages", fields: [senderUserId], references: [id])
+  receiverUser  User?         @relation("UserReceivedMessages", fields: [receiverUserId], references: [id])
+  senderOwner   ProductOwner? @relation("OwnerSentMessages", fields: [senderOwnerId], references: [id])
+  receiverOwner ProductOwner? @relation("OwnerReceivedMessages", fields: [receiverOwnerId], references: [id])
+}
+
+enum MessasageType {
+  TEXT
+  IMAGE
+  VIDEO
+  AUDIO
+}
+
+model ProductOwner {
+  id         Int       @id @default(autoincrement())
+  name       String?
+  email      String?   @unique
+  password   String?
+  updatedAt  DateTime  @updatedAt
+  createdAt  DateTime  @default(now())
+  token      String    @unique
+  isVerified Boolean   @default(false)
+  expiredAt  DateTime?
+
+  sentMessages     Message[] @relation("OwnerSentMessages")
+  receivedMessages Message[] @relation("OwnerReceivedMessages")
+  Product          Product[]
+}
+
+model Brand {
+  id         String          @id @default(uuid())
+  name       String
+  products   Product[]
+  categories CategoryBrand[] //join table
+}
+
+model Category {
+  id        String          @id @default(uuid()) @map("category_id")
+  name      String
+  brands    CategoryBrand[]
+  products  Product[]
+  createdAt DateTime        @default(now()) @map("created_at")
+
+  @@map("categories")
+}
+
+model CategoryBrand {
+  brand      Brand    @relation(fields: [brandId], references: [id])
+  brandId    String
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+
+  @@id([brandId, categoryId]) // Composite primary key for the join table 
+}
+
+model Product {
+  id            String           @id @default(uuid()) @map("product_id")
+  name          String
+  ownerId       Int              @map("owner_id") // lets first create the user then i will uncomment this 
+  owner         ProductOwner     @relation(fields: [ownerId], references: [id]) // new added 
+  description   String
+  category      Category         @relation(fields: [categoryId], references: [id])
+  categoryId    String           @map("category_id")
+  brand         Brand            @relation(fields: [brandId], references: [id])
+  brandId       String           @map("brand_id")
+  gender        Gender           @default(UNISEX)
+  thumnailImage String
+  basePrice     Float?           @map("base_price")
+  variants      ProductVariant[]
+  ratings       Rating[]
+  createdAt     DateTime         @default(now()) @map("created_at")
+  cart          Cart[]
+
+  @@index([name]) // For product name searches
+  @@index([brandId]) // For brand filtering
+  @@index([categoryId]) // For category-based queries
+  @@map("products")
+}
+
+// i dont know it gonna work or not 
+model Cart {
+  id        String         @id @default(uuid()) @map("cart_id")
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int            @map("user_id")
+  product   Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String         @map("product_id")
+  variant   ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  variantId String         @map("variant_id")
+  quantity  Int
+  createdAt DateTime       @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([productId])
+  @@index([variantId])
+  @@map("carts")
+}
+
+model ProductVariant {
+  id            String         @id @default(uuid()) @map("variant_id")
+  product       Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId     String         @map("product_id")
+  size          Float
+  color         String
+  stock         Int            @default(0)
+  price         Float // add this now i run this => npx prisma migrate dev --name add_price_to_variant =>before that npx prisma format
+  sku           String         @unique
+  createdAt     DateTime       @default(now()) @map("created_at")
+  images        VariantImage[]
+  cart          Cart[]
+  checkoutItems CheckoutItem[] // Relation from temporary checkout items
+  OrderItem     OrderItem[]
+
+  @@index([sku]) // Critical for inventory lookups
+  @@index([productId]) // For fetching all variants of a product
+  @@index([size, color]) // For size/color filters
+  @@map("product_variants")
+}
+
+model VariantImage {
+  id        String         @id @default(uuid())
+  url       String
+  variantId String
+  variant   ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+}
+
+model Rating {
+  id        String   @id @default(uuid()) @map("rating_id")
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String   @map("product_id")
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int      @map("user_id")
+  value     Int
+  // if (value < 1 || value > 5) throw new Error("Rating must be 1-5") add this 
+  review    String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([userId]) // For user-specific rating queries
+  @@index([productId]) // For product-specific rating queries
+  @@map("ratings")
+}
+
+model Order {
+  id                String      @id @default(uuid()) @map("order_id")
+  user              User        @relation(fields: [userId], references: [id])
+  userId            Int         @map("user_id")
+  items             OrderItem[] @relation("OrderItems")
+  totalAmount       Decimal     @map("total_amount")
+  status            OrderStatus @default(PENDING)
+  shippingAddress   Address     @relation("ShippingAddress", fields: [shippingAddressId], references: [id])
+  shippingAddressId String      @map("shipping_address_id")
+  payment           Payment?
+  paymentId         String?     @unique @map("payment_id")
+  createdAt         DateTime    @default(now()) @map("created_at")
+  updatedAt         DateTime    @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String         @id @default(uuid()) @map("order_item_id")
+  order     Order          @relation("OrderItems", fields: [orderId], references: [id], onDelete: Cascade)
+  orderId   String         @map("order_id")
+  variant   ProductVariant @relation(fields: [variantId], references: [id], onDelete: Restrict)
+  variantId String         @map("variant_id")
+  quantity  Int
+  price     Decimal
+  createdAt DateTime       @default(now()) @map("created_at")
+
+  @@index([orderId])
+  @@index([variantId])
+  @@map("order_items")
+}
+
+model Payment {
+  id              String        @id @default(uuid()) @map("payment_id")
+  order           Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId         String        @unique @map("order_id")
+  paymentMethod   PaymentMethod @map("payment_method")
+  transactionId   String        @unique @map("transaction_id")
+  amount          Decimal
+  status          PaymentStatus @default(PENDING)
+  gatewayResponse Json?
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  @@index([transactionId])
+  @@map("payments")
+}
+
+model Address {
+  id     String @id @default(uuid()) @map("address_id")
+  userId Int    @map("user_id")
+  user   User   @relation(fields: [userId], references: [id])
+
+  fullName       String   @map("full_name")
+  addresLine1    String   @map("address_line_1")
+  addresLine2    String?  @map("address_line_2") //optional
+  city           String
+  state          String
+  postalCode     String   @map("postal_code")
+  phoneNumber    String   @map("phone_number")
+  shippingOrders Order[]  @relation("ShippingAddress")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@map("addresses")
+}
+
+enum PaymentStatus {
+  SUCCESS
+  FAILED
+  PENDING
+}
+
+enum Gender {
+  MEN
+  WOMEN
+  UNISEX
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  PACKED
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  DEBIT_CARD
+  COD
+  UPI
+  PAYPAL
+  STRIPE
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  name         String
+  email        String?   @unique
+  password     String
+  phoneNo      String?   @unique
+  isVerified   Boolean   @default(false) // remove this too 
+  userRole     UserRole  @default(USER)
+  updatedAt    DateTime  @updatedAt
+  createdAt    DateTime  @default(now())
+  cart         Cart[]
+  refreshToken String?
+  otp          String?
+  otpCreatedAt DateTime?
+
+  sentMessages     Message[]      @relation("UserSentMessages")
+  receivedMessages Message[]      @relation("UserReceivedMessages")
+  // expiresAt  DateTime @default(dbgenerated("(NOW() + interval '5 minutes')"))
+  CheckoutItem     CheckoutItem[]
+  Rating           Rating[]
+  Order            Order[]
+  Address          Address[]
+}
+
+// This is temperory for storing otp and email
+// after successfully otp matched remove this and store to the user 
+
+model TempOtp {
+  id        Int      @id @default(autoincrement())
+  otp       String
+  email     String?  @unique
+  phoneNo   String?  @unique
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+}

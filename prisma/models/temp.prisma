@@ -1,0 +1,13 @@
+// This is temperory for storing otp and email
+// after successfully otp matched remove this and store to the user 
+
+model TempOtp {
+  id    Int    @id @default(autoincrement())
+  otp   String
+  email String? @unique
+  phoneNo String? @unique
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+}
+
+

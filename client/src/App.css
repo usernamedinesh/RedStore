@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+* body {
+  background-color: #dee4e7;
+}
+
+/* background: radial-gradient(#fff, #ffd6d6);  looks cook */
+
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 15s linear infinite;
+}
+
+:root {
+  --background: 255, 255, 255; /* white */
+  /* --my-bg: #f5f5f5; */
+  --my-bg: #dee4e7;
+
+  --text-color: 0, 0, 0; /* black */
+}
+
+.dark {
+  --my-bg: #121212;
+  text-color: 255, 255, 255;
+}
+
+/* 3. Border  button  Reveal */
+.btn-border-reveal {
+  background-color: #78f1d9;
+  color: #010a05;
+  border: 2px solid #606573;
+  position: relative;
+  width: 300px;
+}
+
+.btn-border-reveal::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: #8d5d62;
+  transition: width 0.3s ease;
+  z-index: -1;
+}
+
+.btn-border-reveal:hover::after {
+  width: 100%;
+}
+
+.btn-border-reveal:hover {
+  color: white;
+}
