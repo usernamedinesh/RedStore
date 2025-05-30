@@ -49,7 +49,6 @@ function Product() {
     );
   }
 
-  console.log("prodcut: ", products);
   // Filter categories based on selected Gender
   const filterCategories = Array.from(
     new Set(
@@ -81,11 +80,19 @@ function Product() {
     return genderMatch && categoryMatch;
   });
 
+  //TODO: for tomorow
+  function handleAddToCart(id) {
+    console.log("hione", id);
+  }
+
+  function handleBuyNow(id) {
+    console.log("hitwo", id);
+  }
+
   return (
     <>
       <div className="dark:bg-[var(--my-bg)] text-black dark:text-white  p-4">
         {/* <h1 className="text-3xl font-bold text-center mb-4">Product Pages</h1> */}
-
         <div>
           <h2 className="text-center text-2xl md:text-3xl font-bold mb-6">
             {" "}
@@ -94,7 +101,6 @@ function Product() {
             <div className="dark:bg-green-400 h-0.5 mb-3.5 bg-black" />
           </h2>
         </div>
-
         <div className="flex flex-wrap gap-5 mb-8 justify-center  text-black ">
           {" "}
           {/* SELECTING Category & Gender Filters */}
@@ -141,40 +147,57 @@ function Product() {
             </select>
           </div>
         </div>
-
         {/* LISTING of products */}
-        <div className="p-4">
+        <div className="p-4 h-100">
+          {" "}
+          {/* This outer div's h-100 might be unusual, ensure it's correct for your layout */}
           {filterProduct.length === 0 ? (
             <p className="text-center text-gray-500 dark:text-gray-400 text-lg">
               No matching products found!
             </p>
           ) : (
-            // Assuming you want to render product cards similar to previous examples
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8 max-w-screen-xl mx-auto justify-items-center items-center">
               {filterProduct.map((p) => (
-                <div
-                  key={p.id}
-                  className="cursor-pointer border p-4 rounded-lg shadow-md hover:shadow-xl
-                             flex flex-col items-center text-center
-                             relative overflow-hidden
-                             w-64 h-80 // Example fixed dimensions for consistency and to prevent shaking
-                             transform transition-transform duration-300 ease-in-out hover:-translate-y-1 hover:scale-105"
-                >
-                  {/* Ensure NavLink is imported correctly if it's from 'react-router-dom' */}
+                // This outer div now serves only as a flexible container for the card and its buttons.
+                // It DOES NOT have the hover animation classes anymore.
+                <div key={p.id} className="flex flex-col items-center">
+                  {/* This NavLink is your product card. It now has the border, shadow, fixed height,
+              AND the hover animation classes directly on it. */}
                   <NavLink
                     to={`/product/${p.id}`}
-                    className="flex flex-col items-center w-full h-full justify-between"
+                    className="cursor-pointer border p-5 rounded-lg shadow-md
+                       flex flex-col justify-between items-center text-center
+                       relative overflow-hidden
+                       w-64 h-80 // Fixed dimensions for the product info card itself
+                       dark:bg-gray-800 dark:border-gray-700 dark:text-white
+                       transform transition-transform duration-300 ease-in-out hover:-translate-y-1 hover:scale-105" // <-- ANIMATION CLASSES ARE NOW HERE
                   >
                     <img
                       src={p.variants[0].images[0].url}
                       alt={p.name}
-                      className="w-full h-100 object-cover mb-2 block mx-auto"
+                      className="w-full h-48 object-contain mb-2 block mx-auto"
                     />
                     <h3 className="font-bold text-lg mb-1">{p.name}</h3>
                     <p className="text-gray-700 dark:text-gray-300">
                       ${p.variants[0].price}
                     </p>
                   </NavLink>
+
+                  {/* Button Container - This div is separate and will remain static when the card animates */}
+                  <div className="w-64 flex justify-center gap-2 mt-4">
+                    <button
+                      className="bg-blue-600 text-white font-semibold py-2 px-3 text-sm flex-1"
+                      onClick={handleAddToCart(p.id)}
+                    >
+                      Add To Cart
+                    </button>
+                    <button
+                      className="bg-green-600 text-white font-semibold py-2 px-3 text-sm flex-1"
+                      onClick={handleBuyNow(p.id)}
+                    >
+                      Buy Now
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
