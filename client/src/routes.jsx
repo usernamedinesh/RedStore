@@ -10,6 +10,7 @@ import CartPage from "./components/cart/Cart.jsx";
 import OwnerReqForOTP from "./components/ownrAuth/RequestForOTP.jsx";
 import CreateOwnerAccount from "./components/ownrAuth/createOwnerAccount.jsx";
 import { SingleProduct } from "./components/product/SingleProduct.jsx";
+import ChatPage from "./pages/Chat.jsx";
 
 const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
   {
     path: "/create-account",
     element: <CreateOwnerAccount />,
+  },
+  {
+    path: "/chat",
+    element: <ChatPage />,
   },
 
   {

@@ -7,10 +7,11 @@ import logoVideo from "../assets/logo.png";
 const links = [
   { to: "/", label: "Home", end: true },
   { to: "/products", label: "Products" },
-  { to: "/about", label: "About" },
-  { to: "/contact", label: "Contact" },
+  // { to: "/about", label: "About" },
+  // { to: "/contact", label: "Contact" },
   { to: "/account", label: "Account" },
   { to: "/cart", label: "Cart" },
+  { to: "/chat", label: "Chat" },
 ];
 
 export default function NavBar() {
