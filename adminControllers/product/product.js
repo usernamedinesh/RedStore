@@ -5,7 +5,7 @@ const { getProductKey, getProductTTL } = require("../../redis/cache.redis");
 const customError = require("../../utils/customError");
 
 const Joi = require("joi");
-const { PrismaClient } = require("../../generated/prisma");
+const { PrismaClient, Gender } = require("../../generated/prisma");
 const prisma = new PrismaClient();
 const catchAsync = require("../../utils/catchAsync");
 const { successResponse } = require("../../utils/response");
@@ -211,10 +211,11 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
     const cacheKey = getProductKey(page, limit);
     const cachedData = await redis.get(cacheKey);
 
-    if (cachedData) {
-      const { data, message } = JSON.parse(cachedData);
-      return successResponse(res, data, message);
-    }
+    //TODO: disble cache
+    // if (cachedData) {
+    //   const { data, message } = JSON.parse(cachedData);
+    //   return successResponse(res, data, message);
+    // }
 
     // 4. Database query (optimized)
     const [products, totalProducts] = await Promise.all([
@@ -226,6 +227,7 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
           id: true,
           name: true,
           basePrice: true, // new added
+          gender: true,
           category: { select: { name: true } },
           brand: { select: { name: true } },
           owner: true,
@@ -300,6 +302,7 @@ exports.SingleProduct = catchAsync(async (req, res, next) => {
       where: { id: produtId },
       include: {
         category: true,
+        Gender,
         brand: true,
         variants: {
           include: {
