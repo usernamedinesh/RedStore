@@ -43,10 +43,11 @@ export const getProductById = async (id) => {
 /* fetch product of carts */
 export const getCartProduct = async () => {
   try {
-    const response = axiosInstance.get("/api/user/cart");
+    const response = await axiosInstance.get("/api/user/cart");
     return response.data;
   } catch (error) {
     console.error("error fetching cart product", error);
+    throw error;
   }
 };
 
