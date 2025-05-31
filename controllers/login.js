@@ -102,13 +102,13 @@ exports.login = catchAsync(async (req, res, next) => {
       data: { refreshToken },
     });
 
+    // why this shit is not working
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "Strict",
+      secure: false,
+      sameSite: "Lax",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
-
     successResponse(res, { accessToken, user }, "user login successfully", 200);
   } catch (error) {
     next(error);

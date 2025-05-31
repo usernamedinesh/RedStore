@@ -13,14 +13,15 @@ const corsMiddleware = require("./middleware/cors");
 const bodyParser = require("body-parser");
 const passport = require("./utils/passport");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const app = express();
 
+app.use(corsMiddleware);
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(passport.initialize());
-app.use(corsMiddleware);
 
 app.use("/owner", productOwerRoute);
 app.use("/api", userRoute, productRoute);
