@@ -5,7 +5,7 @@ const userRoute = require("./router/user");
 const adminRoute = require("./router/admin/user");
 const adminProductRoute = require("./router/admin/productRoute");
 const addressRoute = require("./router/order");
-const adminCart = require("./router/admin/addTocart");
+const cart = require("./router/admin/addTocart");
 const productRoute = require("./router//product.route");
 
 const notFoundHandler = require("./middleware/notFound");
@@ -24,8 +24,8 @@ app.use(corsMiddleware);
 
 app.use("/owner", productOwerRoute);
 app.use("/api", userRoute, productRoute);
-app.use("/api/user", addressRoute);
-app.use("/admin", adminRoute, adminProductRoute, adminCart);
+app.use("/api/user", addressRoute, cart);
+app.use("/admin", adminRoute, adminProductRoute);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

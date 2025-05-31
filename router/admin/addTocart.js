@@ -1,5 +1,5 @@
-const router = require("express").Router();
-
+const express = require("express");
+const router = express.Router();
 const {
   AddTOCart,
   getCartItems,
@@ -10,7 +10,7 @@ const authMiddleware = require("../../controllers/refresh-token"); /* do i need 
 router.post("/cart", authMiddleware, AddTOCart);
 
 /* get cart items  by userId*/
-router.get("/cart/:userId", authMiddleware, getCartItems);
+router.get("/cart", authMiddleware, getCartItems);
 
 /* delete an item from cart using cartId */
 router.delete("/cart/:variantId", authMiddleware, removeCartItem);

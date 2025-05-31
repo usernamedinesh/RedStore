@@ -67,7 +67,7 @@ exports.AddTOCart = catchAsync(async (req, res, next) => {
 
 exports.getCartItems = catchAsync(async (req, res, next) => {
   try {
-    const { userId } = req.params;
+    const userId = req.user.id;
 
     // Fetch cart items with necessary details from product and variant
     const cartItems = await prisma.cart.findMany({
