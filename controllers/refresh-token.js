@@ -17,9 +17,6 @@ const prisma = new PrismaClient();
 
 const authenticateJwtWithAutoRefresh = async (req, res, next) => {
   const authHeader = req.headers.authorization;
-  const refreshToken = req.cookies.refreshToken;
-  console.log("refreshToken: ", refreshToken);
-  console.log("req.cookies: ", req.cookies);
 
   if (!authHeader) {
     return successResponse(res, null, "No auth token", 401);
@@ -34,8 +31,6 @@ const authenticateJwtWithAutoRefresh = async (req, res, next) => {
     if (err) {
       if (err.name === "TokenExpiredError") {
         const refreshToken = req.cookies.refreshToken;
-        console.log("refreshToken: ", refreshToken);
-        console.log("req.cookies: ", req.cookies);
         if (!refreshToken) {
           return successResponse(
             res,
