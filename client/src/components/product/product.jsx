@@ -12,12 +12,13 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getAllProduct } from "../../api/productApi";
-import { NavLink } from "react-router";
+import { NavLink, useLocation } from "react-router";
 
 function Product() {
   const [products, setProducts] = useState([]);
   const [selectedGender, setSelectedGender] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const location = useLocation();
   const {
     data: productData,
     isError,
@@ -32,7 +33,11 @@ function Product() {
     if (productData?.data?.data?.products) {
       setProducts(productData.data.data.products);
     }
-  }, [productData]); // Dependency array: this effect runs only when productData changes
+
+    const searchParams = new URLSearchParams(location.search);
+    const genderFromParams = searchParams.get("gender") || "";
+    setSelectedGender(genderFromParams);
+  }, [productData, location.search]); // Dependency array: this effect runs only when productData changes
 
   if (isLoading) {
     return (
@@ -82,11 +87,11 @@ function Product() {
 
   //TODO: for tomorow
   function handleAddToCart(id) {
-    console.log("hione", id);
+    // console.log("hione", id);
   }
 
   function handleBuyNow(id) {
-    console.log("hitwo", id);
+    // console.log("hitwo", id);
   }
 
   return (

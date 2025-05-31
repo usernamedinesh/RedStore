@@ -7,7 +7,7 @@ export const ShowGender = () => {
     <div className="flex flex-wrap justify-center  p-6   gap-4 sm:gap-8 md:gap-12 lg:gap-16">
       {/* Women's Section */}
       <Link
-        to="/product?gender=women"
+        to="/products?gender=WOMEN"
         className="relative group overflow-hidden rounded-lg shadow-lg transform transition duration-300 hover:scale-105 w-full max-w-[600px] h-[400px] sm:h-[500px] md:h-[600px] lg:h-[650px] "
       >
         <img
@@ -26,7 +26,7 @@ export const ShowGender = () => {
 
       {/* Men's Section */}
       <Link
-        to="/product?gender=men"
+        to="/products?gender=MEN"
         className=" relative group overflow-hidden rounded-lg shadow-lg transform transition duration-300 hover:scale-105 w-full max-w-[600px] h-[400px] sm:h-[500px] md:h-[600px] lg:h-[650px] "
       >
         <img
