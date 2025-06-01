@@ -45,9 +45,11 @@ const authenticateJwtWithAutoRefresh = async (req, res, next) => {
             refreshToken,
             env.REFRESH_TOKEN_SECRET,
           );
-
-          const user = await prisma.user.findUnique({
-            where: { id: refreshDecoded.id },
+          if (!refreshDecoded || !refreshDecoded.id) {
+            return successResponse(res, null, "Invalid refresh token", 403);
+          }
+          const user = await prisma.user.findFirst({
+            where: { id: Number(refreshDecoded.id) },
             select: {
               id: true,
               email: true,
@@ -55,7 +57,6 @@ const authenticateJwtWithAutoRefresh = async (req, res, next) => {
               refreshToken: true,
             },
           });
-
           if (!user || user.refreshToken !== refreshToken) {
             return successResponse(
               res,

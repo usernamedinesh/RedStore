@@ -47,7 +47,7 @@ exports.login = catchAsync(async (req, res, next) => {
     if (error) {
       next(error);
     }
-    const user = await Prisma.user.findFirst({
+    let user = await Prisma.user.findFirst({
       where: findCondition,
     });
 
@@ -97,12 +97,14 @@ exports.login = catchAsync(async (req, res, next) => {
       id: user.id,
       email: user.email,
     });
-    await Prisma.user.update({
+
+    user = await Prisma.user.update({
       where: { id: user.id },
       data: { refreshToken },
     });
 
-    // why this shit is not working
+    // user need to send withCredentials: true
+    // then user will be the refreshToken in browser
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: false,
