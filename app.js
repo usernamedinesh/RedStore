@@ -13,7 +13,6 @@ const corsMiddleware = require("./middleware/cors");
 const bodyParser = require("body-parser");
 const passport = require("./utils/passport");
 const cookieParser = require("cookie-parser");
-const cors = require("cors");
 
 const app = express();
 
