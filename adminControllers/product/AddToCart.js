@@ -14,7 +14,8 @@ const prisma = new PrismaClient();
 const { successResponse } = require("../../utils/response");
 
 exports.AddTOCart = catchAsync(async (req, res, next) => {
-  const { userId, productId, quantity, variantId } = req.body;
+  const { productId, quantity, variantId } = req.body.productData;
+  const userId = req.user.id;
 
   if (!userId || !productId || !quantity || !variantId) {
     return next(new Error("Please provide all required fields"));
