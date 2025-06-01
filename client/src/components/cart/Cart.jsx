@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router";
 import { useQuery } from "@tanstack/react-query";
-import { getCartProduct } from "../../api/productApi";
+import { getCartProduct, removeProductCart } from "../../api/productApi";
 
 // fetch all product that are in the db
 // of cart
@@ -48,8 +48,29 @@ function CartPage() {
     );
   }
 
-  console.log("product: ", productData); //TODO: remove
-  const cartProduct = productData?.data?.data?.products || [];
+  const cartProduct = productData?.data || [];
+
+  let variantt;
+  cartProduct.map((p) => {
+    console.log("pro", p.product.name);
+    console.log("cart", p.variants_in_cart);
+    p.variants_in_cart.forEach((variant) => {
+      console.log("var: ", variant.variant.price);
+      variantt = variant;
+    });
+  });
+
+  // handle remove product
+  const handleRemove = async (p, v) => {
+    // console.log("pid", p);
+    // console.log("vid", v);
+    const response = await removeProductCart(v);
+    console.log("response: ", response);
+  };
+  const handleBuy = (p, v) => {
+    console.log("pid", p);
+    console.log("vid", v);
+  };
 
   return (
     <div className="bg-[var(--my-bg)] text-black dark:bg-[var(--my-bg)]  dark:text-white mb-3.5 ">
@@ -73,19 +94,39 @@ function CartPage() {
                      hover:-translate-y-1 hover:scale-105 transition-all h-full"
           >
             <img
-              src={product.imageUrl}
+              src={variantt.variant.images[0].url}
               alt={product.name}
               className="w-full h-32 object-contain mb-2"
             />
-            <h3 className="font-bold text-lg mb-1">{product.name}</h3>
-            <p className="text-gray-600 mb-2">${product.price}</p>
+            <h3 className="font-bold text-lg mb-1">{product.product.name}</h3>
+            <p className="font-bold text-lg mb-1">
+              price: {variantt.variant.price}
+            </p>
+            <p className="font-bold text-lg mb-1">
+              color: {variantt.variant.color}
+            </p>
+            <p className="font-bold text-lg mb-1">
+              size: {variantt.variant.size}
+            </p>
             {/* Add buttons for remove and buy now */}
-            <button className="bg-red-500 text-white px-4 py-2 rounded mr-2">
-              Remove
-            </button>
-            <button className="bg-green-500 text-white px-4 py-2 rounded">
-              Buy Now
-            </button>
+            <div className="justify-between gap-4 mt-3">
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded mr-4"
+                onClick={() =>
+                  handleRemove(product.product.id, variantt.variant.id)
+                }
+              >
+                Remove
+              </button>
+              <button
+                className="bg-green-500 text-white px-4 py-2 rounded ml-4"
+                onClick={() =>
+                  handleBuy(product.product.id, variantt.variant.id)
+                }
+              >
+                Buy Now
+              </button>
+            </div>
           </div>
         ))}
       </div>
@@ -98,8 +139,6 @@ function CartPage() {
           </p>
         )}
       </div>
-      {/*Show prodcut */}
-      {/*add two button [remove] and [buynow]  */}
     </div>
   );
 }

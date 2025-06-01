@@ -11,7 +11,7 @@
  */
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getAllProduct } from "../../api/productApi";
+import { addToCart, getAllProduct } from "../../api/productApi";
 import { NavLink, useLocation } from "react-router";
 
 function Product() {
@@ -85,10 +85,23 @@ function Product() {
     return genderMatch && categoryMatch;
   });
 
-  //TODO: for tomorow
-  function handleAddToCart(id) {
-    // console.log("hione", id);
-  }
+  // need to pass userId (token)
+  // quantity
+  // prodcutId
+  // varintId
+  const handleAddToCart = async (productId, variantId, quantity) => {
+    const productData = {
+      productId,
+      variantId,
+      quantity,
+    };
+    try {
+      const response = await addToCart(productData);
+      console.log("Response", response);
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    }
+  };
 
   function handleBuyNow(id) {
     // console.log("hitwo", id);
@@ -192,13 +205,13 @@ function Product() {
                   <div className="w-64 flex justify-center gap-2 mt-4">
                     <button
                       className="bg-blue-600 text-white font-semibold py-2 px-3 text-sm flex-1"
-                      onClick={handleAddToCart(p.id)}
+                      onClick={() => handleAddToCart(p.id, p.variants[0].id, 1)}
                     >
                       Add To Cart
                     </button>
                     <button
                       className="bg-green-600 text-white font-semibold py-2 px-3 text-sm flex-1"
-                      onClick={handleBuyNow(p.id)}
+                      onClick={() => handleBuyNow(p.id)}
                     >
                       Buy Now
                     </button>
