@@ -54,9 +54,11 @@ export const getCartProduct = async () => {
 /*
  Add product to carts
  */
-export const addToCart = async () => {
+export const addToCart = async (productData) => {
   try {
-    const response = await axiosInstance.post("/api/user/cart");
+    const response = await axiosInstance.post("/api/user/cart", {
+      productData,
+    });
     return response.data;
   } catch (error) {
     console.error("error while adding to cart", error);

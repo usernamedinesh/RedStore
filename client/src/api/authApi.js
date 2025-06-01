@@ -31,7 +31,7 @@ export const verifyEmailOrPhone = async (emailOrPhone) => {
  */
 export const register = async (userdata) => {
   try {
-    const response = await axios.post(`${API_URL}/api/register`, {
+    const response = await axiosInstance.post(`${API_URL}/api/register`, {
       ...userdata,
     });
     return response;
@@ -52,7 +52,7 @@ export const register = async (userdata) => {
 
 export const login = async (userdata) => {
   try {
-    const response = await axios.post(`${API_URL}/api/login`, {
+    const response = await axiosInstance.post(`${API_URL}/api/login`, {
       ...userdata,
     });
     return response;
