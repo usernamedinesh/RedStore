@@ -150,6 +150,25 @@ export const SingleProduct = () => {
           </div>
         </div>
       </div>
+      {/*add to cart or buy now  */}
+      <div className="text-center font-bold text-2xl ">
+        <div className="">
+          <button
+            className="mr-10 px-4 py-2 dark:bg-orange-600 rounded-md bg-orange-600 text-white
+                   transform transition-transform duration-300 ease-in-out
+                   hover:scale-105 hover:shadow-lg"
+          >
+            add to cart
+          </button>
+          <button
+            className="mr-10 px-4 py-2 dark:bg-orange-600 rounded-md bg-orange-600 text-white
+                   transform transition-transform duration-300 ease-in-out
+                   hover:scale-105 hover:shadow-lg"
+          >
+            buy now
+          </button>
+        </div>
+      </div>
 
       {/* Additional products or suggestions can go here */}
       <div></div>
