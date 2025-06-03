@@ -23,9 +23,12 @@ export const getAddress = async () => {
 */
 
 // Add adress
-export const addAddess = async () => {
+export const addAddress = async (form) => {
   try {
-    const response = await axiosInstance.post();
+    const response = await axiosInstance.post("/api/user/address/new", {
+      form,
+    });
+    console.log("rsp", response);
     return response.data;
   } catch (err) {
     console.error("Error while adding address ", err);

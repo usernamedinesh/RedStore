@@ -48,24 +48,26 @@ function CartPage() {
     );
   }
 
-  const cartProduct = productData?.data || [];
+  let cartProduct = productData?.data || [];
 
   let variantt;
   cartProduct.map((p) => {
-    console.log("pro", p.product.name);
-    console.log("cart", p.variants_in_cart);
+    console.log("proId", p.product.id);
+    // console.log("cart", p.variants_in_cart);
     p.variants_in_cart.forEach((variant) => {
-      console.log("var: ", variant.variant.price);
       variantt = variant;
     });
   });
 
-  // handle remove product
   const handleRemove = async (p, v) => {
-    // console.log("pid", p);
+    console.log("pid", p);
     // console.log("vid", v);
-    const response = await removeProductCart(v);
-    console.log("response: ", response);
+    // const response = await removeProductCart(v);
+    // console.log("response: ", response);
+    // After removing product from cart
+    // remove from cartProduct too
+    const cartProducts = cartProduct.filter((p) => p.product.id !== p);
+    console.log("after :", cartProducts);
   };
   const handleBuy = (p, v) => {
     console.log("pid", p);

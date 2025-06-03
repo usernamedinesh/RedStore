@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router";
 // import { useDispatch } from "react-redux";
 import { useDispatch } from "../redux/store";
 import { logout } from "../redux/slice/auth/authSlice";
+import ShowAddress from "../components/address/ShowAddr";
 
 function Account() {
   document.title = "profile";
@@ -30,6 +31,9 @@ function Account() {
         <div>
           <p> UserId: {userId} </p>
           <p> Token: {token} </p>
+        </div>
+        <div>
+          <ShowAddress />
         </div>
         {userId && (
           <div>
