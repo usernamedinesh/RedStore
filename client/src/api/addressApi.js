@@ -28,7 +28,6 @@ export const addAddress = async (form) => {
     const response = await axiosInstance.post("/api/user/address/new", {
       form,
     });
-    console.log("rsp", response);
     return response.data;
   } catch (err) {
     console.error("Error while adding address ", err);

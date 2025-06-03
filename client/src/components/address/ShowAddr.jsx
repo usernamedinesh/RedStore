@@ -3,23 +3,17 @@ import { addAddress, getAddress } from "../../api/addressApi";
 import { useState } from "react";
 
 function ShowAddress() {
-  const [address, setAddress] = useState([]);
   const [AddresOpen, setAddressOpen] = useState(false);
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["address"],
     queryFn: getAddress,
+    staleTime: 1000 * 60 * 5,
   });
 
-  // setAddress(data?.data); // NOTE: may occur error while no address
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  const handleAddAddress = () => {
-    return <AddAddress />;
-  };
-
-  console.log("data", data?.data);
   return (
     <>
       <div className="text-center">
@@ -74,7 +68,7 @@ function ShowAddress() {
         )}
         <button
           onClick={() => setAddressOpen(true)}
-          className="font-bold text-lg text-red-500 shadow-2xl px-10"
+          className="font-bold text-lg text-red-500 shadow-2xl px-10 mt-5"
         >
           add address
         </button>
@@ -123,6 +117,9 @@ const AddAddress = () => {
     onSuccess: (data) => {
       console.log("Address added successfully:", data);
       // Invalidate the 'address' query to refetch the list of addresses
+      // in fetching address i fetched api after the 5 minute so i if add new addresss it wont
+      // fetched the latest address
+      // but it i add the bottom line it will invalidate this key of addres then it will fetch the new address
       queryClient.invalidateQueries(["address"]);
       // Optionally reset the form
       setForm({
@@ -161,7 +158,7 @@ const AddAddress = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mt-8 max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg"
+      className="mt-8 max-w-2xl mx-auto p-6  shadow-lg rounded-lg bg-[var(--my-bg)] text-black dark:bg-[var(--my-bg)]  dark:text-white"
     >
       {/* Removed the redundant inner div, applied styles directly to form */}
       <h2 className="text-center text-2xl font-bold text-gray-800 mb-6">

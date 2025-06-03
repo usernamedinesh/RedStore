@@ -118,3 +118,14 @@ export const getProductByOwner = async () => {
     return error;
   }
 };
+
+export const getProfile = async () => {
+  try {
+    const response = await axiosInstance.get("/api/me");
+    console.log("response: ", response);
+    return response.data;
+  } catch (error) {
+    console.error("Error while fetching profile", error);
+    throw error;
+  }
+};

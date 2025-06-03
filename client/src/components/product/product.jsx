@@ -183,6 +183,7 @@ function Product() {
               AND the hover animation classes directly on it. */}
                   <NavLink
                     to={`/product/${p.id}`}
+                    state={{ product: p }}
                     className="cursor-pointer border p-5 rounded-lg shadow-md
                        flex flex-col justify-between items-center text-center
                        relative overflow-hidden
