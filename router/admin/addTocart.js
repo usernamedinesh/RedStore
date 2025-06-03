@@ -13,6 +13,6 @@ router.post("/cart", authMiddleware, AddTOCart);
 router.get("/cart", authMiddleware, getCartItems);
 
 /* delete an item from cart using cartId */
-router.delete("/cart/:variantId", authMiddleware, removeCartItem);
+router.delete("/:variantId", authMiddleware, removeCartItem);
 
 module.exports = router;

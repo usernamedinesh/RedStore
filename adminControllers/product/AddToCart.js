@@ -155,8 +155,8 @@ exports.removeCartItem = catchAsync(async (req, res, next) => {
 
     // Get the variantId and quantityToRemove from the request body
     const { variantId } = req.params;
-    let { quantityToRemove } = req.body;
-
+    //TODO:  let { quantityToRemove } = req.body;
+    let quantityToRemove;
     // Validate inputs
     if (!userId) {
       return next(

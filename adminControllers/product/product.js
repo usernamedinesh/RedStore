@@ -226,6 +226,7 @@ exports.getAllProducts = catchAsync(async (req, res, next) => {
           // Explicitly select fields for security
           id: true,
           name: true,
+          thumnailImage: true,
           basePrice: true, // new added
           gender: true,
           category: { select: { name: true } },
