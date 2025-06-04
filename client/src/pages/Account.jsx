@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router";
+import { NavLink, useLocation, useNavigate } from "react-router";
 // import { useDispatch } from "react-redux";
 import { useDispatch } from "../redux/store";
 import { logout } from "../redux/slice/auth/authSlice";
+import ShowAddress from "../components/address/ShowAddr";
+import Profile from "../components/auth/Profile";
 
 function Account() {
   document.title = "profile";
@@ -26,10 +28,22 @@ function Account() {
   return (
     <>
       <div className="bg-[var(--my-bg)] text-black dark:bg-[var(--my-bg)]  dark:text-white mb-3.5 ">
-        <div>Account Details</div>
+        <div className="flex justify-between items-center p-4">
+          <h3>Account Details</h3>
+          <NavLink
+            to={-1}
+            className="text-red-700 dark:text-red-400 font-bold hover:underline hover:shadow-2xl"
+          >
+            back
+          </NavLink>
+        </div>
         <div>
-          <p> UserId: {userId} </p>
-          <p> Token: {token} </p>
+          {/* <p> UserId: {userId} </p> */}
+          {/* <p> Token: {token} </p> */}
+        </div>
+        <div>{<Profile />}</div>
+        <div>
+          <ShowAddress />
         </div>
         {userId && (
           <div>

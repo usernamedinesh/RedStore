@@ -20,6 +20,12 @@ const env = cleanEnv(process.env, {
   AWS_REGION: str(),
   S3_BUCKET_NAME: str(),
   CLOUDFRONT_URL: str(),
+  ORIGIN: str(),
+
+  NODE_ENV: str({
+    choices: ["development", "production", "test"],
+    default: "development",
+  }),
 });
 
 module.exports = env;

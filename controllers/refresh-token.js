@@ -10,10 +10,14 @@ const prisma = new PrismaClient();
  * if the token valid then u can access the route freely
  * if the token is expired then it will try to create new
  * accessToken using the refreshToken
+ * REFRESHTOKEN will be sended in the cookies when
+ * user is login in or singup  or register
+ * so send the cookies  when u fetch an api call
  */
 
 const authenticateJwtWithAutoRefresh = async (req, res, next) => {
   const authHeader = req.headers.authorization;
+
   if (!authHeader) {
     return successResponse(res, null, "No auth token", 401);
   }
@@ -41,9 +45,11 @@ const authenticateJwtWithAutoRefresh = async (req, res, next) => {
             refreshToken,
             env.REFRESH_TOKEN_SECRET,
           );
-
-          const user = await prisma.user.findUnique({
-            where: { id: refreshDecoded.id },
+          if (!refreshDecoded || !refreshDecoded.id) {
+            return successResponse(res, null, "Invalid refresh token", 403);
+          }
+          const user = await prisma.user.findFirst({
+            where: { id: Number(refreshDecoded.id) },
             select: {
               id: true,
               email: true,
@@ -51,7 +57,6 @@ const authenticateJwtWithAutoRefresh = async (req, res, next) => {
               refreshToken: true,
             },
           });
-
           if (!user || user.refreshToken !== refreshToken) {
             return successResponse(
               res,

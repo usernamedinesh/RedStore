@@ -11,7 +11,8 @@ const {
 } = require("@prisma/client/runtime/library");
 
 exports.addAddress = catchAsync(async (req, res, next) => {
-  const { error, value } = addAddressSchema.validate(req.body, {
+  console.log("body: ", req.body);
+  const { error, value } = addAddressSchema.validate(req.body.form, {
     abortEarly: false,
   });
 

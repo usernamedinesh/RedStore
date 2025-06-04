@@ -14,7 +14,8 @@ const prisma = new PrismaClient();
 const { successResponse } = require("../../utils/response");
 
 exports.AddTOCart = catchAsync(async (req, res, next) => {
-  const { userId, productId, quantity, variantId } = req.body;
+  const { productId, quantity, variantId } = req.body.productData;
+  const userId = req.user.id;
 
   if (!userId || !productId || !quantity || !variantId) {
     return next(new Error("Please provide all required fields"));
@@ -67,7 +68,7 @@ exports.AddTOCart = catchAsync(async (req, res, next) => {
 
 exports.getCartItems = catchAsync(async (req, res, next) => {
   try {
-    const { userId } = req.params;
+    const userId = req.user.id;
 
     // Fetch cart items with necessary details from product and variant
     const cartItems = await prisma.cart.findMany({
@@ -154,8 +155,8 @@ exports.removeCartItem = catchAsync(async (req, res, next) => {
 
     // Get the variantId and quantityToRemove from the request body
     const { variantId } = req.params;
-    let { quantityToRemove } = req.body;
-
+    //TODO:  let { quantityToRemove } = req.body;
+    let quantityToRemove;
     // Validate inputs
     if (!userId) {
       return next(

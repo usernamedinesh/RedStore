@@ -2,8 +2,8 @@ const Joi = require("joi");
 
 exports.addAddressSchema = Joi.object({
   fullName: Joi.string().trim().min(3).max(50).required(),
-  addresLine1: Joi.string().trim().min(3).required(),
-  addresLine2: Joi.string().trim().min(3).optional(),
+  addresLine1: Joi.string().min(5).max(255).required(),
+  addresLine2: Joi.string().max(255).allow("").optional(),
   city: Joi.string().trim().min(3).max(50).required(),
   postalCode: Joi.string().trim().min(5).max(10).required(),
   phoneNumber: Joi.string().trim().required(),

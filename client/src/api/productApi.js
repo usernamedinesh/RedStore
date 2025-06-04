@@ -35,3 +35,47 @@ export const getProductById = async (id) => {
 /*
  * GET CATEGORY OF PRODUCT
  */
+
+/*
+ * CART PRODUCT
+ */
+
+/* fetch product of carts */
+export const getCartProduct = async () => {
+  try {
+    const response = await axiosInstance.get("/api/user/cart");
+    return response.data;
+  } catch (error) {
+    console.error("error fetching cart product", error);
+    throw error;
+  }
+};
+
+/*
+ Add product to carts
+ */
+export const addToCart = async (productData) => {
+  try {
+    const response = await axiosInstance.post("/api/user/cart", {
+      productData,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("error while adding to cart", error);
+  }
+};
+
+/*
+ * Remove product from cart
+ */
+export const removeProductCart = async (variantId, quantityToRemove = 1) => {
+  try {
+    const response = await axiosInstance.delete(
+      `/api/user/${variantId}`,
+      quantityToRemove,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error while removing prodcut from cart", error);
+  }
+};

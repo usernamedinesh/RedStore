@@ -31,7 +31,7 @@ export const verifyEmailOrPhone = async (emailOrPhone) => {
  */
 export const register = async (userdata) => {
   try {
-    const response = await axios.post(`${API_URL}/api/register`, {
+    const response = await axiosInstance.post(`${API_URL}/api/register`, {
       ...userdata,
     });
     return response;
@@ -52,7 +52,7 @@ export const register = async (userdata) => {
 
 export const login = async (userdata) => {
   try {
-    const response = await axios.post(`${API_URL}/api/login`, {
+    const response = await axiosInstance.post(`${API_URL}/api/login`, {
       ...userdata,
     });
     return response;
@@ -116,5 +116,16 @@ export const getProductByOwner = async () => {
   } catch (error) {
     console.error("Error fetching products by owner:", error);
     return error;
+  }
+};
+
+export const getProfile = async () => {
+  try {
+    const response = await axiosInstance.get("/api/me");
+    console.log("response: ", response);
+    return response.data;
+  } catch (error) {
+    console.error("Error while fetching profile", error);
+    throw error;
   }
 };

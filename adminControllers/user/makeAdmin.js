@@ -19,4 +19,26 @@ async function makeAdmin() {
   }
 }
 
+// makeAdmin();
+// lets see user exist or not
+
+// const user = await Prisma.user.findFirst({
+//   where: findCondition,
+// });
+
+findCondition = {
+  email: "dinesh@gmail.com ",
+};
+async function makeAdmin() {
+  const user = await prisma.user.findFirst({
+    where: { id: 2 },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      refreshToken: true,
+    },
+  });
+  console.log("User found: ", user);
+}
 makeAdmin();
