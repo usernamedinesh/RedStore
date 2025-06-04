@@ -32,13 +32,14 @@ model CheckoutItem {
 // Text, Image, Video, Audio :=> is this enough?
 
 model Message {
-  id     Int           @id @default(autoincrement())
-  type   MessasageType
-  sentAt DateTime      @default(now())
+  id     Int         @id @default(autoincrement())
+  type   MessageType
+  sentAt DateTime    @default(now())
 
   // store the text and image
   text    String? @map("text_content")
-  fileUrl String? @map("file_url")
+  chatId  String?
+  fileUrl String? @map("file_url") @db.Text
 
   senderUserId   Int?
   receiverUserId Int?
@@ -53,7 +54,7 @@ model Message {
   receiverOwner ProductOwner? @relation("OwnerReceivedMessages", fields: [receiverOwnerId], references: [id])
 }
 
-enum MessasageType {
+enum MessageType {
   TEXT
   IMAGE
   VIDEO
@@ -119,6 +120,11 @@ model Product {
   ratings       Rating[]
   createdAt     DateTime         @default(now()) @map("created_at")
   cart          Cart[]
+  // lets make an flag which is visited 
+  // every time a user vists add the id here 
+  // TODO: not migrated not do it right now 
+  // visitetorId   Int              @map("user_id") // lets first create the user then i will uncomment this 
+  // visitedBy     User             @relation(fields: [visitetorId], references: [id]) // new added 
 
   @@index([name]) // For product name searches
   @@index([brandId]) // For brand filtering

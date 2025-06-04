@@ -43,9 +43,9 @@ model Product {
     cart          Cart[]
     // lets make an flag which is visited 
     // every time a user vists add the id here 
-    // TODO: not migrated 
-    visitetorId   Int              @map("user_id") // lets first create the user then i will uncomment this 
-    visitedBy     User             @relation(fields: [visitetorId], references: [id]) // new added 
+    // TODO: not migrated not do it right now 
+    // visitetorId   Int              @map("user_id") // lets first create the user then i will uncomment this 
+    // visitedBy     User             @relation(fields: [visitetorId], references: [id]) // new added 
 
     @@index([name]) // For product name searches
     @@index([brandId]) // For brand filtering

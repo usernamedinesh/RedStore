@@ -1,13 +1,14 @@
 // Text, Image, Video, Audio :=> is this enough?
 
 model Message {
-    id     Int           @id @default(autoincrement())
-    type   MessasageType
-    sentAt DateTime      @default(now())
+    id     Int         @id @default(autoincrement())
+    type   MessageType
+    sentAt DateTime    @default(now())
 
     // store the text and image
     text    String? @map("text_content")
-    fileUrl String? @map("file_url")
+    chatId  String?
+    fileUrl String? @map("file_url") @db.Text
 
     senderUserId   Int?
     receiverUserId Int?
@@ -22,7 +23,7 @@ model Message {
     receiverOwner ProductOwner? @relation("OwnerReceivedMessages", fields: [receiverOwnerId], references: [id])
 }
 
-enum MessasageType {
+enum MessageType {
     TEXT
     IMAGE
     VIDEO

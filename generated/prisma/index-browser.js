@@ -132,6 +132,7 @@ exports.Prisma.MessageScalarFieldEnum = {
   type: 'type',
   sentAt: 'sentAt',
   text: 'text',
+  chatId: 'chatId',
   fileUrl: 'fileUrl',
   senderUserId: 'senderUserId',
   receiverUserId: 'receiverUserId',
@@ -310,7 +311,7 @@ exports.Prisma.JsonNullValueFilter = {
   JsonNull: Prisma.JsonNull,
   AnyNull: Prisma.AnyNull
 };
-exports.MessasageType = exports.$Enums.MessasageType = {
+exports.MessageType = exports.$Enums.MessageType = {
   TEXT: 'TEXT',
   IMAGE: 'IMAGE',
   VIDEO: 'VIDEO',

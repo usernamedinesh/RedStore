@@ -103,14 +103,14 @@ export type TempOtp = $Result.DefaultSelection<Prisma.$TempOtpPayload>
  * Enums
  */
 export namespace $Enums {
-  export const MessasageType: {
+  export const MessageType: {
   TEXT: 'TEXT',
   IMAGE: 'IMAGE',
   VIDEO: 'VIDEO',
   AUDIO: 'AUDIO'
 };
 
-export type MessasageType = (typeof MessasageType)[keyof typeof MessasageType]
+export type MessageType = (typeof MessageType)[keyof typeof MessageType]
 
 
 export const PaymentStatus: {
@@ -164,9 +164,9 @@ export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 }
 
-export type MessasageType = $Enums.MessasageType
+export type MessageType = $Enums.MessageType
 
-export const MessasageType: typeof $Enums.MessasageType
+export const MessageType: typeof $Enums.MessageType
 
 export type PaymentStatus = $Enums.PaymentStatus
 
@@ -3956,9 +3956,10 @@ export namespace Prisma {
 
   export type MessageMinAggregateOutputType = {
     id: number | null
-    type: $Enums.MessasageType | null
+    type: $Enums.MessageType | null
     sentAt: Date | null
     text: string | null
+    chatId: string | null
     fileUrl: string | null
     senderUserId: number | null
     receiverUserId: number | null
@@ -3968,9 +3969,10 @@ export namespace Prisma {
 
   export type MessageMaxAggregateOutputType = {
     id: number | null
-    type: $Enums.MessasageType | null
+    type: $Enums.MessageType | null
     sentAt: Date | null
     text: string | null
+    chatId: string | null
     fileUrl: string | null
     senderUserId: number | null
     receiverUserId: number | null
@@ -3983,6 +3985,7 @@ export namespace Prisma {
     type: number
     sentAt: number
     text: number
+    chatId: number
     fileUrl: number
     senderUserId: number
     receiverUserId: number
@@ -4013,6 +4016,7 @@ export namespace Prisma {
     type?: true
     sentAt?: true
     text?: true
+    chatId?: true
     fileUrl?: true
     senderUserId?: true
     receiverUserId?: true
@@ -4025,6 +4029,7 @@ export namespace Prisma {
     type?: true
     sentAt?: true
     text?: true
+    chatId?: true
     fileUrl?: true
     senderUserId?: true
     receiverUserId?: true
@@ -4037,6 +4042,7 @@ export namespace Prisma {
     type?: true
     sentAt?: true
     text?: true
+    chatId?: true
     fileUrl?: true
     senderUserId?: true
     receiverUserId?: true
@@ -4133,9 +4139,10 @@ export namespace Prisma {
 
   export type MessageGroupByOutputType = {
     id: number
-    type: $Enums.MessasageType
+    type: $Enums.MessageType
     sentAt: Date
     text: string | null
+    chatId: string | null
     fileUrl: string | null
     senderUserId: number | null
     receiverUserId: number | null
@@ -4167,6 +4174,7 @@ export namespace Prisma {
     type?: boolean
     sentAt?: boolean
     text?: boolean
+    chatId?: boolean
     fileUrl?: boolean
     senderUserId?: boolean
     receiverUserId?: boolean
@@ -4183,6 +4191,7 @@ export namespace Prisma {
     type?: boolean
     sentAt?: boolean
     text?: boolean
+    chatId?: boolean
     fileUrl?: boolean
     senderUserId?: boolean
     receiverUserId?: boolean
@@ -4199,6 +4208,7 @@ export namespace Prisma {
     type?: boolean
     sentAt?: boolean
     text?: boolean
+    chatId?: boolean
     fileUrl?: boolean
     senderUserId?: boolean
     receiverUserId?: boolean
@@ -4215,6 +4225,7 @@ export namespace Prisma {
     type?: boolean
     sentAt?: boolean
     text?: boolean
+    chatId?: boolean
     fileUrl?: boolean
     senderUserId?: boolean
     receiverUserId?: boolean
@@ -4222,7 +4233,7 @@ export namespace Prisma {
     receiverOwnerId?: boolean
   }
 
-  export type MessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "sentAt" | "text" | "fileUrl" | "senderUserId" | "receiverUserId" | "senderOwnerId" | "receiverOwnerId", ExtArgs["result"]["message"]>
+  export type MessageOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "sentAt" | "text" | "chatId" | "fileUrl" | "senderUserId" | "receiverUserId" | "senderOwnerId" | "receiverOwnerId", ExtArgs["result"]["message"]>
   export type MessageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     senderUser?: boolean | Message$senderUserArgs<ExtArgs>
     receiverUser?: boolean | Message$receiverUserArgs<ExtArgs>
@@ -4252,9 +4263,10 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
-      type: $Enums.MessasageType
+      type: $Enums.MessageType
       sentAt: Date
       text: string | null
+      chatId: string | null
       fileUrl: string | null
       senderUserId: number | null
       receiverUserId: number | null
@@ -4688,9 +4700,10 @@ export namespace Prisma {
    */
   interface MessageFieldRefs {
     readonly id: FieldRef<"Message", 'Int'>
-    readonly type: FieldRef<"Message", 'MessasageType'>
+    readonly type: FieldRef<"Message", 'MessageType'>
     readonly sentAt: FieldRef<"Message", 'DateTime'>
     readonly text: FieldRef<"Message", 'String'>
+    readonly chatId: FieldRef<"Message", 'String'>
     readonly fileUrl: FieldRef<"Message", 'String'>
     readonly senderUserId: FieldRef<"Message", 'Int'>
     readonly receiverUserId: FieldRef<"Message", 'Int'>
@@ -22436,6 +22449,7 @@ export namespace Prisma {
     type: 'type',
     sentAt: 'sentAt',
     text: 'text',
+    chatId: 'chatId',
     fileUrl: 'fileUrl',
     senderUserId: 'senderUserId',
     receiverUserId: 'receiverUserId',
@@ -22726,16 +22740,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'MessasageType'
+   * Reference to a field of type 'MessageType'
    */
-  export type EnumMessasageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessasageType'>
+  export type EnumMessageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessageType'>
     
 
 
   /**
-   * Reference to a field of type 'MessasageType[]'
+   * Reference to a field of type 'MessageType[]'
    */
-  export type ListEnumMessasageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessasageType[]'>
+  export type ListEnumMessageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MessageType[]'>
     
 
 
@@ -22936,9 +22950,10 @@ export namespace Prisma {
     OR?: MessageWhereInput[]
     NOT?: MessageWhereInput | MessageWhereInput[]
     id?: IntFilter<"Message"> | number
-    type?: EnumMessasageTypeFilter<"Message"> | $Enums.MessasageType
+    type?: EnumMessageTypeFilter<"Message"> | $Enums.MessageType
     sentAt?: DateTimeFilter<"Message"> | Date | string
     text?: StringNullableFilter<"Message"> | string | null
+    chatId?: StringNullableFilter<"Message"> | string | null
     fileUrl?: StringNullableFilter<"Message"> | string | null
     senderUserId?: IntNullableFilter<"Message"> | number | null
     receiverUserId?: IntNullableFilter<"Message"> | number | null
@@ -22955,6 +22970,7 @@ export namespace Prisma {
     type?: SortOrder
     sentAt?: SortOrder
     text?: SortOrderInput | SortOrder
+    chatId?: SortOrderInput | SortOrder
     fileUrl?: SortOrderInput | SortOrder
     senderUserId?: SortOrderInput | SortOrder
     receiverUserId?: SortOrderInput | SortOrder
@@ -22971,9 +22987,10 @@ export namespace Prisma {
     AND?: MessageWhereInput | MessageWhereInput[]
     OR?: MessageWhereInput[]
     NOT?: MessageWhereInput | MessageWhereInput[]
-    type?: EnumMessasageTypeFilter<"Message"> | $Enums.MessasageType
+    type?: EnumMessageTypeFilter<"Message"> | $Enums.MessageType
     sentAt?: DateTimeFilter<"Message"> | Date | string
     text?: StringNullableFilter<"Message"> | string | null
+    chatId?: StringNullableFilter<"Message"> | string | null
     fileUrl?: StringNullableFilter<"Message"> | string | null
     senderUserId?: IntNullableFilter<"Message"> | number | null
     receiverUserId?: IntNullableFilter<"Message"> | number | null
@@ -22990,6 +23007,7 @@ export namespace Prisma {
     type?: SortOrder
     sentAt?: SortOrder
     text?: SortOrderInput | SortOrder
+    chatId?: SortOrderInput | SortOrder
     fileUrl?: SortOrderInput | SortOrder
     senderUserId?: SortOrderInput | SortOrder
     receiverUserId?: SortOrderInput | SortOrder
@@ -23007,9 +23025,10 @@ export namespace Prisma {
     OR?: MessageScalarWhereWithAggregatesInput[]
     NOT?: MessageScalarWhereWithAggregatesInput | MessageScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Message"> | number
-    type?: EnumMessasageTypeWithAggregatesFilter<"Message"> | $Enums.MessasageType
+    type?: EnumMessageTypeWithAggregatesFilter<"Message"> | $Enums.MessageType
     sentAt?: DateTimeWithAggregatesFilter<"Message"> | Date | string
     text?: StringNullableWithAggregatesFilter<"Message"> | string | null
+    chatId?: StringNullableWithAggregatesFilter<"Message"> | string | null
     fileUrl?: StringNullableWithAggregatesFilter<"Message"> | string | null
     senderUserId?: IntNullableWithAggregatesFilter<"Message"> | number | null
     receiverUserId?: IntNullableWithAggregatesFilter<"Message"> | number | null
@@ -24145,9 +24164,10 @@ export namespace Prisma {
   }
 
   export type MessageCreateInput = {
-    type: $Enums.MessasageType
+    type: $Enums.MessageType
     sentAt?: Date | string
     text?: string | null
+    chatId?: string | null
     fileUrl?: string | null
     senderUser?: UserCreateNestedOneWithoutSentMessagesInput
     receiverUser?: UserCreateNestedOneWithoutReceivedMessagesInput
@@ -24157,9 +24177,10 @@ export namespace Prisma {
 
   export type MessageUncheckedCreateInput = {
     id?: number
-    type: $Enums.MessasageType
+    type: $Enums.MessageType
     sentAt?: Date | string
     text?: string | null
+    chatId?: string | null
     fileUrl?: string | null
     senderUserId?: number | null
     receiverUserId?: number | null
@@ -24168,9 +24189,10 @@ export namespace Prisma {
   }
 
   export type MessageUpdateInput = {
-    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     text?: NullableStringFieldUpdateOperationsInput | string | null
+    chatId?: NullableStringFieldUpdateOperationsInput | string | null
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     senderUser?: UserUpdateOneWithoutSentMessagesNestedInput
     receiverUser?: UserUpdateOneWithoutReceivedMessagesNestedInput
@@ -24180,9 +24202,10 @@ export namespace Prisma {
 
   export type MessageUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     text?: NullableStringFieldUpdateOperationsInput | string | null
+    chatId?: NullableStringFieldUpdateOperationsInput | string | null
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     senderUserId?: NullableIntFieldUpdateOperationsInput | number | null
     receiverUserId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -24192,9 +24215,10 @@ export namespace Prisma {
 
   export type MessageCreateManyInput = {
     id?: number
-    type: $Enums.MessasageType
+    type: $Enums.MessageType
     sentAt?: Date | string
     text?: string | null
+    chatId?: string | null
     fileUrl?: string | null
     senderUserId?: number | null
     receiverUserId?: number | null
@@ -24203,17 +24227,19 @@ export namespace Prisma {
   }
 
   export type MessageUpdateManyMutationInput = {
-    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     text?: NullableStringFieldUpdateOperationsInput | string | null
+    chatId?: NullableStringFieldUpdateOperationsInput | string | null
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type MessageUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
-    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     text?: NullableStringFieldUpdateOperationsInput | string | null
+    chatId?: NullableStringFieldUpdateOperationsInput | string | null
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     senderUserId?: NullableIntFieldUpdateOperationsInput | number | null
     receiverUserId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -25478,11 +25504,11 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type EnumMessasageTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.MessasageType | EnumMessasageTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.MessasageType[] | ListEnumMessasageTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.MessasageType[] | ListEnumMessasageTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumMessasageTypeFilter<$PrismaModel> | $Enums.MessasageType
+  export type EnumMessageTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.MessageType | EnumMessageTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MessageType[] | ListEnumMessageTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MessageType[] | ListEnumMessageTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMessageTypeFilter<$PrismaModel> | $Enums.MessageType
   }
 
   export type StringNullableFilter<$PrismaModel = never> = {
@@ -25526,6 +25552,7 @@ export namespace Prisma {
     type?: SortOrder
     sentAt?: SortOrder
     text?: SortOrder
+    chatId?: SortOrder
     fileUrl?: SortOrder
     senderUserId?: SortOrder
     receiverUserId?: SortOrder
@@ -25546,6 +25573,7 @@ export namespace Prisma {
     type?: SortOrder
     sentAt?: SortOrder
     text?: SortOrder
+    chatId?: SortOrder
     fileUrl?: SortOrder
     senderUserId?: SortOrder
     receiverUserId?: SortOrder
@@ -25558,6 +25586,7 @@ export namespace Prisma {
     type?: SortOrder
     sentAt?: SortOrder
     text?: SortOrder
+    chatId?: SortOrder
     fileUrl?: SortOrder
     senderUserId?: SortOrder
     receiverUserId?: SortOrder
@@ -25573,14 +25602,14 @@ export namespace Prisma {
     receiverOwnerId?: SortOrder
   }
 
-  export type EnumMessasageTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.MessasageType | EnumMessasageTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.MessasageType[] | ListEnumMessasageTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.MessasageType[] | ListEnumMessasageTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumMessasageTypeWithAggregatesFilter<$PrismaModel> | $Enums.MessasageType
+  export type EnumMessageTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MessageType | EnumMessageTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MessageType[] | ListEnumMessageTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MessageType[] | ListEnumMessageTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMessageTypeWithAggregatesFilter<$PrismaModel> | $Enums.MessageType
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumMessasageTypeFilter<$PrismaModel>
-    _max?: NestedEnumMessasageTypeFilter<$PrismaModel>
+    _min?: NestedEnumMessageTypeFilter<$PrismaModel>
+    _max?: NestedEnumMessageTypeFilter<$PrismaModel>
   }
 
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -26605,8 +26634,8 @@ export namespace Prisma {
     connect?: ProductOwnerWhereUniqueInput
   }
 
-  export type EnumMessasageTypeFieldUpdateOperationsInput = {
-    set?: $Enums.MessasageType
+  export type EnumMessageTypeFieldUpdateOperationsInput = {
+    set?: $Enums.MessageType
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -28089,11 +28118,11 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedEnumMessasageTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.MessasageType | EnumMessasageTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.MessasageType[] | ListEnumMessasageTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.MessasageType[] | ListEnumMessasageTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumMessasageTypeFilter<$PrismaModel> | $Enums.MessasageType
+  export type NestedEnumMessageTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.MessageType | EnumMessageTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MessageType[] | ListEnumMessageTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MessageType[] | ListEnumMessageTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMessageTypeFilter<$PrismaModel> | $Enums.MessageType
   }
 
   export type NestedStringNullableFilter<$PrismaModel = never> = {
@@ -28110,14 +28139,14 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type NestedEnumMessasageTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.MessasageType | EnumMessasageTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.MessasageType[] | ListEnumMessasageTypeFieldRefInput<$PrismaModel>
-    notIn?: $Enums.MessasageType[] | ListEnumMessasageTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumMessasageTypeWithAggregatesFilter<$PrismaModel> | $Enums.MessasageType
+  export type NestedEnumMessageTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MessageType | EnumMessageTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.MessageType[] | ListEnumMessageTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MessageType[] | ListEnumMessageTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumMessageTypeWithAggregatesFilter<$PrismaModel> | $Enums.MessageType
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumMessasageTypeFilter<$PrismaModel>
-    _max?: NestedEnumMessasageTypeFilter<$PrismaModel>
+    _min?: NestedEnumMessageTypeFilter<$PrismaModel>
+    _max?: NestedEnumMessageTypeFilter<$PrismaModel>
   }
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -28851,9 +28880,10 @@ export namespace Prisma {
   }
 
   export type MessageCreateWithoutSenderOwnerInput = {
-    type: $Enums.MessasageType
+    type: $Enums.MessageType
     sentAt?: Date | string
     text?: string | null
+    chatId?: string | null
     fileUrl?: string | null
     senderUser?: UserCreateNestedOneWithoutSentMessagesInput
     receiverUser?: UserCreateNestedOneWithoutReceivedMessagesInput
@@ -28862,9 +28892,10 @@ export namespace Prisma {
 
   export type MessageUncheckedCreateWithoutSenderOwnerInput = {
     id?: number
-    type: $Enums.MessasageType
+    type: $Enums.MessageType
     sentAt?: Date | string
     text?: string | null
+    chatId?: string | null
     fileUrl?: string | null
     senderUserId?: number | null
     receiverUserId?: number | null
@@ -28882,9 +28913,10 @@ export namespace Prisma {
   }
 
   export type MessageCreateWithoutReceiverOwnerInput = {
-    type: $Enums.MessasageType
+    type: $Enums.MessageType
     sentAt?: Date | string
     text?: string | null
+    chatId?: string | null
     fileUrl?: string | null
     senderUser?: UserCreateNestedOneWithoutSentMessagesInput
     receiverUser?: UserCreateNestedOneWithoutReceivedMessagesInput
@@ -28893,9 +28925,10 @@ export namespace Prisma {
 
   export type MessageUncheckedCreateWithoutReceiverOwnerInput = {
     id?: number
-    type: $Enums.MessasageType
+    type: $Enums.MessageType
     sentAt?: Date | string
     text?: string | null
+    chatId?: string | null
     fileUrl?: string | null
     senderUserId?: number | null
     receiverUserId?: number | null
@@ -28973,9 +29006,10 @@ export namespace Prisma {
     OR?: MessageScalarWhereInput[]
     NOT?: MessageScalarWhereInput | MessageScalarWhereInput[]
     id?: IntFilter<"Message"> | number
-    type?: EnumMessasageTypeFilter<"Message"> | $Enums.MessasageType
+    type?: EnumMessageTypeFilter<"Message"> | $Enums.MessageType
     sentAt?: DateTimeFilter<"Message"> | Date | string
     text?: StringNullableFilter<"Message"> | string | null
+    chatId?: StringNullableFilter<"Message"> | string | null
     fileUrl?: StringNullableFilter<"Message"> | string | null
     senderUserId?: IntNullableFilter<"Message"> | number | null
     receiverUserId?: IntNullableFilter<"Message"> | number | null
@@ -31060,9 +31094,10 @@ export namespace Prisma {
   }
 
   export type MessageCreateWithoutSenderUserInput = {
-    type: $Enums.MessasageType
+    type: $Enums.MessageType
     sentAt?: Date | string
     text?: string | null
+    chatId?: string | null
     fileUrl?: string | null
     receiverUser?: UserCreateNestedOneWithoutReceivedMessagesInput
     senderOwner?: ProductOwnerCreateNestedOneWithoutSentMessagesInput
@@ -31071,9 +31106,10 @@ export namespace Prisma {
 
   export type MessageUncheckedCreateWithoutSenderUserInput = {
     id?: number
-    type: $Enums.MessasageType
+    type: $Enums.MessageType
     sentAt?: Date | string
     text?: string | null
+    chatId?: string | null
     fileUrl?: string | null
     receiverUserId?: number | null
     senderOwnerId?: number | null
@@ -31091,9 +31127,10 @@ export namespace Prisma {
   }
 
   export type MessageCreateWithoutReceiverUserInput = {
-    type: $Enums.MessasageType
+    type: $Enums.MessageType
     sentAt?: Date | string
     text?: string | null
+    chatId?: string | null
     fileUrl?: string | null
     senderUser?: UserCreateNestedOneWithoutSentMessagesInput
     senderOwner?: ProductOwnerCreateNestedOneWithoutSentMessagesInput
@@ -31102,9 +31139,10 @@ export namespace Prisma {
 
   export type MessageUncheckedCreateWithoutReceiverUserInput = {
     id?: number
-    type: $Enums.MessasageType
+    type: $Enums.MessageType
     sentAt?: Date | string
     text?: string | null
+    chatId?: string | null
     fileUrl?: string | null
     senderUserId?: number | null
     senderOwnerId?: number | null
@@ -31378,9 +31416,10 @@ export namespace Prisma {
 
   export type MessageCreateManySenderOwnerInput = {
     id?: number
-    type: $Enums.MessasageType
+    type: $Enums.MessageType
     sentAt?: Date | string
     text?: string | null
+    chatId?: string | null
     fileUrl?: string | null
     senderUserId?: number | null
     receiverUserId?: number | null
@@ -31389,9 +31428,10 @@ export namespace Prisma {
 
   export type MessageCreateManyReceiverOwnerInput = {
     id?: number
-    type: $Enums.MessasageType
+    type: $Enums.MessageType
     sentAt?: Date | string
     text?: string | null
+    chatId?: string | null
     fileUrl?: string | null
     senderUserId?: number | null
     receiverUserId?: number | null
@@ -31411,9 +31451,10 @@ export namespace Prisma {
   }
 
   export type MessageUpdateWithoutSenderOwnerInput = {
-    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     text?: NullableStringFieldUpdateOperationsInput | string | null
+    chatId?: NullableStringFieldUpdateOperationsInput | string | null
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     senderUser?: UserUpdateOneWithoutSentMessagesNestedInput
     receiverUser?: UserUpdateOneWithoutReceivedMessagesNestedInput
@@ -31422,9 +31463,10 @@ export namespace Prisma {
 
   export type MessageUncheckedUpdateWithoutSenderOwnerInput = {
     id?: IntFieldUpdateOperationsInput | number
-    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     text?: NullableStringFieldUpdateOperationsInput | string | null
+    chatId?: NullableStringFieldUpdateOperationsInput | string | null
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     senderUserId?: NullableIntFieldUpdateOperationsInput | number | null
     receiverUserId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -31433,9 +31475,10 @@ export namespace Prisma {
 
   export type MessageUncheckedUpdateManyWithoutSenderOwnerInput = {
     id?: IntFieldUpdateOperationsInput | number
-    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     text?: NullableStringFieldUpdateOperationsInput | string | null
+    chatId?: NullableStringFieldUpdateOperationsInput | string | null
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     senderUserId?: NullableIntFieldUpdateOperationsInput | number | null
     receiverUserId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -31443,9 +31486,10 @@ export namespace Prisma {
   }
 
   export type MessageUpdateWithoutReceiverOwnerInput = {
-    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     text?: NullableStringFieldUpdateOperationsInput | string | null
+    chatId?: NullableStringFieldUpdateOperationsInput | string | null
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     senderUser?: UserUpdateOneWithoutSentMessagesNestedInput
     receiverUser?: UserUpdateOneWithoutReceivedMessagesNestedInput
@@ -31454,9 +31498,10 @@ export namespace Prisma {
 
   export type MessageUncheckedUpdateWithoutReceiverOwnerInput = {
     id?: IntFieldUpdateOperationsInput | number
-    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     text?: NullableStringFieldUpdateOperationsInput | string | null
+    chatId?: NullableStringFieldUpdateOperationsInput | string | null
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     senderUserId?: NullableIntFieldUpdateOperationsInput | number | null
     receiverUserId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -31465,9 +31510,10 @@ export namespace Prisma {
 
   export type MessageUncheckedUpdateManyWithoutReceiverOwnerInput = {
     id?: IntFieldUpdateOperationsInput | number
-    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     text?: NullableStringFieldUpdateOperationsInput | string | null
+    chatId?: NullableStringFieldUpdateOperationsInput | string | null
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     senderUserId?: NullableIntFieldUpdateOperationsInput | number | null
     receiverUserId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -31974,9 +32020,10 @@ export namespace Prisma {
 
   export type MessageCreateManySenderUserInput = {
     id?: number
-    type: $Enums.MessasageType
+    type: $Enums.MessageType
     sentAt?: Date | string
     text?: string | null
+    chatId?: string | null
     fileUrl?: string | null
     receiverUserId?: number | null
     senderOwnerId?: number | null
@@ -31985,9 +32032,10 @@ export namespace Prisma {
 
   export type MessageCreateManyReceiverUserInput = {
     id?: number
-    type: $Enums.MessasageType
+    type: $Enums.MessageType
     sentAt?: Date | string
     text?: string | null
+    chatId?: string | null
     fileUrl?: string | null
     senderUserId?: number | null
     senderOwnerId?: number | null
@@ -32059,9 +32107,10 @@ export namespace Prisma {
   }
 
   export type MessageUpdateWithoutSenderUserInput = {
-    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     text?: NullableStringFieldUpdateOperationsInput | string | null
+    chatId?: NullableStringFieldUpdateOperationsInput | string | null
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiverUser?: UserUpdateOneWithoutReceivedMessagesNestedInput
     senderOwner?: ProductOwnerUpdateOneWithoutSentMessagesNestedInput
@@ -32070,9 +32119,10 @@ export namespace Prisma {
 
   export type MessageUncheckedUpdateWithoutSenderUserInput = {
     id?: IntFieldUpdateOperationsInput | number
-    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     text?: NullableStringFieldUpdateOperationsInput | string | null
+    chatId?: NullableStringFieldUpdateOperationsInput | string | null
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiverUserId?: NullableIntFieldUpdateOperationsInput | number | null
     senderOwnerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -32081,9 +32131,10 @@ export namespace Prisma {
 
   export type MessageUncheckedUpdateManyWithoutSenderUserInput = {
     id?: IntFieldUpdateOperationsInput | number
-    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     text?: NullableStringFieldUpdateOperationsInput | string | null
+    chatId?: NullableStringFieldUpdateOperationsInput | string | null
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     receiverUserId?: NullableIntFieldUpdateOperationsInput | number | null
     senderOwnerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -32091,9 +32142,10 @@ export namespace Prisma {
   }
 
   export type MessageUpdateWithoutReceiverUserInput = {
-    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     text?: NullableStringFieldUpdateOperationsInput | string | null
+    chatId?: NullableStringFieldUpdateOperationsInput | string | null
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     senderUser?: UserUpdateOneWithoutSentMessagesNestedInput
     senderOwner?: ProductOwnerUpdateOneWithoutSentMessagesNestedInput
@@ -32102,9 +32154,10 @@ export namespace Prisma {
 
   export type MessageUncheckedUpdateWithoutReceiverUserInput = {
     id?: IntFieldUpdateOperationsInput | number
-    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     text?: NullableStringFieldUpdateOperationsInput | string | null
+    chatId?: NullableStringFieldUpdateOperationsInput | string | null
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     senderUserId?: NullableIntFieldUpdateOperationsInput | number | null
     senderOwnerId?: NullableIntFieldUpdateOperationsInput | number | null
@@ -32113,9 +32166,10 @@ export namespace Prisma {
 
   export type MessageUncheckedUpdateManyWithoutReceiverUserInput = {
     id?: IntFieldUpdateOperationsInput | number
-    type?: EnumMessasageTypeFieldUpdateOperationsInput | $Enums.MessasageType
+    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     text?: NullableStringFieldUpdateOperationsInput | string | null
+    chatId?: NullableStringFieldUpdateOperationsInput | string | null
     fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     senderUserId?: NullableIntFieldUpdateOperationsInput | number | null
     senderOwnerId?: NullableIntFieldUpdateOperationsInput | number | null
