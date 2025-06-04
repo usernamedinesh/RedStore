@@ -8,6 +8,7 @@ const adminProductRoute = require("./router/admin/productRoute");
 const addressRoute = require("./router/order");
 const cart = require("./router/admin/addTocart");
 const productRoute = require("./router//product.route");
+const rateLimiter = require("./middleware/rateLimiter");
 
 const notFoundHandler = require("./middleware/notFound");
 const corsMiddleware = require("./middleware/cors");
@@ -16,10 +17,11 @@ const passport = require("./utils/passport");
 const cookieParser = require("cookie-parser");
 
 const app = express();
-const Server = http.createServer(app);
 
 app.use(corsMiddleware);
-app.use(express.json());
+app.use(express.json({ limit: "16kb" }));
+app.use(express.urlencoded({ extended: true, limit: "16kb" }));
+app.use(rateLimiter);
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(passport.initialize());
@@ -32,4 +34,5 @@ app.use("/admin", adminRoute, adminProductRoute);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-module.exports = { Server };
+const httpServer = http.createServer(app);
+module.exports = { httpServer };
