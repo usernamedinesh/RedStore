@@ -1,3 +1,4 @@
+const http = require("http");
 const express = require("express");
 const errorHandler = require("./middleware/errorHandler");
 const productOwerRoute = require("./router/productOwer.route");
@@ -15,6 +16,7 @@ const passport = require("./utils/passport");
 const cookieParser = require("cookie-parser");
 
 const app = express();
+const Server = http.createServer(app);
 
 app.use(corsMiddleware);
 app.use(express.json());
@@ -30,4 +32,4 @@ app.use("/admin", adminRoute, adminProductRoute);
 app.use(notFoundHandler);
 app.use(errorHandler);
 
-module.exports = app;
+module.exports = { Server };

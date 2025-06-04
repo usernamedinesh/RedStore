@@ -1,5 +1,6 @@
 require("dotenv").config();
-const app = require("./app");
+// const app = require("./app");
+const { Server } = require("./app");
 const env = require("./config/envConfig");
 const { PrismaClient } = require("./generated/prisma");
 const prisma = new PrismaClient();
@@ -10,7 +11,7 @@ process.on("SIGINT", async () => {
   process.exit(0);
 });
 
-const sever = app.listen(env.PORT, () => {
+const server = Server.listen(env.PORT, () => {
   console.log(`Server is running on port ${env.PORT}`);
 });
 
@@ -19,7 +20,7 @@ const shutdown = async () => {
   console.log("\nStarting gracefully shutdown ... !");
   try {
     /* Closed Http server */
-    await new Promise((resolve) => sever.close(resolve));
+    await new Promise((resolve) => server.close(resolve));
     console.log("Http sever closed");
 
     /* Closed prisma connection */
