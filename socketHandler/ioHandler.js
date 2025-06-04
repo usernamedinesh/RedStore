@@ -1,5 +1,4 @@
-//i need httpServer here
-const { Server } = require("http");
+const { Server } = require("socket.io");
 const { httpServer } = require("../app");
 const env = require("../config/envConfig");
 
@@ -12,4 +11,18 @@ const io = new Server(httpServer, {
   },
 });
 
-module.exports = io;
+const initSocket = () => {
+  console.log("Socket.io initialized");
+
+  io.on("connection", (socket) => {
+    console.log(`New client connected: ${socket.id}`);
+
+    socket.on("disconnect", () => {
+      console.log(`Client disconnected: ${socket.id}`);
+    });
+
+    // Add more socket event listeners here if needed
+  });
+};
+
+module.exports = { io, initSocket };

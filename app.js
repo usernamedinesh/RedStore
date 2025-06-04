@@ -35,4 +35,4 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 const httpServer = http.createServer(app);
-module.exports = { httpServer };
+module.exports = { httpServer, app };
