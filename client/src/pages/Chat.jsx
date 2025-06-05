@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useSocket } from "../context/SocketContext";
+import { useEffect } from "react";
 
 /*
  * i want a feature here when i can toggle this to left or right
@@ -12,10 +14,52 @@ const users = [
   { name: "Ansri", id: 4 },
   { name: "priya", id: 5 },
 ];
+
+// DO i need to connect socket here
 function ChatPage() {
+  const socket = useSocket();
   const [chatOpen, setChatOpen] = useState(false);
   const [user, setUserId] = useState(users);
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const [isConnected, setIsConnected] = useState(false);
+
+  // Use effect to handle socket connection status
+  useEffect(() => {
+    if (!socket) {
+      console.warn("Socket is not available");
+      return;
+    }
+    // Log the current status of the socket when the component renders/mounts
+    console.log(
+      `ChatPage: Initial socket status - Connected: ${socket.connected}, ID: ${socket.id || "N/A"}`,
+    );
+    if (!socket.connected) {
+      console.log("ChatPage: Connecting socket...");
+      socket.connect();
+      setIsConnected(true);
+    } else {
+      console.log("ChatPage: Socket is already connected.");
+      setIsConnected(true);
+    }
+
+    const onConnect = () => {
+      // This code will run ONLY when the 'connect' event is emitted by the socket
+      setIsConnected(true);
+      console.log(`ChatPage: Socket connected successfully! ID: ${socket.id}`);
+      // Any other logic you want to execute immediately upon connection
+      // e.g., socket.emit('joinRoom', { userId: '...', ownerId: '...' });
+    };
+    const onDisconnect = () => setIsConnected(false);
+
+    socket.on("connect", onConnect);
+    socket.on("disconnect", onDisconnect);
+
+    return () => {
+      // Cleanup function to remove event listeners if needed
+      socket.off("connect", onConnect);
+      socket.off("connection", onDisconnect);
+    };
+  }, [socket]);
 
   const openChat = (id) => {
     setSelectedUserId(id);
