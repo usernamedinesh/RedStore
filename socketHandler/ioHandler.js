@@ -9,7 +9,8 @@ const router = require("express").Router();
 const io = new Server(httpServer, {
   pingTimeout: 6000,
   cors: {
-    origin: env.ORIGIN,
+    // origin: env.ORIGIN,
+    origin: "http://localhost:5173",
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -81,6 +82,12 @@ router.get("/:userId/:ownerId", async (req, res, next) => {
     console.error("Error while fetching chat:", error);
     next(error);
   }
+});
+
+router.get("/", async (req, res, next) => {
+  res.status(200).json({
+    message: "Welcome to the chat API",
+  });
 });
 
 module.exports = { io, initSocket, router };
