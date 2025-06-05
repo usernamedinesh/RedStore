@@ -26,6 +26,7 @@
     "react-toastify": "^11.0.5",
     "redux-persist": "^6.0.0",
     "slick-carousel": "^1.8.1",
+    "socket.io-client": "^4.8.1",
     "tailwindcss": "^4.1.7",
     "tailwindcss-dark-mode": "^1.1.7"
   },

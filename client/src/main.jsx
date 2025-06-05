@@ -11,6 +11,7 @@ import App from "./App.jsx";
 import { ToastContainer } from "react-toastify";
 import queryClient from "./context/ReactQury.jsx";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { SocketProvider } from "./context/SocketContext";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -19,7 +20,9 @@ createRoot(document.getElementById("root")).render(
         <ThemeProvider>
           <QueryClientProvider client={queryClient}>
             <App />
-            <RouterProvider router={router} />
+            <SocketProvider>
+              <RouterProvider router={router} />
+            </SocketProvider>
             <ToastContainer />
           </QueryClientProvider>
         </ThemeProvider>
