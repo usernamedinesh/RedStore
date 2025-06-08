@@ -1,5 +1,7 @@
 import { useLocation } from "react-router";
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { addToCart } from "../../api/productApi";
 
 export const SingleProduct = () => {
   const [selectedColor, setSelectedColor] = useState(null);
@@ -12,7 +14,7 @@ export const SingleProduct = () => {
 
   const colors = [...new Set(product.variants.map((v) => v.color))];
   const sizes = [...new Set(product.variants.map((v) => v.size))];
-  console.log("Product:", product.variants);
+  // console.log("Product:", product.variants);
   // Auto-select first variant
   useEffect(() => {
     if (product.variants?.length && !selectedVariant) {
@@ -38,6 +40,30 @@ export const SingleProduct = () => {
       }
     }
   }, [selectedColor, selectedSize]);
+
+  // Handle  add to cart
+  const handleAddToCart = async (productId, variantId, quantity) => {
+    const productData = {
+      productId,
+      variantId,
+      quantity,
+    };
+
+    try {
+      const response = await addToCart(productData);
+      toast.success(
+        response.message || "Product added to cart successfully!!",
+        {
+          position: "top-center",
+          autoClose: 1500,
+        },
+      );
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    }
+  };
+
+  //Handle buy now
 
   return (
     <div className="dark:bg-[var(--my-bg)] text-black dark:text-white">
@@ -157,6 +183,7 @@ export const SingleProduct = () => {
             className="mr-10 px-4 py-2 dark:bg-orange-600 rounded-md bg-orange-600 text-white
                    transform transition-transform duration-300 ease-in-out
                    hover:scale-105 hover:shadow-lg"
+            onClick={() => handleAddToCart(product.id, selectedVariant?.id, 1)}
           >
             add to cart
           </button>
@@ -164,6 +191,7 @@ export const SingleProduct = () => {
             className="mr-10 px-4 py-2 dark:bg-orange-600 rounded-md bg-orange-600 text-white
                    transform transition-transform duration-300 ease-in-out
                    hover:scale-105 hover:shadow-lg"
+            onClick={() => handleBuyNow(product.id, selectedVariant?.id)}
           >
             buy now
           </button>

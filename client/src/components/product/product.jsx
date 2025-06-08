@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { addToCart, getAllProduct } from "../../api/productApi";
 import { NavLink, useLocation } from "react-router";
+import { toast } from "react-toastify";
 
 function Product() {
   const [products, setProducts] = useState([]);
@@ -98,6 +99,10 @@ function Product() {
     try {
       const response = await addToCart(productData);
       console.log("Response", response);
+      toast.success(
+        response.message || "Product added to cart successfully!!",
+        { position: "top-center", autoClose: 1500 },
+      );
     } catch (error) {
       console.error("Error adding to cart:", error);
     }
