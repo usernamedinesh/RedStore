@@ -44,6 +44,7 @@ export const getProductById = async (id) => {
 export const getCartProduct = async () => {
   try {
     const response = await axiosInstance.get("/api/user/cart");
+    console.log("response from cart product_API", response);
     return response.data;
   } catch (error) {
     console.error("error fetching cart product", error);

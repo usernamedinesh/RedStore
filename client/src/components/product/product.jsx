@@ -10,7 +10,7 @@
  *
  */
 import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { addToCart, getAllProduct } from "../../api/productApi";
 import { NavLink, useLocation } from "react-router";
 import { toast } from "react-toastify";
@@ -20,6 +20,7 @@ function Product() {
   const [selectedGender, setSelectedGender] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const location = useLocation();
+  const queryClient = useQueryClient();
   const {
     data: productData,
     isError,
@@ -30,6 +31,11 @@ function Product() {
     queryKey: ["products", { page: 1, limit: 10 }],
     queryFn: () => getAllProduct(1, 10),
   });
+
+  const { mutateAsync } = useMutation({
+    mutationFn: addToCart,
+  });
+
   useEffect(() => {
     if (productData?.data?.data?.products) {
       setProducts(productData.data.data.products);
@@ -90,26 +96,30 @@ function Product() {
   // quantity
   // prodcutId
   // varintId
+  // lets use mutation
+
   const handleAddToCart = async (productId, variantId, quantity) => {
-    const productData = {
-      productId,
-      variantId,
-      quantity,
-    };
+    const productData = { productId, variantId, quantity };
     try {
-      const response = await addToCart(productData);
-      console.log("Response", response);
-      toast.success(
-        response.message || "Product added to cart successfully!!",
-        { position: "top-center", autoClose: 1500 },
-      );
+      const response = await mutateAsync(productData);
+      console.log("Product added to cart:", response);
+      queryClient.invalidateQueries(["cart"]);
+      toast.success(response.message || "Product added to cart successfully!", {
+        position: "top-center",
+        autoClose: 1500,
+      });
     } catch (error) {
       console.error("Error adding to cart:", error);
+      toast.error(
+        error?.response?.data?.message || "Failed to add product to cart",
+        { position: "top-center", autoClose: 1500 },
+      );
     }
   };
 
+  //TODO: handle buy now
   function handleBuyNow(id) {
-    // console.log("hitwo", id);
+    console.log("hitwo", id);
   }
 
   return (

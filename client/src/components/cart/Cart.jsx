@@ -1,8 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getCartProduct, removeProductCart } from "../../api/productApi";
+import { toast } from "react-toastify";
 
 // fetch all product that are in the db
 // of cart
@@ -11,6 +12,14 @@ function CartPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const { userId, token } = useSelector((state) => state.auth);
+  const queryClient = useQueryClient();
+
+  const { mutateAsync: removeFromCart } = useMutation({
+    mutationFn: removeProductCart,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["cart"]);
+    },
+  });
 
   useEffect(() => {
     if ((!userId || !token) && location.pathname !== "/login") {
@@ -28,7 +37,7 @@ function CartPage() {
     error,
   } = useQuery({
     queryKey: ["cart"],
-    queryFn: () => getCartProduct(),
+    queryFn: getCartProduct,
     enabled: true,
   });
 
@@ -52,26 +61,30 @@ function CartPage() {
 
   let variantt;
   cartProduct.map((p) => {
-    console.log("proId", p.product.id);
-    // console.log("cart", p.variants_in_cart);
     p.variants_in_cart.forEach((variant) => {
       variantt = variant;
     });
   });
 
+  // console.log("variantt", variantt);
+  // console.log("cartProduct", cartProduct);
+
+  // lets user react-query so it manages the state of the cart products
   const handleRemove = async (p, v) => {
-    console.log("pid", p);
+    // console.log("pid", p);
     // console.log("vid", v);
-    // const response = await removeProductCart(v);
-    // console.log("response: ", response);
-    // After removing product from cart
-    // remove from cartProduct too
-    const cartProducts = cartProduct.filter((p) => p.product.id !== p);
-    console.log("after :", cartProducts);
+    // const response = await removeProductCart(v); // no need this
+    const response = await removeFromCart(v); // use the mutation to remove from cart
+    toast.success("Product removed from cart successfully!", {
+      position: "top-center",
+      autoClose: 1500,
+    });
   };
+
+  //TODO: handle remove product from cart
   const handleBuy = (p, v) => {
-    console.log("pid", p);
-    console.log("vid", v);
+    // console.log("pid", p);
+    // console.log("vid", v);
   };
 
   return (
@@ -109,6 +122,9 @@ function CartPage() {
             </p>
             <p className="font-bold text-lg mb-1">
               size: {variantt.variant.size}
+            </p>
+            <p className="font-bold text-lg mb-1">
+              quantity: {variantt.quantity}
             </p>
             {/* Add buttons for remove and buy now */}
             <div className="justify-between gap-4 mt-3">

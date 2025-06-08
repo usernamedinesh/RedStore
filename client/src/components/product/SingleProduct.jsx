@@ -64,6 +64,7 @@ export const SingleProduct = () => {
   };
 
   //Handle buy now
+  //TODO: here todo
 
   return (
     <div className="dark:bg-[var(--my-bg)] text-black dark:text-white">
