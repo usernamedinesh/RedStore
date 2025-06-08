@@ -2,8 +2,10 @@ import { useLocation } from "react-router";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { addToCart } from "../../api/productApi";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const SingleProduct = () => {
+  const queryClient = useQueryClient();
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedVariant, setSelectedVariant] = useState(null);
@@ -11,6 +13,13 @@ export const SingleProduct = () => {
 
   const { state } = useLocation();
   const product = state?.product || {};
+
+  const { mutateAsync: addTOcart } = useMutation({
+    mutationFn: addToCart,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["cart"]);
+    },
+  });
 
   const colors = [...new Set(product.variants.map((v) => v.color))];
   const sizes = [...new Set(product.variants.map((v) => v.size))];
@@ -50,7 +59,7 @@ export const SingleProduct = () => {
     };
 
     try {
-      const response = await addToCart(productData);
+      const response = await addTOcart(productData);
       toast.success(
         response.message || "Product added to cart successfully!!",
         {

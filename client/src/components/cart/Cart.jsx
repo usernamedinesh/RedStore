@@ -101,52 +101,53 @@ function CartPage() {
         )}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-7 max-w-[1400px] mx-auto px-4 lg:h-[500px] w-[360px] sm:w-full">
-        {cartProduct.map((product) => (
-          <div
-            key={product.id}
-            className="cursor-pointer border p-4 rounded-lg shadow-md hover:shadow-xl 
-                     flex flex-col items-center text-center duration-300 ease-in-out 
-                     hover:-translate-y-1 hover:scale-105 transition-all h-full"
-          >
-            <img
-              src={variantt.variant.images[0].url}
-              alt={product.name}
-              className="w-full h-32 object-contain mb-2"
-            />
-            <h3 className="font-bold text-lg mb-1">{product.product.name}</h3>
-            <p className="font-bold text-lg mb-1">
-              price: {variantt.variant.price}
-            </p>
-            <p className="font-bold text-lg mb-1">
-              color: {variantt.variant.color}
-            </p>
-            <p className="font-bold text-lg mb-1">
-              size: {variantt.variant.size}
-            </p>
-            <p className="font-bold text-lg mb-1">
-              quantity: {variantt.quantity}
-            </p>
-            {/* Add buttons for remove and buy now */}
-            <div className="justify-between gap-4 mt-3">
-              <button
-                className="bg-red-500 text-white px-4 py-2 rounded mr-4"
-                onClick={() =>
-                  handleRemove(product.product.id, variantt.variant.id)
-                }
-              >
-                Remove
-              </button>
-              <button
-                className="bg-green-500 text-white px-4 py-2 rounded ml-4"
-                onClick={() =>
-                  handleBuy(product.product.id, variantt.variant.id)
-                }
-              >
-                Buy Now
-              </button>
+        {cartProduct.map((product) =>
+          product.variants_in_cart.map((variantItem) => (
+            <div
+              key={`${product.product.id}-${variantItem.variant.id}`}
+              className="cursor-pointer border p-4 rounded-lg shadow-md hover:shadow-xl 
+                 flex flex-col items-center text-center duration-300 ease-in-out 
+                 hover:-translate-y-1 hover:scale-105 transition-all h-full"
+            >
+              <img
+                src={variantItem.variant.images[0].url}
+                alt={product.product.name}
+                className="w-full h-32 object-contain mb-2"
+              />
+              <h3 className="font-bold text-lg mb-1">{product.product.name}</h3>
+              <p className="font-bold text-lg mb-1">
+                price: {variantItem.variant.price}
+              </p>
+              <p className="font-bold text-lg mb-1">
+                color: {variantItem.variant.color}
+              </p>
+              <p className="font-bold text-lg mb-1">
+                size: {variantItem.variant.size}
+              </p>
+              <p className="font-bold text-lg mb-1">
+                quantity: {variantItem.quantity}
+              </p>
+              <div className="justify-between gap-4 mt-3">
+                <button
+                  className="bg-red-500 text-white px-4 py-2 rounded mr-4"
+                  onClick={() =>
+                    handleRemove(product.product.id, variantItem.variant.id)
+                  }
+                >
+                  Remove
+                </button>
+                <button
+                  className="bg-green-500 text-white px-4 py-2 rounded ml-4"
+                  onClick={() =>
+                    handleBuy(product.product.id, variantItem.variant.id)
+                  }
+                >
+                  Buy Now
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          )),
+        )}
       </div>
       <div className="text-center mt-4">
         {cartProduct.length === 0 ? (

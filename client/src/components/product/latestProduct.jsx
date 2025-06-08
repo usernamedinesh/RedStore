@@ -37,7 +37,6 @@ function Latestproduct() {
   // Access product array from the data.produces
   const yesh = productData?.data?.data?.products || [];
   const latestProduct = yesh.slice(0, 3);
-  console.log(latestProduct);
 
   return (
     <div className="flex flex-col justify-center items-center px-4">
