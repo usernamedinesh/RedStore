@@ -86,13 +86,13 @@ export const SingleProduct = () => {
   // userId, sellerId
   // redirect to chat page
   // i gonne render this in return then my components ChatBox will render
-  const handleChat = (ownerId) => {
+  const handleChat = (ownerId, ownerName) => {
     // userId from token
     // return <ChatBox userId={userId} ownerId={ownerId} />;
     // setShowChat(true); // instead of  doing this i can navigate to chat page
     //navigate to chat
     navigate("/chat", {
-      state: { ownerId, userId },
+      state: { ownerId, userId, ownerName },
     });
   };
 
@@ -230,7 +230,7 @@ export const SingleProduct = () => {
             className="mr-10 px-4 py-2 dark:bg-orange-600 rounded-md bg-orange-600 text-white
                    transform transition-transform duration-300 ease-in-out
                    hover:scale-105 hover:shadow-lg"
-            onClick={() => handleChat(product.owner.id)}
+            onClick={() => handleChat(product.owner.id, product.owner.name)}
           >
             Chat with seller
           </button>

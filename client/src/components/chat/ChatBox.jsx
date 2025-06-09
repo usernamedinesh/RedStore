@@ -3,36 +3,37 @@ import socket from "../../socket/socket";
 import { API_URL } from "../../api/axiosInstance";
 import { useEffect, useState, useRef } from "react";
 
-const ChatBox = ({ userId, ownerId }) => {
+const ChatBox = ({ userId, ownerId, ownerName }) => {
   const [messages, setMessage] = useState([]);
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(true); // 👈 loading state
   const messagesEndRef = useRef(null);
 
-  const roomId = `chat_${userId}_${ownerId}`;
-
   useEffect(() => {
-    //Join the chat room
-    socket.emit("joinRoom", userId, ownerId);
-
-    // fetch the previous messages
-    axios
-      .get(`${API_URL}/chat/${roomId}/${ownerId}`)
-      .then((response) => setMessage(response.data.messages))
-      .catch((error) => console.error("Error fetching messages:", error));
-
-    // Listen for new messages
-    socket.on("receiveMessage", (data) => {
-      setMessage((prevMessages) => [...prevMessages, data.messages]);
-    });
-
-    // Cleanup on component unmount
-    return () => {
-      socket.off("receiveMessage");
+    const handleMessage = (data) => {
+      setMessage((prev) => [...prev, data]);
     };
-  }, [userId, ownerId, roomId]);
+
+    socket.emit("joinRoom", { userId, ownerId });
+    socket.on("receiveMessage", handleMessage);
+
+    // Fetch message history
+    axios
+      .get(`${API_URL}/chat/${userId}/${ownerId}`)
+      .then((res) => {
+        setMessage(res.data?.messages || []); // 👈 fallback to []
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false)); // 👈 done loading
+
+    return () => {
+      socket.off("receiveMessage", handleMessage);
+    };
+  }, [userId, ownerId]);
 
   const sendMessage = () => {
     if (input.trim() === "") return;
+
     const newMessage = {
       content: input,
       type: "TEXT",
@@ -43,36 +44,49 @@ const ChatBox = ({ userId, ownerId }) => {
     socket.emit("sendMessage", newMessage);
     setInput("");
   };
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   return (
     <div className="max-w-xl mx-auto p-4">
-      <h3 className="text-xl font-semibold mb-4">Chat with Product Owner</h3>
+      <h3 className="text-xl font-semibold mb-4 text-white">
+        Chat with Product Owner: {ownerName}
+      </h3>
 
       <div className="border border-gray-300 h-96 overflow-y-scroll p-3 rounded-md bg-white shadow-sm">
-        {messages.map((msg) => (
-          <div
-            key={msg.id}
-            className={`my-2 flex ${msg.senderUserId === userId ? "justify-end" : "justify-start"}`}
-          >
-            {msg.type === "TEXT" ? (
-              <div className="inline-block bg-gray-100 text-sm px-4 py-2 rounded-md max-w-xs break-words">
-                {msg.text}
-              </div>
-            ) : (
-              <a
-                href={msg.fileUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 underline text-sm"
-              >
-                [Media Message]
-              </a>
-            )}
+        {loading ? (
+          <div className="text-center text-gray-400 mt-4">Loading chat...</div>
+        ) : Array.isArray(messages) && messages.length === 0 ? (
+          <div className="text-center mt-4 text-black">
+            This is the start of your conversation.
           </div>
-        ))}
+        ) : (
+          messages.map((msg) => (
+            <div
+              key={msg.id}
+              className={`my-2 flex ${
+                msg.senderUserId === userId ? "justify-end" : "justify-start"
+              }`}
+            >
+              {msg.type === "TEXT" ? (
+                <div className="inline-block bg-gray-100 text-sm px-4 py-2 rounded-md max-w-xs break-words">
+                  {msg.text}
+                </div>
+              ) : (
+                <a
+                  href={msg.fileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 underline text-sm"
+                >
+                  [Media Message]
+                </a>
+              )}
+            </div>
+          ))
+        )}
         <div ref={messagesEndRef} />
       </div>
 
