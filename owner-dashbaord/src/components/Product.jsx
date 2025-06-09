@@ -5,6 +5,8 @@ import { useAppContext } from "../customComponents/context";
 // we can share code with react ? or just out of the context
 // import { getProductByOwner } from "../../../../client/src/api/authApi.js";
 
+import { CreateProductBTN } from "../customComponents/createProductBtn";
+
 export function Product() {
   const { data } = useAppContext();
   const [product, setProduct] = useState([]);
@@ -30,9 +32,10 @@ export function Product() {
     }
   }, [data.id]);
 
+  console.log("prodcutl", product);
   return (
     <>
-      <div className="h-[100vh] w-full">
+      <div>
         <div>Product page</div>
         {product.length > 0 ? (
           <div className="h-full">
@@ -44,7 +47,7 @@ export function Product() {
                   className="min-w-[200px] max-w-[200px] bg-white rounded shadow p-4 flex-shrink-0 h-[350px] flex flex-col justify-between"
                 >
                   <img
-                    src={item.imageUrl}
+                    src={item.thumnailImage}
                     alt={item.name}
                     className="h-40 object-cover rounded"
                   />
@@ -68,6 +71,7 @@ export function Product() {
             <p>No products found.</p>
           </div>
         )}
+        {/* <CreateProductBTN /> */}
       </div>
     </>
   );
