@@ -14,6 +14,9 @@ export function Header() {
           ME
         </a>
 
+        <a href="/chat" class={url == "/product" && "active"}>
+          Chat
+        </a>
         <a href="/product" class={url == "/product" && "active"}>
           Product
         </a>
