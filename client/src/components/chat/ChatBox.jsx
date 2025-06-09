@@ -14,6 +14,8 @@ const ChatBox = ({ userId, ownerId, ownerName }) => {
       setMessage((prev) => [...prev, data]);
     };
 
+    // if (!userId || !ownerId) return null;
+
     socket.emit("joinRoom", { userId, ownerId });
     socket.on("receiveMessage", handleMessage);
 
@@ -21,10 +23,10 @@ const ChatBox = ({ userId, ownerId, ownerName }) => {
     axios
       .get(`${API_URL}/chat/${userId}/${ownerId}`)
       .then((res) => {
-        setMessage(res.data?.messages || []); // 👈 fallback to []
+        setMessage(res.data?.messages || []);
       })
       .catch(console.error)
-      .finally(() => setLoading(false)); // 👈 done loading
+      .finally(() => setLoading(false));
 
     return () => {
       socket.off("receiveMessage", handleMessage);
@@ -39,8 +41,9 @@ const ChatBox = ({ userId, ownerId, ownerName }) => {
       type: "TEXT",
       userId,
       ownerId,
+      senderType: "USER",
     };
-
+    console.log("mess", messages);
     socket.emit("sendMessage", newMessage);
     setInput("");
   };
@@ -55,7 +58,7 @@ const ChatBox = ({ userId, ownerId, ownerName }) => {
         Chat with Product Owner: {ownerName}
       </h3>
 
-      <div className="border border-gray-300 h-96 overflow-y-scroll p-3 rounded-md bg-white shadow-sm">
+      <div className="border border-gray-300 h-96 overflow-y-scroll p-3 rounded-md  bg-amber-200">
         {loading ? (
           <div className="text-center text-gray-400 mt-4">Loading chat...</div>
         ) : Array.isArray(messages) && messages.length === 0 ? (
