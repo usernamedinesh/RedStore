@@ -28,8 +28,9 @@ function ChatPage() {
   // access from state
   const location = useLocation();
   const { ownerId, userId } = location.state || {};
-  setUserId(userId);
-  setOwnerID(ownerId);
+  // setUserId(userId);
+  // setSelectedUserId(userId);
+  // setOwnerID(ownerId);
 
   // Use effect to handle socket connection status
   useEffect(() => {

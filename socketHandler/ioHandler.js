@@ -16,40 +16,57 @@ const io = new Server(httpServer, {
   },
 });
 
+const getChatRoomId = (userId, ownerId) => {
+  return `chat_${Math.min(userId, ownerId)}_${Math.max(userId, ownerId)}`;
+};
+
 const initSocket = () => {
   console.log("Socket.io initialized");
 
   io.on("connection", (socket) => {
     console.log(`New client connected: ${socket.id}`);
 
-    // join an specific room
     socket.on("joinRoom", ({ userId, ownerId }) => {
-      const roomId = `chat_${userId}_${ownerId}`;
+      const roomId = getChatRoomId(userId, ownerId);
       socket.join(roomId);
       console.log(`Client ${socket.id} joined room: ${roomId}`);
     });
 
-    // user send an message
     socket.on("sendMessage", async (data) => {
-      const { content, type, userId, ownerId, fileUrl = null } = data;
-      const roomId = `chat_${userId}_${ownerId}`;
+      const {
+        content,
+        type,
+        userId,
+        ownerId,
+        fileUrl = null,
+        senderType,
+      } = data;
+      const roomId = getChatRoomId(userId, ownerId);
 
       try {
-        //save in db
-        const message = await prisma.message.create({
-          data: {
-            text: type === "TEXT" ? content : null,
-            fileUrl: type === "FILE" ? fileUrl : null,
-            type,
-            senderUserId: userId,
-            senderOwnerId: ownerId,
-            chatId: roomId, // NOTE: not migrated  in db right now
-          },
-        });
+        const messageData = {
+          text: type === "TEXT" ? content : null,
+          fileUrl: type === "FILE" ? fileUrl : null,
+          type,
+          chatId: roomId,
+        };
+
+        if (senderType === "USER") {
+          messageData.senderUserId = userId;
+          messageData.receiverOwnerId = ownerId;
+        } else if (senderType === "OWNER") {
+          messageData.senderOwnerId = ownerId;
+          messageData.receiverUserId = userId;
+        } else {
+          throw new Error("Invalid senderType. Must be 'USER' or 'OWNER'");
+        }
+
+        const message = await prisma.message.create({ data: messageData });
+
         io.to(roomId).emit("receiveMessage", message);
       } catch (error) {
         console.error("Error saving message to database:", error);
-        socket.emit("errro", {
+        socket.emit("error", {
           message: "Failed to send message. Please try again later.",
         });
       }
@@ -58,8 +75,6 @@ const initSocket = () => {
     socket.on("disconnect", () => {
       console.log(`Client disconnected: ${socket.id}`);
     });
-
-    // Add more socket event listeners here if needed
   });
 };
 

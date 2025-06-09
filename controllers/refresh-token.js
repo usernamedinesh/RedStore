@@ -17,6 +17,8 @@ const prisma = new PrismaClient();
 
 const authenticateJwtWithAutoRefresh = async (req, res, next) => {
   const authHeader = req.headers.authorization;
+  const refreshToken = req.cookies.refreshToken;
+  console.log("authHeader", refreshToken);
 
   if (!authHeader) {
     return successResponse(res, null, "No auth token", 401);

@@ -6,10 +6,17 @@ const prisma = new PrismaClient();
 
 // NOTE: note tested
 // for fetchig all messages in a chat between user and ownerId
+const normalizeChatId = (uId, oId) => {
+  const [a, b] = [Number(uId), Number(oId)].sort((x, y) => x - y);
+  return `chat_${a}_${b}`;
+};
+
 router.get("/:userId/:ownerId", async (req, res, next) => {
   const { ownerId, userId } = req.params;
   try {
-    const chatId = `chat_${userId}_${ownerId}`;
+    // i don't know  do i need to change here
+    // const chatId = `chat_${userId}_${ownerId}`;
+    const chatId = normalizeChatId(userId, ownerId);
     const message = await prisma.message.findMany({
       where: { chatId },
       orderBy: { sentAt: "asc" },
