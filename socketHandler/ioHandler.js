@@ -63,31 +63,4 @@ const initSocket = () => {
   });
 };
 
-// NOTE: note tested
-router.get("/:userId/:ownerId", async (req, res, next) => {
-  const { ownerId, userId } = req.params;
-  try {
-    const chatId = `chat_${userId}_${ownerId}`;
-    const message = await prisma.message.findMany({
-      where: { chatId },
-      orderBy: { sentAt: "asc" },
-    });
-    successResponse(
-      res,
-      { messages: message },
-      "Chat fetched successfully",
-      200,
-    );
-  } catch (error) {
-    console.error("Error while fetching chat:", error);
-    next(error);
-  }
-});
-
-router.get("/", async (req, res, next) => {
-  res.status(200).json({
-    message: "Welcome to the chat API",
-  });
-});
-
 module.exports = { io, initSocket, router };
