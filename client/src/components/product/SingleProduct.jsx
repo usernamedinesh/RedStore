@@ -1,15 +1,22 @@
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { addToCart } from "../../api/productApi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import ChatBox from "../../components/chat/ChatBox";
+import { useSelector } from "../../redux/store";
 
 export const SingleProduct = () => {
+  document.title = "single_product";
   const queryClient = useQueryClient();
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const { userId } = useSelector((state) => state.auth);
+  const [showChat, setShowChat] = useState(false);
+
+  const navigate = useNavigate();
 
   const { state } = useLocation();
   const product = state?.product || {};
@@ -74,6 +81,20 @@ export const SingleProduct = () => {
 
   //Handle buy now
   //TODO: here todo
+
+  // chat with seller
+  // userId, sellerId
+  // redirect to chat page
+  // i gonne render this in return then my components ChatBox will render
+  const handleChat = (ownerId) => {
+    // userId from token
+    // return <ChatBox userId={userId} ownerId={ownerId} />;
+    // setShowChat(true); // instead of  doing this i can navigate to chat page
+    //navigate to chat
+    navigate("/chat", {
+      state: { ownerId, userId },
+    });
+  };
 
   return (
     <div className="dark:bg-[var(--my-bg)] text-black dark:text-white">
@@ -205,6 +226,15 @@ export const SingleProduct = () => {
           >
             buy now
           </button>
+          <button
+            className="mr-10 px-4 py-2 dark:bg-orange-600 rounded-md bg-orange-600 text-white
+                   transform transition-transform duration-300 ease-in-out
+                   hover:scale-105 hover:shadow-lg"
+            onClick={() => handleChat(product.owner.id)}
+          >
+            Chat with seller
+          </button>
+          {/* {showChat && <ChatBox userId={userId} ownerId={product.owner.id} />} */}
         </div>
       </div>
 

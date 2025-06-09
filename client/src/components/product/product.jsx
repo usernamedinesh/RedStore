@@ -102,7 +102,7 @@ function Product() {
     const productData = { productId, variantId, quantity };
     try {
       const response = await mutateAsync(productData);
-      console.log("Product added to cart:", response);
+      // console.log("Product added to cart:", response);
       queryClient.invalidateQueries(["cart"]);
       toast.success(response.message || "Product added to cart successfully!", {
         position: "top-center",

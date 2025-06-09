@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSocket } from "../context/SocketContext";
-import { useEffect } from "react";
+import { useLocation } from "react-router";
 
 /*
  * i want a feature here when i can toggle this to left or right
@@ -22,6 +22,14 @@ function ChatPage() {
   const [user, setUserId] = useState(users);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
+  const [userID, setUserID] = useState("");
+  const [ownerID, setOwnerID] = useState("");
+
+  // access from state
+  const location = useLocation();
+  const { ownerId, userId } = location.state || {};
+  setUserId(userId);
+  setOwnerID(ownerId);
 
   // Use effect to handle socket connection status
   useEffect(() => {
@@ -65,6 +73,12 @@ function ChatPage() {
     setSelectedUserId(id);
     setChatOpen(true);
   };
+  //NOTE:
+  /*
+   * In the state there is userId and ownerId
+   * it means user is comming directly from the sing_product_page
+   * here direclty need to open that ChatBox with that ownerId
+   */
 
   return (
     <div className="bg-[var(--my-bg)] text-black dark:bg-[var(--my-bg)]  dark:text-white flex  gap-10">

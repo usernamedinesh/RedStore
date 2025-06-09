@@ -1,16 +1,16 @@
 import axios from "axios";
 import socket from "../../socket/socket";
 import { API_URL } from "../../api/axiosInstance";
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const ChatBox = ({ userId, ownerId }) => {
-  const [messages, setMessage] = React.useState([]);
-  const [input, setInput] = React.useState("");
+  const [messages, setMessage] = useState([]);
+  const [input, setInput] = useState("");
   const messagesEndRef = useRef(null);
 
   const roomId = `chat_${userId}_${ownerId}`;
 
-  React.useEffect(() => {
+  useEffect(() => {
     //Join the chat room
     socket.emit("joinRoom", userId, ownerId);
 
