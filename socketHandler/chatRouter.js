@@ -27,15 +27,23 @@ router.get("/:userId/:ownerId", async (req, res, next) => {
       "Chat fetched successfully",
       200,
     );
+    console.log("M", message);
   } catch (error) {
     console.error("Error while fetching chat:", error);
     next(error);
   }
 });
 
-router.get("/partners", authMiddleware, async (req, res, next) => {
+/*
+ * I need to make this function
+ */
+
+// router.get("/partners", authMiddleware, async (req, res, next) => {
+
+exports.getPartners = async (req, res, next) => {
   try {
-    const userId = Number(req.user.id);
+    let userId = req.user?.id ?? req.body?.userId;
+    userId = Number(userId);
 
     const messages = await prisma.message.findMany({
       where: {
@@ -104,7 +112,10 @@ router.get("/partners", authMiddleware, async (req, res, next) => {
     console.error("Error while fetching partners:", error);
     next(error);
   }
-});
+};
+
+router.get("/partners", authMiddleware, exports.getPartners);
+router.get("/admin/partners", exports.getPartners);
 
 router.get("/", async (req, res, next) => {
   res.status(200).json({

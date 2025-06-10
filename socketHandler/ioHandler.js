@@ -10,7 +10,7 @@ const io = new Server(httpServer, {
   pingTimeout: 6000,
   cors: {
     // origin: env.ORIGIN,
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "http://localhost:5174"],
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -27,7 +27,11 @@ const initSocket = () => {
     console.log(`New client connected: ${socket.id}`);
 
     socket.on("joinRoom", ({ userId, ownerId }) => {
+      console.log(
+        `Client ${socket.id} joining room for userId: ${userId}, ownerId: ${ownerId}`,
+      );
       const roomId = getChatRoomId(userId, ownerId);
+      console.log("roomId: ", roomId);
       socket.join(roomId);
       console.log(`Client ${socket.id} joined room: ${roomId}`);
     });
