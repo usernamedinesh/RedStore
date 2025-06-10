@@ -2,12 +2,21 @@ import axios from "axios";
 import socket from "../../socket/socket";
 import { API_URL } from "../../api/axiosInstance";
 import { useEffect, useState, useRef } from "react";
+import { getChatMessages } from "../../api/customApi";
 
 const ChatBox = ({ userId, ownerId, ownerName }) => {
   const [messages, setMessage] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(true); // 👈 loading state
+  const [messageText, setMessageText] = useState("");
+
+  const typingTimeoutRef = useRef(null);
+  const [onlineUsers, setOnlineUsers] = useState([]);
+  const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
+
+  const getChatRoomId = (userId1, userId2) =>
+    `chat_${Math.min(userId1, userId2)}_${Math.max(userId1, userId2)}`;
 
   useEffect(() => {
     const handleMessage = (data) => {
@@ -16,17 +25,35 @@ const ChatBox = ({ userId, ownerId, ownerName }) => {
 
     // if (!userId || !ownerId) return null;
 
+    socket.emit("onlineUser", { userId: userId });
+
+    socket.on("onlineUsers", (users) => {
+      setOnlineUsers(users);
+    });
+
+    socket.on("typing", ({ senderId }) => {
+      if (senderId === ownerId) setIsTyping(true);
+    });
+
+    socket.on("stopTyping", ({ senderId }) => {
+      if (senderId === ownerId) setIsTyping(false);
+    });
     socket.emit("joinRoom", { userId, ownerId });
     socket.on("receiveMessage", handleMessage);
 
     // Fetch message history
-    axios
-      .get(`${API_URL}/chat/${userId}/${ownerId}`)
-      .then((res) => {
-        setMessage(res.data?.messages || []);
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false));
+    const fetchMessages = async () => {
+      try {
+        const response = await getChatMessages(userId, ownerId);
+        const data = await response;
+        setMessage(data.data.messages);
+        setLoading(false); // Set loading to false after fetching messages
+      } catch (error) {
+        console.error("Error fetching messages:", error);
+        setLoading(false);
+      }
+    };
+    fetchMessages();
 
     return () => {
       socket.off("receiveMessage", handleMessage);
@@ -43,7 +70,6 @@ const ChatBox = ({ userId, ownerId, ownerName }) => {
       ownerId,
       senderType: "USER",
     };
-    console.log("mess", messages);
     socket.emit("sendMessage", newMessage);
     setInput("");
   };
@@ -52,13 +78,35 @@ const ChatBox = ({ userId, ownerId, ownerName }) => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  const handleTyping = (e) => {
+    const value = e.target.value;
+    setMessageText(value);
+
+    socket.emit("typing", {
+      roomId: getChatRoomId(userId, ownerId),
+      senderId: userId,
+    });
+
+    clearTimeout(typingTimeoutRef.current);
+    typingTimeoutRef.current = setTimeout(() => {
+      socket.emit("stopTyping", {
+        roomId: getChatRoomId(userId, ownerId),
+        senderId: userId,
+      });
+    }, 1000);
+  };
   return (
     <div className="max-w-xl mx-auto p-4">
-      <h3 className="text-xl font-semibold mb-4 text-white">
-        Chat with Product Owner: {ownerName}
-      </h3>
+      <div className="flex items-center gap-2 mb-4">
+        <h3 className="text-xl font-semibold text-white">{ownerName}</h3>
+        <span
+          className={`h-2 w-2 rounded-full ${
+            onlineUsers.includes(ownerId) ? "bg-green-500" : ""
+          }`}
+        />
+      </div>
 
-      <div className="border border-gray-300 h-96 overflow-y-scroll p-3 rounded-md  bg-amber-200">
+      <div className="border border-gray-300 h-96 overflow-y-scroll p-3 rounded-md  bg-amber-200 ">
         {loading ? (
           <div className="text-center text-gray-400 mt-4">Loading chat...</div>
         ) : Array.isArray(messages) && messages.length === 0 ? (
@@ -74,7 +122,7 @@ const ChatBox = ({ userId, ownerId, ownerName }) => {
               }`}
             >
               {msg.type === "TEXT" ? (
-                <div className="inline-block bg-gray-100 text-sm px-4 py-2 rounded-md max-w-xs break-words">
+                <div className="inline-block bg-gray-100 text-sm px-4 py-2 rounded-md max-w-xs break-words text-black">
                   {msg.text}
                 </div>
               ) : (
@@ -90,13 +138,20 @@ const ChatBox = ({ userId, ownerId, ownerName }) => {
             </div>
           ))
         )}
+        <div className="border-t border-gray-300 pt-2 h-6">
+          {isTyping && (
+            <p className="text-sm italic text-gray-400 ">Typing...</p>
+          )}
+        </div>
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="mt-4 flex gap-2">
+      <div className="mt-10 flex gap-2">
         <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => {
+            setInput(e.target.value);
+            handleTyping(e);
+          }}
           className="flex-1 border border-gray-300 px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
           placeholder="Type a message..."
         />

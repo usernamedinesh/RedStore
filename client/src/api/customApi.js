@@ -11,4 +11,12 @@ export const getParterForChating = async (userId) => {
   }
 };
 
-export const getChatMessages = async (userId, ownerId) => {};
+export const getChatMessages = async (userId, ownerId) => {
+  try {
+    const response = await axiosInstance.get(`/chat/${userId}/${ownerId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching chat messages:", error);
+    throw error;
+  }
+};

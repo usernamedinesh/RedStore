@@ -10,22 +10,26 @@ function ChatPage() {
   const socket = useSocket();
   const [chatOpen, setChatOpen] = useState(false);
   const [ownerID, setOwnerID] = useState(null);
+  const [ownerName, setOwnerName] = useState(null);
   const { userId } = useSelector((state) => state.auth);
 
   const location = useLocation();
   const locationOwnerId = location.state?.ownerId;
+  const locationOwnerName = location.state?.ownerName;
 
   // When coming from product page
   useEffect(() => {
     if (userId && locationOwnerId) {
       setOwnerID(locationOwnerId);
+      setOwnerName(locationOwnerName);
       setChatOpen(true);
     }
   }, [userId, locationOwnerId]);
 
   // When user clicks from list
-  const openChat = (id) => {
+  const openChat = (id, name) => {
     setOwnerID(id);
+    setOwnerName(name);
     setChatOpen(true);
   };
 
@@ -53,8 +57,6 @@ function ChatPage() {
     };
   }, [socket]);
 
-  console.log("owneerId:", ownerID);
-
   return (
     <div className="bg-[var(--my-bg)] text-black dark:bg-[var(--my-bg)] dark:text-white flex gap-10">
       <div className="w-1/6 mt-10 ml-10">
@@ -63,7 +65,7 @@ function ChatPage() {
             data.data.partners.map((u) => (
               <li
                 key={u.id}
-                onClick={() => openChat(u.id)}
+                onClick={() => openChat(u.id, u.name)}
                 className="cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 p-2 rounded"
               >
                 {u.name}
@@ -77,7 +79,7 @@ function ChatPage() {
 
       {chatOpen && ownerID ? (
         <div className="w-2/3 mt-10">
-          <ChatBox userId={userId} ownerId={ownerID} />
+          <ChatBox userId={userId} ownerId={ownerID} ownerName={ownerName} />
         </div>
       ) : (
         <div>
