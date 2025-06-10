@@ -15,13 +15,13 @@ export function Chat() {
     const fetchUsers = async (userId) => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/chat/partners",
+          "http://localhost:3000/chat/admin/partners",
           { userId },
         );
-        if (!response.ok) {
-          throw new Error("Failed to fetch users");
+        if (response.status === 200) {
+          const users = response.data;
+          console.log("Fetched users:", users);
         }
-        console.log(response);
       } catch (error) {
         console.error("Error fetching users:", error);
       }
