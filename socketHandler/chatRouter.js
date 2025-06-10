@@ -11,7 +11,8 @@ const normalizeChatId = (uId, oId) => {
   return `chat_${a}_${b}`;
 };
 
-router.get("/:userId/:ownerId", async (req, res, next) => {
+// router.get("/:userId/:ownerId", async (req, res, next) => {
+exports.getChat = async (req, res, next) => {
   const { ownerId, userId } = req.params;
   try {
     // i don't know  do i need to change here
@@ -32,7 +33,7 @@ router.get("/:userId/:ownerId", async (req, res, next) => {
     console.error("Error while fetching chat:", error);
     next(error);
   }
-});
+};
 
 /*
  * I need to make this function
@@ -43,11 +44,17 @@ router.get("/:userId/:ownerId", async (req, res, next) => {
 exports.getPartners = async (req, res, next) => {
   try {
     let userId = req.user?.id ?? req.body?.userId;
-    userId = Number(userId);
 
+    userId = Number(userId);
+    console.log("User ID:", userId);
     const messages = await prisma.message.findMany({
       where: {
-        OR: [{ senderUserId: userId }, { receiverUserId: userId }],
+        OR: [
+          { senderUserId: userId },
+          { receiverUserId: userId },
+          { senderOwnerId: userId },
+          { receiverOwnerId: userId },
+        ],
       },
       select: {
         senderUser: { select: { id: true, name: true } },
@@ -56,14 +63,18 @@ exports.getPartners = async (req, res, next) => {
         receiverOwner: { select: { id: true, name: true } },
       },
     });
+    console.log("Messages:", messages);
 
     const partnersMap = new Map();
 
     for (const msg of messages) {
       const { senderUser, receiverUser, senderOwner, receiverOwner } = msg;
 
-      // Current user sent the message
-      if (senderUser && senderUser.id === userId) {
+      // Case 1: Current user is sender
+      if (
+        (senderUser && senderUser.id === userId) ||
+        (senderOwner && senderOwner.id === userId)
+      ) {
         if (receiverUser)
           partnersMap.set(`user-${receiverUser.id}`, {
             ...receiverUser,
@@ -72,6 +83,23 @@ exports.getPartners = async (req, res, next) => {
         if (receiverOwner)
           partnersMap.set(`owner-${receiverOwner.id}`, {
             ...receiverOwner,
+            role: "OWNER",
+          });
+      }
+
+      // Case 2: Current user is receiver
+      if (
+        (receiverUser && receiverUser.id === userId) ||
+        (receiverOwner && receiverOwner.id === userId)
+      ) {
+        if (senderUser)
+          partnersMap.set(`user-${senderUser.id}`, {
+            ...senderUser,
+            role: "USER",
+          });
+        if (senderOwner)
+          partnersMap.set(`owner-${senderOwner.id}`, {
+            ...senderOwner,
             role: "OWNER",
           });
       }
@@ -114,8 +142,9 @@ exports.getPartners = async (req, res, next) => {
   }
 };
 
+router.post("/admin/partners", exports.getPartners);
 router.get("/partners", authMiddleware, exports.getPartners);
-router.get("/admin/partners", exports.getPartners);
+router.get("/:userId/:ownerId", exports.getChat);
 
 router.get("/", async (req, res, next) => {
   res.status(200).json({
