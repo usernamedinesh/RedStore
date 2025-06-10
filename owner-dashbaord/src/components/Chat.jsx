@@ -5,18 +5,34 @@ import axios from "axios";
 
 export function Chat() {
   const socket = useSocket();
+  const { data } = useAppContext();
   const [chatUser, setChatUser] = useState([]);
   const [chatMessages, setChatMessages] = useState([]);
   const [messageText, setMessageText] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
-  const { data } = useAppContext();
-
+  const [onlineUsers, setOnlineUsers] = useState([]);
+  const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
+  const typingTimeoutRef = useRef(null);
 
-  // Connect socket and listen for messages
+  const getChatRoomId = (userId1, userId2) =>
+    `chat_${Math.min(userId1, userId2)}_${Math.max(userId1, userId2)}`;
+
   useEffect(() => {
     socket.connect();
-    console.log("Connecting to socket...");
+    socket.emit("onlineUser", { userId: data.id });
+
+    socket.on("onlineUsers", (users) => {
+      setOnlineUsers(users);
+    });
+
+    socket.on("typing", ({ senderId }) => {
+      if (senderId === selectedUser) setIsTyping(true);
+    });
+
+    socket.on("stopTyping", ({ senderId }) => {
+      if (senderId === selectedUser) setIsTyping(false);
+    });
 
     const handleMessage = (message) => {
       setChatMessages((prev) => [...prev, message]);
@@ -28,9 +44,7 @@ export function Chat() {
       try {
         const res = await axios.post(
           "http://localhost:3000/chat/admin/partners",
-          {
-            userId: data.id,
-          },
+          { userId: data.id },
         );
         if (res.status === 200) {
           setChatUser(res.data.data.partners);
@@ -44,12 +58,13 @@ export function Chat() {
 
     return () => {
       socket.off("receiveMessage", handleMessage);
+      socket.off("onlineUsers");
+      socket.off("typing");
+      socket.off("stopTyping");
       socket.disconnect();
-      console.log("Socket disconnected");
     };
-  }, []);
+  }, [selectedUser]);
 
-  // Join room and fetch messages when selected user changes
   useEffect(() => {
     if (!selectedUser) return;
 
@@ -69,12 +84,10 @@ export function Chat() {
     fetchMessages();
   }, [selectedUser]);
 
-  // Auto-scroll on new message
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatMessages]);
 
-  // Send message through socket
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (!messageText.trim() || !selectedUser) return;
@@ -84,11 +97,33 @@ export function Chat() {
       type: "TEXT",
       userId: selectedUser,
       ownerId: data.id,
-      senderType: "OWNER", // or "USER" based on current user's role
+      senderType: "OWNER",
     };
 
     socket.emit("sendMessage", messagePayload);
     setMessageText("");
+    socket.emit("stopTyping", {
+      roomId: getChatRoomId(selectedUser, data.id),
+      senderId: data.id,
+    });
+  };
+
+  const handleTyping = (e) => {
+    const value = e.target.value;
+    setMessageText(value);
+
+    socket.emit("typing", {
+      roomId: getChatRoomId(selectedUser, data.id),
+      senderId: data.id,
+    });
+
+    clearTimeout(typingTimeoutRef.current);
+    typingTimeoutRef.current = setTimeout(() => {
+      socket.emit("stopTyping", {
+        roomId: getChatRoomId(selectedUser, data.id),
+        senderId: data.id,
+      });
+    }, 1000);
   };
 
   return (
@@ -108,35 +143,43 @@ export function Chat() {
               <li
                 key={user.id}
                 onClick={() => setSelectedUser(user.id)}
-                className={`p-2 rounded cursor-pointer ${
+                className={`p-2 rounded cursor-pointer flex justify-between items-center ${
                   selectedUser === user.id
                     ? "bg-blue-200"
                     : "bg-gray-100 hover:bg-blue-100"
                 }`}
               >
-                {user.name}
+                <span>{user.name}</span>
+                <span
+                  className={`h-2 w-2 rounded-full ${
+                    onlineUsers.includes(user.id)
+                      ? "bg-green-500"
+                      : "bg-gray-400"
+                  }`}
+                />
               </li>
             ))}
           </ul>
         </aside>
 
-        {/* Chat Messages */}
+        {/* Main Chat */}
         <main className="flex-1 bg-white flex flex-col">
           <div className="flex-1 p-4 overflow-y-auto space-y-2">
             {chatMessages.length > 0 ? (
               chatMessages.map((msg, idx) => {
                 const isOwnerMessage = msg.senderOwnerId === data.id;
-
                 return (
                   <div
                     key={idx}
-                    className={`flex ${isOwnerMessage ? "justify-end ml-100" : "justify-start"}`}
+                    className={`flex ${
+                      isOwnerMessage ? "justify-end" : "justify-start"
+                    }`}
                   >
                     <div
                       className={`max-w-xs p-2 rounded-lg ${
                         isOwnerMessage
-                          ? "bg-blue-500 text-white self-end"
-                          : "bg-gray-200 text-black self-start"
+                          ? "bg-blue-500 text-white"
+                          : "bg-gray-200 text-black"
                       }`}
                     >
                       {msg.text || msg.content}
@@ -147,10 +190,16 @@ export function Chat() {
             ) : (
               <p className="text-gray-500">Start chatting...</p>
             )}
+            <div className="h-7 text-end">
+              {isTyping && (
+                <p className="text-sm italic text-gray-400 mt-2 h-7">
+                  Typing...
+                </p>
+              )}
+            </div>
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input Form */}
           <form
             onSubmit={handleSendMessage}
             className="p-4 border-t border-gray-200 flex gap-2"
@@ -158,7 +207,7 @@ export function Chat() {
             <input
               type="text"
               value={messageText}
-              onChange={(e) => setMessageText(e.target.value)}
+              onInput={handleTyping}
               placeholder="Type a message..."
               className="flex-1 p-2 border border-gray-300 rounded text-black"
             />
