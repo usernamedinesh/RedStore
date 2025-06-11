@@ -28,7 +28,6 @@ exports.getChat = async (req, res, next) => {
       "Chat fetched successfully",
       200,
     );
-    console.log("M", message);
   } catch (error) {
     console.error("Error while fetching chat:", error);
     next(error);
@@ -46,7 +45,6 @@ exports.getPartners = async (req, res, next) => {
     let userId = req.user?.id ?? req.body?.userId;
 
     userId = Number(userId);
-    console.log("User ID:", userId);
     const messages = await prisma.message.findMany({
       where: {
         OR: [
@@ -63,7 +61,6 @@ exports.getPartners = async (req, res, next) => {
         receiverOwner: { select: { id: true, name: true } },
       },
     });
-    console.log("Messages:", messages);
 
     const partnersMap = new Map();
 

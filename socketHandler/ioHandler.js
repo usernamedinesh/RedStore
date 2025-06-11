@@ -20,18 +20,23 @@ const getChatRoomId = (userId, ownerId) => {
   return `chat_${Math.min(userId, ownerId)}_${Math.max(userId, ownerId)}`;
 };
 
+const onlineUsers = new Map();
 const initSocket = () => {
   console.log("Socket.io initialized");
 
   io.on("connection", (socket) => {
     console.log(`New client connected: ${socket.id}`);
 
+    socket.on("onlineUser", ({ userId }) => {
+      onlineUsers.set(userId, socket.id);
+      io.emit("onlineUsers", Array.from(onlineUsers.keys()));
+    });
+
     socket.on("joinRoom", ({ userId, ownerId }) => {
       console.log(
         `Client ${socket.id} joining room for userId: ${userId}, ownerId: ${ownerId}`,
       );
       const roomId = getChatRoomId(userId, ownerId);
-      console.log("roomId: ", roomId);
       socket.join(roomId);
       console.log(`Client ${socket.id} joined room: ${roomId}`);
     });
@@ -76,7 +81,23 @@ const initSocket = () => {
       }
     });
 
+    socket.on("typing", ({ roomId, senderId }) => {
+      socket.to(roomId).emit("typing", { senderId });
+    });
+
+    socket.on("stopTyping", ({ roomId, senderId }) => {
+      socket.to(roomId).emit("stopTyping", { senderId });
+    });
+
     socket.on("disconnect", () => {
+      for (let [userId, id] of onlineUsers.entries()) {
+        if (id === socket.id) {
+          onlineUsers.delete(userId);
+          io.emit("onlineUsers", Array.from(onlineUsers.keys()));
+          break;
+        }
+      }
+      socket.leaveAll();
       console.log(`Client disconnected: ${socket.id}`);
     });
   });
