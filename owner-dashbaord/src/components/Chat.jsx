@@ -152,9 +152,7 @@ export function Chat() {
                 <span>{user.name}</span>
                 <span
                   className={`h-2 w-2 rounded-full ${
-                    onlineUsers.includes(user.id)
-                      ? "bg-green-500"
-                      : "bg-gray-400"
+                    onlineUsers.includes(user.id) ? "bg-green-500" : ""
                   }`}
                 />
               </li>
