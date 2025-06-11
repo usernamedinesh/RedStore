@@ -10,84 +10,97 @@ const io = new Server(httpServer, {
   pingTimeout: 6000,
   cors: {
     // origin: env.ORIGIN,
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "http://localhost:5174"],
     methods: ["GET", "POST"],
     credentials: true,
   },
 });
 
+const getChatRoomId = (userId, ownerId) => {
+  return `chat_${Math.min(userId, ownerId)}_${Math.max(userId, ownerId)}`;
+};
+
+const onlineUsers = new Map();
 const initSocket = () => {
   console.log("Socket.io initialized");
 
   io.on("connection", (socket) => {
     console.log(`New client connected: ${socket.id}`);
 
-    // join an specific room
+    socket.on("onlineUser", ({ userId }) => {
+      onlineUsers.set(userId, socket.id);
+      io.emit("onlineUsers", Array.from(onlineUsers.keys()));
+    });
+
     socket.on("joinRoom", ({ userId, ownerId }) => {
-      const roomId = `chat_${userId}_${ownerId}`;
+      console.log(
+        `Client ${socket.id} joining room for userId: ${userId}, ownerId: ${ownerId}`,
+      );
+      const roomId = getChatRoomId(userId, ownerId);
       socket.join(roomId);
       console.log(`Client ${socket.id} joined room: ${roomId}`);
     });
 
-    // user send an message
     socket.on("sendMessage", async (data) => {
-      const { content, type, userId, ownerId, fileUrl = null } = data;
-      const roomId = `chat_${userId}_${ownerId}`;
+      const {
+        content,
+        type,
+        userId,
+        ownerId,
+        fileUrl = null,
+        senderType,
+      } = data;
+      const roomId = getChatRoomId(userId, ownerId);
 
       try {
-        //save in db
-        const message = await prisma.message.create({
-          data: {
-            text: type === "TEXT" ? content : null,
-            fileUrl: type === "FILE" ? fileUrl : null,
-            type,
-            senderUserId: userId,
-            senderOwnerId: ownerId,
-            chatId: roomId, // NOTE: not migrated  in db right now
-          },
-        });
+        const messageData = {
+          text: type === "TEXT" ? content : null,
+          fileUrl: type === "FILE" ? fileUrl : null,
+          type,
+          chatId: roomId,
+        };
+
+        if (senderType === "USER") {
+          messageData.senderUserId = userId;
+          messageData.receiverOwnerId = ownerId;
+        } else if (senderType === "OWNER") {
+          messageData.senderOwnerId = ownerId;
+          messageData.receiverUserId = userId;
+        } else {
+          throw new Error("Invalid senderType. Must be 'USER' or 'OWNER'");
+        }
+
+        const message = await prisma.message.create({ data: messageData });
+
         io.to(roomId).emit("receiveMessage", message);
       } catch (error) {
         console.error("Error saving message to database:", error);
-        socket.emit("errro", {
+        socket.emit("error", {
           message: "Failed to send message. Please try again later.",
         });
       }
     });
 
+    socket.on("typing", ({ roomId, senderId }) => {
+      socket.to(roomId).emit("typing", { senderId });
+    });
+
+    socket.on("stopTyping", ({ roomId, senderId }) => {
+      socket.to(roomId).emit("stopTyping", { senderId });
+    });
+
     socket.on("disconnect", () => {
+      for (let [userId, id] of onlineUsers.entries()) {
+        if (id === socket.id) {
+          onlineUsers.delete(userId);
+          io.emit("onlineUsers", Array.from(onlineUsers.keys()));
+          break;
+        }
+      }
+      socket.leaveAll();
       console.log(`Client disconnected: ${socket.id}`);
     });
-
-    // Add more socket event listeners here if needed
   });
 };
-
-// NOTE: note tested
-router.get("/:userId/:ownerId", async (req, res, next) => {
-  const { ownerId, userId } = req.params;
-  try {
-    const chatId = `chat_${userId}_${ownerId}`;
-    const message = await prisma.message.findMany({
-      where: { chatId },
-      orderBy: { sentAt: "asc" },
-    });
-    successResponse(
-      res,
-      { messages: message },
-      "Chat fetched successfully",
-      200,
-    );
-  } catch (error) {
-    console.error("Error while fetching chat:", error);
-    next(error);
-  }
-});
-
-router.get("/", async (req, res, next) => {
-  res.status(200).json({
-    message: "Welcome to the chat API",
-  });
-});
 
 module.exports = { io, initSocket, router };

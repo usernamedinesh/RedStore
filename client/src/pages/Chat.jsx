@@ -1,123 +1,89 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSocket } from "../context/SocketContext";
-import { useEffect } from "react";
+import { useLocation } from "react-router";
+import { useQuery } from "@tanstack/react-query";
+import { getParterForChating } from "../api/customApi";
+import ChatBox from "../components/chat/ChatBox";
+import { useSelector } from "../redux/store";
 
-/*
- * i want a feature here when i can toggle this to left or right
- * i dont know how to do this but i want here
- * i can toggle the users list  left or right
- */
-const users = [
-  { name: "dinesh", id: 1 },
-  { name: "Ramesh", id: 2 },
-  { name: "sures", id: 3 },
-  { name: "Ansri", id: 4 },
-  { name: "priya", id: 5 },
-];
-
-// DO i need to connect socket here
 function ChatPage() {
   const socket = useSocket();
   const [chatOpen, setChatOpen] = useState(false);
-  const [user, setUserId] = useState(users);
-  const [selectedUserId, setSelectedUserId] = useState(null);
-  const [isConnected, setIsConnected] = useState(false);
+  const [ownerID, setOwnerID] = useState(null);
+  const [ownerName, setOwnerName] = useState(null);
+  const { userId } = useSelector((state) => state.auth);
 
-  // Use effect to handle socket connection status
+  const location = useLocation();
+  const locationOwnerId = location.state?.ownerId;
+  const locationOwnerName = location.state?.ownerName;
+
+  // When coming from product page
   useEffect(() => {
-    if (!socket) {
-      console.warn("Socket is not available");
-      return;
+    if (userId && locationOwnerId) {
+      setOwnerID(locationOwnerId);
+      setOwnerName(locationOwnerName);
+      setChatOpen(true);
     }
-    // Log the current status of the socket when the component renders/mounts
-    console.log(
-      `ChatPage: Initial socket status - Connected: ${socket.connected}, ID: ${socket.id || "N/A"}`,
-    );
-    if (!socket.connected) {
-      console.log("ChatPage: Connecting socket...");
-      socket.connect();
-      setIsConnected(true);
-    } else {
-      console.log("ChatPage: Socket is already connected.");
-      setIsConnected(true);
-    }
+  }, [userId, locationOwnerId]);
 
-    const onConnect = () => {
-      // This code will run ONLY when the 'connect' event is emitted by the socket
-      setIsConnected(true);
-      console.log(`ChatPage: Socket connected successfully! ID: ${socket.id}`);
-      // Any other logic you want to execute immediately upon connection
-      // e.g., socket.emit('joinRoom', { userId: '...', ownerId: '...' });
-    };
-    const onDisconnect = () => setIsConnected(false);
-
-    socket.on("connect", onConnect);
-    socket.on("disconnect", onDisconnect);
-
-    return () => {
-      // Cleanup function to remove event listeners if needed
-      socket.off("connect", onConnect);
-      socket.off("connection", onDisconnect);
-    };
-  }, [socket]);
-
-  const openChat = (id) => {
-    setSelectedUserId(id);
+  // When user clicks from list
+  const openChat = (id, name) => {
+    setOwnerID(id);
+    setOwnerName(name);
     setChatOpen(true);
   };
 
+  const { data } = useQuery({
+    queryKey: ["partners", userId],
+    queryFn: () => getParterForChating(userId),
+    enabled: !!userId, // Avoid fetching with null userId
+  });
+
+  // Socket connection (optional improvement)
+  useEffect(() => {
+    if (!socket) return;
+
+    if (!socket.connected) socket.connect();
+
+    const handleConnect = () => console.log("Socket connected:", socket.id);
+    const handleDisconnect = () => console.log("Socket disconnected");
+
+    socket.on("connect", handleConnect);
+    socket.on("disconnect", handleDisconnect);
+
+    return () => {
+      socket.off("connect", handleConnect);
+      socket.off("disconnect", handleDisconnect);
+    };
+  }, [socket]);
+
   return (
-    <div className="bg-[var(--my-bg)] text-black dark:bg-[var(--my-bg)]  dark:text-white flex  gap-10">
+    <div className="bg-[var(--my-bg)] text-black dark:bg-[var(--my-bg)] dark:text-white flex gap-10">
       <div className="w-1/6 mt-10 ml-10">
-        {/*list of users to chat */}
         <ul className="text-xl">
-          {user.map((u) => {
-            return (
+          {data?.data?.partners?.length > 0 ? (
+            data.data.partners.map((u) => (
               <li
                 key={u.id}
-                onClick={() => {
-                  openChat(u.id);
-                }}
+                onClick={() => openChat(u.id, u.name)}
                 className="cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 p-2 rounded"
               >
                 {u.name}
               </li>
-            );
-          })}
+            ))
+          ) : (
+            <li className="text-gray-500">No chat partners found.</li>
+          )}
         </ul>
       </div>
-      {/* actual chat */}
-      {chatOpen ? (
-        <div className="flex-1 p-4">
-          <h1 className="text-2xl font-bold mb-4">Welcome to Chat!</h1>
-          {/* This is where your chat messages, input field, etc., will go */}
-          <div className="border border-gray-300 dark:border-gray-600 p-4 h-64 overflow-y-auto mb-4 rounded">
-            {/* Example chat messages */}
 
-            <div>
-              {selectedUserId ? (
-                <div>
-                  <p className="text-gray-500">
-                    User {user.find((u) => u.id === selectedUserId).name}:
-                    Hello!
-                  </p>
-                  <p> Hey there!</p>
-                </div>
-              ) : (
-                <div></div>
-              )}
-            </div>
-          </div>
-          {/* Chat input field */}
-          <input
-            type="text"
-            placeholder="Type your message..."
-            className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+      {chatOpen && ownerID ? (
+        <div className="w-2/3 mt-10">
+          <ChatBox userId={userId} ownerId={ownerID} ownerName={ownerName} />
         </div>
       ) : (
         <div>
-          <h1 className="text-2xl font-bold mb-4">Feel Free To Caht Here </h1>
+          <h1 className="text-2xl font-bold mb-4">Feel Free To Chat Here</h1>
           <p className="text-gray-500">Click on a user to start chatting.</p>
         </div>
       )}

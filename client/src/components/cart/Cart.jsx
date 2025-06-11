@@ -1,8 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getCartProduct, removeProductCart } from "../../api/productApi";
+import { toast } from "react-toastify";
 
 // fetch all product that are in the db
 // of cart
@@ -11,6 +12,14 @@ function CartPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const { userId, token } = useSelector((state) => state.auth);
+  const queryClient = useQueryClient();
+
+  const { mutateAsync: removeFromCart } = useMutation({
+    mutationFn: removeProductCart,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["cart"]);
+    },
+  });
 
   useEffect(() => {
     if ((!userId || !token) && location.pathname !== "/login") {
@@ -28,7 +37,7 @@ function CartPage() {
     error,
   } = useQuery({
     queryKey: ["cart"],
-    queryFn: () => getCartProduct(),
+    queryFn: getCartProduct,
     enabled: true,
   });
 
@@ -52,26 +61,30 @@ function CartPage() {
 
   let variantt;
   cartProduct.map((p) => {
-    console.log("proId", p.product.id);
-    // console.log("cart", p.variants_in_cart);
     p.variants_in_cart.forEach((variant) => {
       variantt = variant;
     });
   });
 
+  // console.log("variantt", variantt);
+  // console.log("cartProduct", cartProduct);
+
+  // lets user react-query so it manages the state of the cart products
   const handleRemove = async (p, v) => {
-    console.log("pid", p);
+    // console.log("pid", p);
     // console.log("vid", v);
-    // const response = await removeProductCart(v);
-    // console.log("response: ", response);
-    // After removing product from cart
-    // remove from cartProduct too
-    const cartProducts = cartProduct.filter((p) => p.product.id !== p);
-    console.log("after :", cartProducts);
+    // const response = await removeProductCart(v); // no need this
+    const response = await removeFromCart(v); // use the mutation to remove from cart
+    toast.success("Product removed from cart successfully!", {
+      position: "top-center",
+      autoClose: 1500,
+    });
   };
+
+  //TODO: handle remove product from cart
   const handleBuy = (p, v) => {
-    console.log("pid", p);
-    console.log("vid", v);
+    // console.log("pid", p);
+    // console.log("vid", v);
   };
 
   return (
@@ -82,55 +95,75 @@ function CartPage() {
             Updating cart products...
           </div>
         ) : (
-          <div className="text-center dark:text-white text-black font-bold text-lg mt-5">
-            Cart has {cartProduct.length} products
+          <div className="">
+            <div className="text-center dark:text-white text-black font-bold text-lg mt-5">
+              Cart has {cartProduct.length} products
+            </div>
+            <div className=" text-end">
+              <span
+                className="  text-gray-900 dark:text-back bg-gradient-to-r
+                    from-teal-300 to-lime-300 hover:bg-gradient-to-l hover:from-teal-400
+                    hover:to-lime-400 focus:ring-4 focus:outline-none
+                    focus:ring-lime-300 dark:focus:ring-teal-700 font-medium rounded-lg
+                    text-sm px-10 py-2.5 text-center me-2 transform transition-transform
+                    duration-300 ease-in-out hover:scale-105 hover:shadow-lg shadow-md
+                    dark:shadow-lg"
+                onClick={() => navigate(-1)}
+              >
+                back
+              </span>
+            </div>
           </div>
         )}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-7 max-w-[1400px] mx-auto px-4 lg:h-[500px] w-[360px] sm:w-full">
-        {cartProduct.map((product) => (
-          <div
-            key={product.id}
-            className="cursor-pointer border p-4 rounded-lg shadow-md hover:shadow-xl 
-                     flex flex-col items-center text-center duration-300 ease-in-out 
-                     hover:-translate-y-1 hover:scale-105 transition-all h-full"
-          >
-            <img
-              src={variantt.variant.images[0].url}
-              alt={product.name}
-              className="w-full h-32 object-contain mb-2"
-            />
-            <h3 className="font-bold text-lg mb-1">{product.product.name}</h3>
-            <p className="font-bold text-lg mb-1">
-              price: {variantt.variant.price}
-            </p>
-            <p className="font-bold text-lg mb-1">
-              color: {variantt.variant.color}
-            </p>
-            <p className="font-bold text-lg mb-1">
-              size: {variantt.variant.size}
-            </p>
-            {/* Add buttons for remove and buy now */}
-            <div className="justify-between gap-4 mt-3">
-              <button
-                className="bg-red-500 text-white px-4 py-2 rounded mr-4"
-                onClick={() =>
-                  handleRemove(product.product.id, variantt.variant.id)
-                }
-              >
-                Remove
-              </button>
-              <button
-                className="bg-green-500 text-white px-4 py-2 rounded ml-4"
-                onClick={() =>
-                  handleBuy(product.product.id, variantt.variant.id)
-                }
-              >
-                Buy Now
-              </button>
+        {cartProduct.map((product) =>
+          product.variants_in_cart.map((variantItem) => (
+            <div
+              key={`${product.product.id}-${variantItem.variant.id}`}
+              className="cursor-pointer border p-4 rounded-lg shadow-md hover:shadow-xl 
+                 flex flex-col items-center text-center duration-300 ease-in-out 
+                 hover:-translate-y-1 hover:scale-105 transition-all h-full"
+            >
+              <img
+                src={variantItem.variant.images[0].url}
+                alt={product.product.name}
+                className="w-full h-32 object-contain mb-2"
+              />
+              <h3 className="font-bold text-lg mb-1">{product.product.name}</h3>
+              <p className="font-bold text-lg mb-1">
+                price: {variantItem.variant.price}
+              </p>
+              <p className="font-bold text-lg mb-1">
+                color: {variantItem.variant.color}
+              </p>
+              <p className="font-bold text-lg mb-1">
+                size: {variantItem.variant.size}
+              </p>
+              <p className="font-bold text-lg mb-1">
+                quantity: {variantItem.quantity}
+              </p>
+              <div className="justify-between gap-4 mt-3">
+                <button
+                  className="bg-red-500 text-white px-4 py-2 rounded mr-4"
+                  onClick={() =>
+                    handleRemove(product.product.id, variantItem.variant.id)
+                  }
+                >
+                  Remove
+                </button>
+                <button
+                  className="bg-green-500 text-white px-4 py-2 rounded ml-4"
+                  onClick={() =>
+                    handleBuy(product.product.id, variantItem.variant.id)
+                  }
+                >
+                  Buy Now
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          )),
+        )}
       </div>
       <div className="text-center mt-4">
         {cartProduct.length === 0 ? (

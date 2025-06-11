@@ -51,13 +51,8 @@ export function Home() {
         <div class="home ">
           <div>
             <Product />
+            <CreateProductBTN />
           </div>
-          <div>
-            <h1>WELCOMPE TO DASHBOARD</h1>
-          </div>
-
-          {/* <VerifyPage /> */}
-          <CreateProductBTN />
         </div>
       ) : (
         <div class="home">

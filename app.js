@@ -8,7 +8,7 @@ const adminProductRoute = require("./router/admin/productRoute");
 const addressRoute = require("./router/order");
 const cart = require("./router/admin/addTocart");
 const productRoute = require("./router//product.route");
-// const { router: messageRoute } = require("./socketHandler/ioHandler");
+const messageRoute = require("./socketHandler/chatRouter");
 
 const errorHandler = require("./middleware/errorHandler");
 const rateLimiter = require("./middleware/rateLimiter");
@@ -32,7 +32,7 @@ app.use("/owner", productOwerRoute);
 app.use("/api", userRoute, productRoute);
 app.use("/api/user", addressRoute, cart);
 app.use("/admin", adminRoute, adminProductRoute);
-// app.use("/chat", messageRoute);
+app.use("/chat", messageRoute);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

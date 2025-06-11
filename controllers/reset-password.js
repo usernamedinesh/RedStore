@@ -69,10 +69,38 @@ exports.sendOtpFornewpassword = catchAsync(async (req, res, next) => {
       return next(new Error("Email or phone number is required"));
     }
 
-    const user = await prisma.user.findUnique({ where: findCondition });
+    // const user = await prisma.user.findUnique({ where: findCondition });
+    let user = await prisma.user.findUnique({ where: findCondition });
+    // for productOwner password reset
     if (!user) {
-      return next(new Error("user not exist !"));
+      user = await prisma.productOwner.findUnique({
+        where: findCondition,
+      });
+      if (!user) {
+        return next(new Error("user not exist !"));
+      }
+
+      // lets send the otp to user
+      // and save the data to db
+
+      const otp = generateOtp();
+
+      // const data = await prisma.productOwner.update({
+      //   where: { id: user.id },
+      //   data: {
+      //     otp,
+      //     otpCreatedAt: new Date(Date.now() + 1 * 60 * 1000), // ✅ corrected here
+      //   },
+      // });
+      // TODO : here need to send the email/sms OTP
+      return successResponse(
+        res,
+        otp,
+        "OTP sended for reset-password verification for product owner!",
+        201,
+      );
     }
+
     const otp = generateOtp();
 
     const data = await prisma.user.update({
@@ -113,9 +141,40 @@ exports.newPassword = catchAsync(async (req, res, next) => {
       return next(new Error("Email or phone number is required"));
     }
 
-    const user = await prisma.user.findUnique({ where: findCondition });
+    // const user = await prisma.user.findUnique({ where: findCondition });
+    // user is not exist
+    // then check he is OWNER
+    // if owner is not exist then return error
+    let user = await prisma.user.findUnique({ where: findCondition });
     if (!user) {
-      return next(new Error("user not exist !"));
+      user = await prisma.productOwner.findUnique({
+        where: findCondition,
+      });
+      if (!user) {
+        return next(new Error("user not exist !"));
+      }
+
+      // there is not otp right becuse db is not  migrated
+      // if (otp != user.otp) {
+      //   return next(new Error("Incorrect OTP!"));
+      // }
+      const newPassword = await bcrypt.hash(password, 10);
+
+      await prisma.productOwner.update({
+        where: { id: user.id },
+        data: {
+          password: newPassword,
+          // not need right now
+          // otp: null,
+          // otpCreatedAt: null,
+        },
+      });
+      return successResponse(
+        res,
+        newPassword,
+        "Password Changed succussfully for product owner!",
+        201,
+      );
     }
     /* check here otp is matchd or nto
      * otp expiration time

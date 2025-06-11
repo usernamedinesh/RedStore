@@ -76,8 +76,8 @@ export default function ModalForm({ onClose }) {
   };
 
   return createPortal(
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white text-black p-6 rounded-lg w-full max-w-md mx-auto shadow-lg">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 w-full overflow-auto h-screen">
+      <div className="bg-white text-black p-6 rounded-lg w-full  mx-auto shadow-lg w-full max-w-3xl overflow-auto h-screen">
         <h2 className="text-xl font-bold mb-4">Create Product</h2>
         <form
           onSubmit={(e) => {
@@ -85,43 +85,52 @@ export default function ModalForm({ onClose }) {
             // handle submit
             console.log("Submitted");
           }}
+          className="h-full w-full"
         >
-          <input
-            name="name"
-            placeholder="Product Name"
-            onChange={handleProductChange}
-          />
-          <input
-            name="description"
-            placeholder="Description"
-            onChange={handleProductChange}
-          />
-          <input
-            name="categoryName"
-            placeholder="Category Name"
-            onChange={handleProductChange}
-          />
-          <input
-            name="brandName"
-            placeholder="Brand"
-            onChange={handleProductChange}
-          />
-          <input
-            name="gender"
-            placeholder="Gender"
-            onChange={handleProductChange}
-          />
-          <input
-            name="basePrice"
-            type="number"
-            placeholder="Base Price"
-            onChange={handleProductChange}
-          />
+          <div className="space-y-4">
+            <input
+              name="name"
+              placeholder="Product Name"
+              onChange={handleProductChange}
+              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              name="description"
+              placeholder="Description"
+              onChange={handleProductChange}
+              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              name="categoryName"
+              placeholder="Category Name"
+              onChange={handleProductChange}
+              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              name="brandName"
+              placeholder="Brand"
+              onChange={handleProductChange}
+              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              name="gender"
+              placeholder="Gender"
+              onChange={handleProductChange}
+              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <input
+              name="basePrice"
+              type="number"
+              placeholder="Base Price"
+              onChange={handleProductChange}
+              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
           <h3 className="text-lg font-semibold">Variants</h3>
           {product.variants.map((variant, index) => (
             <div
               key={index}
-              className="border p-4 rounded space-y-2 bg-gray-100"
+              className="border px-4 rounded space-y-2 bg-gray-100 py-2"
             >
               <input
                 placeholder="Size"
@@ -129,6 +138,7 @@ export default function ModalForm({ onClose }) {
                 onChange={(e) =>
                   handleVariantChange(index, "size", e.target.value)
                 }
+                className="w-1/2 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <input
                 placeholder="Color"
@@ -136,6 +146,7 @@ export default function ModalForm({ onClose }) {
                 onChange={(e) =>
                   handleVariantChange(index, "color", e.target.value)
                 }
+                className="w-1/2 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <input
                 placeholder="Stock"
@@ -144,6 +155,7 @@ export default function ModalForm({ onClose }) {
                 onChange={(e) =>
                   handleVariantChange(index, "stock", e.target.value)
                 }
+                className="w-1/2 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <input
                 placeholder="Price"
@@ -152,6 +164,7 @@ export default function ModalForm({ onClose }) {
                 onChange={(e) =>
                   handleVariantChange(index, "price", e.target.value)
                 }
+                className="w-1/2 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <input
                 placeholder="SKU"
@@ -159,6 +172,7 @@ export default function ModalForm({ onClose }) {
                 onChange={(e) =>
                   handleVariantChange(index, "sku", e.target.value)
                 }
+                className="w-1/2 p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <ImageUploading
                 multiple
