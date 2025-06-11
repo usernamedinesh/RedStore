@@ -12,13 +12,15 @@
 import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { addToCart, getAllProduct } from "../../api/productApi";
-import { NavLink, useLocation } from "react-router";
+import { NavLink, useLocation, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
 function Product() {
   const [products, setProducts] = useState([]);
   const [selectedGender, setSelectedGender] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const navigate = useNavigate();
+
   const location = useLocation();
   const queryClient = useQueryClient();
   const {
@@ -126,13 +128,27 @@ function Product() {
     <>
       <div className="dark:bg-[var(--my-bg)] text-black dark:text-white  p-4">
         {/* <h1 className="text-3xl font-bold text-center mb-4">Product Pages</h1> */}
-        <div>
+        <div className="">
           <h2 className="text-center text-2xl md:text-3xl font-bold mb-6">
             {" "}
             {/* Changed h1 to h2 */}
             grab you favourite products {isFetching ? "(Updating...)" : ""}
             <div className="dark:bg-green-400 h-0.5 mb-3.5 bg-black" />
           </h2>
+          <div className="text-end">
+            <span
+              className="  text-gray-900 dark:text-back bg-gradient-to-r
+                            from-teal-300 to-lime-300 hover:bg-gradient-to-l hover:from-teal-400
+                            hover:to-lime-400 focus:ring-4 focus:outline-none
+                            focus:ring-lime-300 dark:focus:ring-teal-700 font-medium rounded-lg
+                            text-sm px-10 py-2.5  me-2 transform transition-transform
+                            duration-300 ease-in-out hover:scale-105 hover:shadow-lg shadow-md
+                            dark:shadow-lg"
+              onClick={() => navigate(-1)}
+            >
+              back
+            </span>
+          </div>
         </div>
         <div className="flex flex-wrap gap-5 mb-8 justify-center  text-black ">
           {" "}
@@ -165,6 +181,7 @@ function Product() {
             >
               Category
             </label>
+
             <select
               id="category-select"
               value={selectedCategory}

@@ -95,8 +95,24 @@ function CartPage() {
             Updating cart products...
           </div>
         ) : (
-          <div className="text-center dark:text-white text-black font-bold text-lg mt-5">
-            Cart has {cartProduct.length} products
+          <div className="">
+            <div className="text-center dark:text-white text-black font-bold text-lg mt-5">
+              Cart has {cartProduct.length} products
+            </div>
+            <div className=" text-end">
+              <span
+                className="  text-gray-900 dark:text-back bg-gradient-to-r
+                    from-teal-300 to-lime-300 hover:bg-gradient-to-l hover:from-teal-400
+                    hover:to-lime-400 focus:ring-4 focus:outline-none
+                    focus:ring-lime-300 dark:focus:ring-teal-700 font-medium rounded-lg
+                    text-sm px-10 py-2.5 text-center me-2 transform transition-transform
+                    duration-300 ease-in-out hover:scale-105 hover:shadow-lg shadow-md
+                    dark:shadow-lg"
+                onClick={() => navigate(-1)}
+              >
+                back
+              </span>
+            </div>
           </div>
         )}
       </div>

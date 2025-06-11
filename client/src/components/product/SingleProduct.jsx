@@ -101,9 +101,9 @@ export const SingleProduct = () => {
       <h2 className="text-center text-2xl font-bold mt-4">Product Details</h2>
 
       {/* Main product layout */}
-      <div className="flex flex-col md:flex-row w-full max-w-[1500px] mx-auto px-4 py-8 h-[600px] mt-7 gap-6">
+      <div className=" flex flex-col md:flex-row w-full max-w-[1500px] mx-auto px-4 py-8 h-[600px] mt-7 gap-6">
         {/* Left: Image section */}
-        <div className="shadow-lg bg-gray-100 md:w-1/2 h-full flex flex-col justify-center items-center p-4">
+        <div className="rounded-md shadow-lg bg-gray-100 md:w-1/2 h-full flex flex-col justify-center items-center p-4">
           {selectedVariant ? (
             <>
               <img
@@ -135,7 +135,7 @@ export const SingleProduct = () => {
         </div>
 
         {/* Right: Product details */}
-        <div className="shadow-lg md:w-1/2 h-full flex flex-col justify-between p-6 overflow-y-auto">
+        <div className="rounded-md shadow-lg md:w-1/2 h-full flex flex-col justify-between p-6 overflow-y-auto">
           <div>
             <h2 className="text-2xl font-bold mb-2 text-black dark:text-white">
               {product.name}
@@ -211,28 +211,44 @@ export const SingleProduct = () => {
       <div className="text-center font-bold text-2xl ">
         <div className="">
           <button
-            className="mr-10 px-4 py-2 dark:bg-orange-600 rounded-md bg-orange-600 text-white
-                   transform transition-transform duration-300 ease-in-out
-                   hover:scale-105 hover:shadow-lg"
+            // className="mr-10 px-4 py-2 dark:bg-orange-600 rounded-md bg-orange-600 text-white
+            //        transform transition-transform duration-300 ease-in-out
+            //        hover:scale-105 hover:shadow-lg"
+            className="mr-10 text-gray-900 dark:text-white 
+             bg-gradient-to-r from-teal-300 to-lime-300 
+             hover:bg-gradient-to-l hover:from-teal-400 hover:to-lime-400 
+             focus:ring-4 focus:outline-none focus:ring-lime-300 dark:focus:ring-teal-700 
+             font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 
+             transform transition-transform duration-300 ease-in-out 
+             hover:scale-105 hover:shadow-lg shadow-md dark:shadow-lg"
             onClick={() => handleAddToCart(product.id, selectedVariant?.id, 1)}
           >
             add to cart
           </button>
           <button
-            className="mr-10 px-4 py-2 dark:bg-orange-600 rounded-md bg-orange-600 text-white
-                   transform transition-transform duration-300 ease-in-out
-                   hover:scale-105 hover:shadow-lg"
+            className="mr-10 text-gray-900 dark:text-white 
+             bg-gradient-to-r from-teal-300 to-lime-300 
+             hover:bg-gradient-to-l hover:from-teal-400 hover:to-lime-400 
+             focus:ring-4 focus:outline-none focus:ring-lime-300 dark:focus:ring-teal-700 
+             font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 
+             transform transition-transform duration-300 ease-in-out 
+             hover:scale-105 hover:shadow-lg shadow-md dark:shadow-lg"
             onClick={() => handleBuyNow(product.id, selectedVariant?.id)}
           >
+            {" "}
             buy now
           </button>
           <button
-            className="mr-10 px-4 py-2 dark:bg-orange-600 rounded-md bg-orange-600 text-white
-                   transform transition-transform duration-300 ease-in-out
-                   hover:scale-105 hover:shadow-lg"
+            className="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
             onClick={() => handleChat(product.owner.id, product.owner.name)}
           >
             Chat with seller
+          </button>
+          <button
+            className="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
+            onClick={() => navigate(-1)}
+          >
+            back
           </button>
           {/* {showChat && <ChatBox userId={userId} ownerId={product.owner.id} />} */}
         </div>

@@ -68,18 +68,24 @@ function ShowAddress() {
         )}
         <button
           onClick={() => setAddressOpen(true)}
-          className="font-bold text-lg text-red-500 shadow-2xl px-10 mt-5"
+          className="mt-5 text-lg py-1 px-5 text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-center me-2 mb-2 transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
         >
           add address
         </button>
-        <button
-          onClick={() => setAddressOpen(false)}
-          className="font-bold text-lg ml-5 text-red-600 shadow-2xl px-10"
-        >
-          {" "}
-          Close{" "}
-        </button>
-        {AddresOpen && <AddAddress />}
+        {AddresOpen && (
+          <div>
+            <button
+              onClick={() => setAddressOpen(false)}
+              // className="font-bold text-lg ml-5 text-red-600 shadow-2xl px-10"
+
+              className=" px-10 py-2 text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm  text-center me-2 mb-2 transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg"
+            >
+              Close
+            </button>
+
+            <AddAddress />
+          </div>
+        )}
       </div>
     </>
   );
