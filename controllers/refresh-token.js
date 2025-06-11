@@ -18,7 +18,6 @@ const prisma = new PrismaClient();
 const authenticateJwtWithAutoRefresh = async (req, res, next) => {
   const authHeader = req.headers.authorization;
   const refreshToken = req.cookies.refreshToken;
-  console.log("authHeader", refreshToken);
 
   if (!authHeader) {
     return successResponse(res, null, "No auth token", 401);
@@ -28,9 +27,10 @@ const authenticateJwtWithAutoRefresh = async (req, res, next) => {
   if (!token) {
     return successResponse(res, null, "Malformed auth token", 401);
   }
-
+  console.log("token", token);
   jwt.verify(token, env.ACCESS_TOKEN_SECRET, async (err, decoded) => {
     if (err) {
+      console.log("JWT verification error:", err);
       if (err.name === "TokenExpiredError") {
         const refreshToken = req.cookies.refreshToken;
         if (!refreshToken) {

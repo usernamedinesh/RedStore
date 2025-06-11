@@ -67,10 +67,15 @@ exports.login = catchAsync(async (req, res, next) => {
         // generate an token an enctrypt the token
         let token = genTokenUsingEmail(owner.email);
         token = await runCryptoTask("encrypt", token, env.SECRET_KEY);
+
+        const accessToken = generateAccessToken({
+          id: owner.id,
+          email: owner.email,
+        });
         // then send the response
         return successResponse(
           res,
-          { isOwner: true, token },
+          { isOwner: true, token, accessToken },
           "owner login successfully",
           200,
         );
