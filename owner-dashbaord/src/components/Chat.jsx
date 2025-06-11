@@ -170,7 +170,7 @@ export function Chat() {
                   <div
                     key={idx}
                     className={`flex ${
-                      isOwnerMessage ? "justify-end" : "justify-start"
+                      isOwnerMessage ? " ml-100" : "justify-start"
                     }`}
                   >
                     <div
