@@ -12,6 +12,7 @@ if (!fs.existsSync(uploadDir)) {
 // multer
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
+    console.log("File upload destination:");
     // cb: callback funcion provided by Multer
     // First argument error (null if no error)
     // Second destination path

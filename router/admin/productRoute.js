@@ -1,6 +1,10 @@
 /* ADMIN */
 
+const multer = require("multer");
+const storage = require("../../service/file_upload");
 const router = require("express").Router();
+
+const upload = multer({ storage: storage });
 const {
   createProduct,
   createCategory,
@@ -14,7 +18,7 @@ const {
 const authMiddleware = require("../../controllers/refresh-token");
 
 /* create product */
-router.post("/product/:userId", createProduct);
+router.post("/product/:userId", upload.any(), createProduct);
 
 /* get category or brand */
 router.get("/category", authMiddleware, getCategoryAndBrand);

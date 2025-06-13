@@ -3,8 +3,14 @@
 const { client: redis, policies } = require("../../config/redisConfig");
 const { getProductKey, getProductTTL } = require("../../redis/cache.redis");
 const customError = require("../../utils/customError");
+const {
+  uploadMultipleToS3,
+  uploadToS3,
+} = require("../../service/upload_to_s3");
 
 const Joi = require("joi");
+const fs = require("fs");
+const path = require("path");
 const { PrismaClient, Gender } = require("../../generated/prisma");
 const prisma = new PrismaClient();
 const catchAsync = require("../../utils/catchAsync");
@@ -77,23 +83,69 @@ exports.createProduct = async (req, res, next) => {
     const {
       name,
       description,
-      basePrice,
       categoryName,
       brandName,
       images,
       gender = "UNISEX",
-      variants = [],
+      // variants = [],
     } = req.body;
 
+    const basePrice = Number(req.body.basePrice);
+    const size = Number(req.body.size);
+    const variants = req.body.variants;
+    if (!Array.isArray(variants) || variants.length === 0) {
+      return next(new Error("Variants must be a non-empty array"));
+    }
     /*
      * PICK AND RANDOM IMAGE FROM IMAGES ARRAY
      */
 
-    let AllImage = variants.flatMap((v) => v.images || []);
+    const filesMap = {};
+    for (const file of req.files) {
+      const match = file.fieldname.match(/variants\[(\d+)\]\[images\]/);
+      if (match) {
+        const index = Number(match[1]);
+        if (!filesMap[index]) filesMap[index] = [];
+        filesMap[index].push(file);
+      }
+    }
+
+    for (const i in variants) {
+      const files = filesMap[i] || [];
+      const uploadedUrls = await Promise.all(
+        files.map(async (file) => {
+          const fileBuffer = await fs.readFile(file.path); // read file from disk
+
+          const uniqueFileName = `${Date.now()}-${Math.floor(Math.random() * 10000)}-${file.originalname}`;
+          const s3Url = await uploadToS3(
+            fileBuffer,
+            uniqueFileName,
+            "products",
+          );
+
+          // Delete local file after upload
+          try {
+            await fs.unlink(file.path);
+          } catch (err) {
+            console.error("Failed to delete local file:", file.path, err);
+          }
+
+          return typeof s3Url === "string" ? s3Url : s3Url.url;
+        }),
+      );
+
+      variants[i].images = uploadedUrls;
+    }
+
+    const AllImage = variants.flatMap((v) => v.images || []);
     const randomImage =
       AllImage.length > 0
         ? AllImage[Math.floor(Math.random() * AllImage.length)]
         : null;
+
+    // if image is object, pick .url
+    const thumbnailUrl =
+      typeof randomImage === "string" ? randomImage : randomImage?.url || "";
 
     // Check if user is admin
     // const id = req.user.id;
@@ -150,13 +202,13 @@ exports.createProduct = async (req, res, next) => {
           basePrice,
           categoryId: category.id,
           brandId: brand.id,
-          thumnailImage: randomImage || "",
+          thumnailImage: thumbnailUrl,
           variants: {
             create: variants.map((v) => ({
-              size: v.size,
+              size: Number(v.size),
               color: v.color,
-              price: v.price,
-              stock: v.stock,
+              price: Number(v.price),
+              stock: Number(v.stock),
               sku: v.sku,
               images: {
                 create: v.images.map((url) => ({ url })),
