@@ -113,28 +113,14 @@ exports.createProduct = async (req, res, next) => {
     for (const i in variants) {
       const files = filesMap[i] || [];
       const uploadedUrls = await Promise.all(
-        files.map(async (file) => {
-          const fileBuffer = await fs.readFile(file.path); // read file from disk
-
+        files.map((file) => {
           const uniqueFileName = `${Date.now()}-${Math.floor(Math.random() * 10000)}-${file.originalname}`;
-          const s3Url = await uploadToS3(
-            fileBuffer,
-            uniqueFileName,
-            "products",
-          );
-
-          // Delete local file after upload
-          try {
-            await fs.unlink(file.path);
-          } catch (err) {
-            console.error("Failed to delete local file:", file.path, err);
-          }
-
-          return typeof s3Url === "string" ? s3Url : s3Url.url;
+          return uploadToS3(file, uniqueFileName, "products"); // should return a string URL or object with .url
         }),
       );
-
-      variants[i].images = uploadedUrls;
+      variants[i].images = uploadedUrls.map((url) =>
+        typeof url === "string" ? url : url.url,
+      );
     }
 
     const AllImage = variants.flatMap((v) => v.images || []);

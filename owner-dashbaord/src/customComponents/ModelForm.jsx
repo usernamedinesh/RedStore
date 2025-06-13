@@ -7,6 +7,7 @@ import { useAppContext } from "./context";
 import ImageUploading from "react-images-uploading";
 
 export default function ModalForm({ onClose }) {
+  const [loading, setLoading] = useState(false);
   const { data } = useAppContext();
   const [product, setProduct] = useState({
     name: "",
@@ -71,6 +72,7 @@ export default function ModalForm({ onClose }) {
   };
 
   const handleSubmit = async () => {
+    setLoading(true);
     // i need to append all the data to formData
     const formData = new FormData();
     formData.append("name", product.name);
@@ -99,6 +101,7 @@ export default function ModalForm({ onClose }) {
       `http://localhost:3000/admin/product/${data.id}`,
       formData,
     );
+    setLoading(false);
     console.log("response ", response.data);
     console.log("response ", response.data.data);
   };
@@ -107,6 +110,11 @@ export default function ModalForm({ onClose }) {
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 w-full overflow-auto h-screen">
       <div className="bg-white text-black p-6 rounded-lg w-full  mx-auto shadow-lg w-full max-w-3xl overflow-auto h-screen">
         <h2 className="text-xl font-bold mb-4">Create Product</h2>
+        {loading && (
+          <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-50">
+            <div className="loader">loading</div>
+          </div>
+        )}
         <form
           onSubmit={(e) => {
             e.preventDefault();
