@@ -16,12 +16,11 @@ export function Product() {
     try {
       const fetchProducts = async () => {
         const response = await axios.get(
-          `http://localhost:3000/admin/my-product/${1}`,
+          `http://localhost:3000/admin/my-product/${data.id}`,
         );
-        console.log("Response : ", response);
         if (response.data.success === true) {
           setProduct(response.data.data.simplifiedProducts);
-          console.log("Products: ", response.data.data.simplifiedProducts);
+          // console.log("Products: ", response.data.data.simplifiedProducts);
         } else {
           setError(response.data.message);
         }
@@ -32,7 +31,6 @@ export function Product() {
     }
   }, [data.id]);
 
-  console.log("prodcutl", product);
   return (
     <>
       <div>

@@ -1,10 +1,14 @@
 // ModalForm.jsx
 import { createPortal } from "react-dom";
 import { useState } from "react";
+import axios from "axios";
+import { useAppContext } from "./context";
 
 import ImageUploading from "react-images-uploading";
 
 export default function ModalForm({ onClose }) {
+  const [loading, setLoading] = useState(false);
+  const { data } = useAppContext();
   const [product, setProduct] = useState({
     name: "",
     description: "",
@@ -19,7 +23,7 @@ export default function ModalForm({ onClose }) {
         stock: "",
         price: "",
         sku: "",
-        images: [""],
+        images: [],
       },
     ],
   });
@@ -27,7 +31,8 @@ export default function ModalForm({ onClose }) {
   // Update top-level product fields
   const handleProductChange = (e) => {
     const { name, value } = e.target;
-    setProduct({ ...product, [name]: value });
+    // setProduct({ ...product, [name]: value });
+    setProduct((prev) => ({ ...prev, [name]: value }));
   };
 
   // Update variant fields
@@ -66,19 +71,50 @@ export default function ModalForm({ onClose }) {
     setProduct({ ...product, variants: newVariants });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Submitting:", product);
+  const handleSubmit = async () => {
+    setLoading(true);
+    // i need to append all the data to formData
+    const formData = new FormData();
+    formData.append("name", product.name);
+    formData.append("description", product.description);
+    formData.append("categoryName", product.categoryName);
+    formData.append("brandName", product.brandName);
+    formData.append("gender", product.gender || "UNISEX");
+    // formData.append("basePrice", product.basePrice || "");
+    formData.append("basePrice", String(Number(product.basePrice || 0)));
 
-    // Add validation if needed
-    // Send to API
-    // fetch('/api/product', { ... })
+    product.variants.forEach((variant, index) => {
+      formData.append(`variants[${index}][size]`, variant.size);
+      formData.append(`variants[${index}][color]`, variant.color);
+      formData.append(`variants[${index}][stock]`, variant.stock);
+      formData.append(`variants[${index}][price]`, variant.price);
+      formData.append(`variants[${index}][sku]`, variant.sku);
+
+      variant.images.forEach((image, imgIndex) => {
+        if (image && image.file) {
+          formData.append(`variants[${index}][images]`, image.file);
+        }
+      });
+    });
+
+    const response = await axios.post(
+      `http://localhost:3000/admin/product/${data.id}`,
+      formData,
+    );
+    setLoading(false);
+    console.log("response ", response.data);
+    console.log("response ", response.data.data);
   };
 
   return createPortal(
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 w-full overflow-auto h-screen">
       <div className="bg-white text-black p-6 rounded-lg w-full  mx-auto shadow-lg w-full max-w-3xl overflow-auto h-screen">
         <h2 className="text-xl font-bold mb-4">Create Product</h2>
+        {loading && (
+          <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-50">
+            <div className="loader">loading</div>
+          </div>
+        )}
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -112,12 +148,16 @@ export default function ModalForm({ onClose }) {
               onChange={handleProductChange}
               className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <input
+            <select
               name="gender"
-              placeholder="Gender"
               onChange={handleProductChange}
               className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            >
+              <option value="">Select Gender</option>
+              <option value="MEN">Men</option>
+              <option value="WOMEN">Women</option>
+              <option value="UNISEX">Unisex</option>
+            </select>
             <input
               name="basePrice"
               type="number"
@@ -277,6 +317,7 @@ export default function ModalForm({ onClose }) {
             <button
               type="submit"
               className="bg-blue-600 text-white px-4 py-2 rounded mt-2 "
+              onClick={handleSubmit}
             >
               Submit
             </button>
