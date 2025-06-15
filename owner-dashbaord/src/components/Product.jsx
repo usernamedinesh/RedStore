@@ -11,6 +11,7 @@ export function Product() {
   const { data } = useAppContext();
   const [product, setProduct] = useState([]);
   const [error, setError] = useState();
+  const [reFreshFlag, setReFreshFlag] = useState(false);
 
   useEffect(() => {
     try {
@@ -29,7 +30,26 @@ export function Product() {
     } catch (error) {
       console.error("");
     }
-  }, [data.id]);
+  }, [data.id, reFreshFlag]);
+  const HandleRemoveProduct = async (id) => {
+    try {
+      console.log("productID: ", id);
+      const response = await axios.delete(
+        `http://localhost:3000/admin/product/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${data.token}`,
+          },
+        },
+      );
+      if (response.data.success) {
+        console.log("product deleted successfully");
+        setReFreshFlag((prev) => !prev);
+      }
+    } catch (error) {
+      console.error("error while deleting product", error);
+    }
+  };
 
   return (
     <>
@@ -57,8 +77,13 @@ export function Product() {
                       {item.description}
                     </p>
                     <p className="text-green-600 font-bold mt-1">
-                      ${item.price}
+                      ${item.variants[0].price}
                     </p>
+                  </div>
+                  <div className="text-green-600 font-bold mt-1">
+                    <button onClick={() => HandleRemoveProduct(item.id)}>
+                      remove
+                    </button>
                   </div>
                 </div>
               ))}
