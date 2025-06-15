@@ -72,6 +72,10 @@ exports.login = catchAsync(async (req, res, next) => {
           id: owner.id,
           email: owner.email,
         });
+        await Prisma.productOwner.update({
+          where: { id: owner.id },
+          data: { token: accessToken },
+        });
         // then send the response
         return successResponse(
           res,
