@@ -15,6 +15,7 @@ exports.updateAddressSchema = Joi.object({
   addresLine1: Joi.string().trim().min(3).optional(),
   addresLine2: Joi.string().trim().min(3).optional(),
   city: Joi.string().trim().min(3).max(50).optional(),
+  state: Joi.string().trim().min(2).max(50).optional(),
   postalCode: Joi.string().trim().min(5).max(10).optional(),
   phoneNumber: Joi.string().trim().optional(),
 }).min(1); // At least one field must be present

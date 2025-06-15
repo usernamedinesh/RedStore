@@ -34,7 +34,6 @@ axiosInstance.interceptors.response.use(
   (response) => {
     const newAccessToken = response.headers["x-access-token"];
     if (newAccessToken) {
-      console.log("set newAccessToken successfully");
       const currentUserId = store.getState().auth.userId;
       store.dispatch(auth({ userId: currentUserId, token: newAccessToken }));
     }
@@ -43,7 +42,6 @@ axiosInstance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     const newAccessToken = error.response?.headers?.["x-access-token"];
-    console.log("newaccessToken get ", newAccessToken);
 
     if (newAccessToken && !originalRequest._retry) {
       originalRequest._retry = true;
