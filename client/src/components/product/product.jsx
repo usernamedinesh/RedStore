@@ -120,10 +120,14 @@ function Product() {
     }
   };
 
-  //requires variantId, quantity
+  //requires variantId, quantity(optional)
   async function handleBuyNow(variantId) {
     const response = await InitiateOrderFromBuyNow(variantId);
-    console.log("response: ", response);
+    //redirect to order summery page
+    sessionStorage.setItem("orderId", "true");
+    navigate("/order/summery", {
+      state: response.data.id,
+    });
   }
 
   return (

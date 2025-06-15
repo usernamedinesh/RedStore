@@ -6,22 +6,34 @@ export const InitiateOrder = async (variantId = null) => {
     const response = await axiosInstance.post("api/user/checkout/cart", {
       variantId,
     });
-    console.log("response from api", response);
-    return response.data;
+    if (response.data.status === "success") {
+      return response.data;
+    }
   } catch (error) {
     console.error("Error while initiating order", error);
   }
 };
 
 export const InitiateOrderFromBuyNow = async (variantId) => {
-  console.log("varintID", variantId);
   try {
     const response = await axiosInstance.post("api/user/checkout/buy-now", {
       variantId,
       quantity: 1,
     });
-    return response.data;
+
+    if (response.data.success === true) {
+      return response.data;
+    }
   } catch (error) {
     console.error("Error while InitiateOrderFromBuyNow ", error);
+  }
+};
+
+export const getOrderSummery = async () => {
+  try {
+    const response = await axiosInstance.get("api/user/summery");
+    return response.data;
+  } catch (error) {
+    console.error("Error while fetching orderSummery", error);
   }
 };

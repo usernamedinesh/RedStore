@@ -96,7 +96,9 @@ function CartPage() {
   // both call the same api
   const handleBuy = async (variantId) => {
     const response = await InitiateOrder(variantId);
-    console.log("response from function: ", response);
+    console.log("response from function: ", response.data);
+    // after success response
+    // redirect to the summery page
   };
 
   // buy all product from the cart
