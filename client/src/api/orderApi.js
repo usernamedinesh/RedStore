@@ -6,7 +6,7 @@ export const InitiateOrder = async (variantId = null) => {
     const response = await axiosInstance.post("api/user/checkout/cart", {
       variantId,
     });
-    if (response.data.status === "success") {
+    if (response.data.success === true) {
       return response.data;
     }
   } catch (error) {

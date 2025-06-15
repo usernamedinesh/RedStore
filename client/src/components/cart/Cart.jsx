@@ -72,8 +72,6 @@ function CartPage() {
 
   // lets user react-query so it manages the state of the cart products
   const handleRemove = async (p, v) => {
-    // console.log("pid", p);
-    // console.log("vid", v);
     // const response = await removeProductCart(v); // no need this
     const response = await removeFromCart(v); // use the mutation to remove from cart
     toast.success("Product removed from cart successfully!", {
@@ -96,9 +94,10 @@ function CartPage() {
   // both call the same api
   const handleBuy = async (variantId) => {
     const response = await InitiateOrder(variantId);
-    console.log("response from function: ", response.data);
-    // after success response
-    // redirect to the summery page
+    sessionStorage.setItem("orderId", "true");
+    navigate("/order/summery", {
+      state: response.data[0].id,
+    });
   };
 
   // buy all product from the cart
@@ -107,6 +106,11 @@ function CartPage() {
   const checkoutAllProduct = async (product) => {
     const response = await InitiateOrder();
     console.log("response from function: ", response);
+
+    sessionStorage.setItem("orderId", "true");
+    navigate("/order/summery", {
+      state: response.data[0].id,
+    });
   };
 
   return (

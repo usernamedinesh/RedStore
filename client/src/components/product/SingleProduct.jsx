@@ -80,9 +80,6 @@ export const SingleProduct = () => {
     }
   };
 
-  //Handle buy now
-  //TODO: here todo
-
   async function handleBuyNow(variantId) {
     const response = await InitiateOrderFromBuyNow(variantId);
     //redirect to order summery page
