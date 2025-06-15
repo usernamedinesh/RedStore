@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getCartProduct, removeProductCart } from "../../api/productApi";
 import { toast } from "react-toastify";
+import { InitiateOrder } from "../../api/orderApi";
 
 // fetch all product that are in the db
 // of cart
@@ -81,10 +82,29 @@ function CartPage() {
     });
   };
 
-  //TODO: handle remove product from cart
-  const handleBuy = (p, v) => {
-    // console.log("pid", p);
-    // console.log("vid", v);
+  /*
+   ** **** BUY LOGIC ****
+   * when user click to buy in both cases (single product or all cart prodcut  )
+   * it create an order it will saved to db
+   * and redirect to anther page summery
+   * from summery to check each an every details
+   * and make payment here
+   * done
+   */
+
+  // buy single prodcut from cart
+  // both call the same api
+  const handleBuy = async (variantId) => {
+    const response = await InitiateOrder(variantId);
+    console.log("response from function: ", response);
+  };
+
+  // buy all product from the cart
+  // i dont need to send here anything
+  // it will take all project from the cart (from db)
+  const checkoutAllProduct = async (product) => {
+    const response = await InitiateOrder();
+    console.log("response from function: ", response);
   };
 
   return (
@@ -154,9 +174,7 @@ function CartPage() {
                 </button>
                 <button
                   className="bg-green-500 text-white px-4 py-2 rounded ml-4"
-                  onClick={() =>
-                    handleBuy(product.product.id, variantItem.variant.id)
-                  }
+                  onClick={() => handleBuy(variantItem.variant.id)}
                 >
                   Buy Now
                 </button>
@@ -169,9 +187,19 @@ function CartPage() {
         {cartProduct.length === 0 ? (
           <p className="text-gray-500">Your cart is empty.</p>
         ) : (
-          <p className="text-gray-700">
-            Total items in cart: {cartProduct.length}
-          </p>
+          <div>
+            <p className="text-gray-700">
+              Total items in cart: {cartProduct.length}
+            </p>
+            <div>
+              <button
+                className="bg-green-600 border rounded-xl  px-2 py-2 mt-2 hover:bg-green-700 text-white font-bold"
+                onClick={() => checkoutAllProduct(productData.data)}
+              >
+                checkout now
+              </button>
+            </div>
+          </div>
         )}
       </div>
     </div>
