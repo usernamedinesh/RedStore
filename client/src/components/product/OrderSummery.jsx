@@ -87,6 +87,18 @@ const OrderSummery = () => {
                   </p>
                 </li>
               ))}
+
+              {/* 🧮 Total */}
+              <div className="text-right mt-4 text-xl font-bold">
+                Total Price:{" "}
+                {checkoutItem
+                  .reduce(
+                    (acc, item) => acc + item.variant.price * item.quantity,
+                    0,
+                  )
+                  .toFixed(2)}{" "}
+                RS
+              </div>
             </ul>
           </div>
 
