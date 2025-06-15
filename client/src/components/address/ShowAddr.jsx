@@ -1,8 +1,9 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { addAddress, getAddress } from "../../api/addressApi";
+import { addAddress, getAddress, deleteAddresses } from "../../api/addressApi";
 import { useState } from "react";
 
 function ShowAddress() {
+  const queryClient = useQueryClient();
   const [AddresOpen, setAddressOpen] = useState(false);
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["address"],
@@ -10,9 +11,27 @@ function ShowAddress() {
     staleTime: 1000 * 60 * 5,
   });
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  const { mutate: deleteAddressMutate, isLoading: isDeleting } = useMutation({
+    mutationFn: deleteAddresses,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["address"]);
+    },
+    onError: (error) => {
+      console.error("Failed to delete address:", error);
+    },
+  });
+
+  // delete address
+  const editAddress = (addressId) => {
+    console.log("hi", addressId);
+  };
+  // edit address
+  const deleteAddress = (addressId) => {
+    deleteAddressMutate(addressId);
+  };
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error: {error.message}</div>;
 
   return (
     <>
@@ -51,10 +70,16 @@ function ShowAddress() {
 
                 {/* Optional: Add action buttons here */}
                 <div className="mt-4 flex space-x-2">
-                  <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm transition-colors duration-200">
+                  <button
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm transition-colors duration-200"
+                    onClick={() => editAddress(address.id)}
+                  >
                     Edit
                   </button>
-                  <button className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm transition-colors duration-200">
+                  <button
+                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm transition-colors duration-200"
+                    onClick={() => deleteAddress(address.id)}
+                  >
                     Delete
                   </button>
                 </div>
