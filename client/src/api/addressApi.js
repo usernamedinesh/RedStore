@@ -48,11 +48,13 @@ export const deleteAddresses = async (addressId) => {
 
 // Update address
 
-export const updateAddress = async (addressId, data) => {
+export const updateAddresses = async (data) => {
+  const { id, ...bodyWithoutId } = data;
   try {
-    const response = await axiosInstance.put(`/api/user/address/${addressId}`, {
-      data,
-    });
+    const response = await axiosInstance.put(
+      `/api/user/address/${id}`,
+      bodyWithoutId,
+    );
     return response.data;
   } catch (error) {
     console.error("Error while deleting address", error);

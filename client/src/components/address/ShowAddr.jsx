@@ -1,8 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { addAddress, getAddress, deleteAddresses } from "../../api/addressApi";
+import {
+  addAddress,
+  getAddress,
+  deleteAddresses,
+  updateAddresses,
+} from "../../api/addressApi";
 import { useState } from "react";
 
 function ShowAddress() {
+  const [editingId, setEditingId] = useState(null);
+  const [editForm, setEditForm] = useState({});
+  const [originalForm, setOriginalForm] = useState({});
   const queryClient = useQueryClient();
   const [AddresOpen, setAddressOpen] = useState(false);
   const { data, isLoading, isError, error } = useQuery({
@@ -21,11 +29,49 @@ function ShowAddress() {
     },
   });
 
-  // delete address
-  const editAddress = (addressId) => {
-    console.log("hi", addressId);
+  const { mutate: updateAddressMutate, isLoading: isUpdating } = useMutation({
+    mutationFn: updateAddresses,
+    onSuccess: () => {
+      queryClient.invalidateQueries(["address"]);
+    },
+    onError: (error) => {
+      console.error("Failed to delete address:", error);
+    },
+  });
+
+  const startEdit = (address) => {
+    setEditingId(address.id);
+    setEditForm({ ...address });
+    setOriginalForm({ ...address });
+  };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditForm((prev) => ({ ...prev, [name]: value }));
+  };
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditForm({});
   };
   // edit address
+  const saveEdit = () => {
+    const updatedFields = {};
+    for (const key in editForm) {
+      if (editForm[key] !== originalForm[key]) {
+        updatedFields[key] = editForm[key];
+      }
+    }
+    if (Object.keys(updatedFields).length === 0) {
+      console.log("no change detected ");
+      setEditingId(null);
+      return;
+    }
+
+    updateAddressMutate({ id: editingId, ...updatedFields });
+    setEditingId(null);
+    setEditForm({});
+  };
+
+  // delete address
   const deleteAddress = (addressId) => {
     deleteAddressMutate(addressId);
   };
@@ -49,39 +95,141 @@ function ShowAddress() {
                 key={address.id}
                 className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow duration-300"
               >
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-                  {address.fullName}
-                </h3>
-                <p className="text-gray-700 dark:text-gray-300 mb-1">
-                  address1: {address.addresLine1}
-                </p>
-                {address.addressLine2 && ( // Only render if addressLine2 exists
-                  <p className="text-gray-700 dark:text-gray-300 mb-1">
-                    {address.addresLine2}
-                  </p>
+                {editingId === address.id ? (
+                  <>
+                    <input
+                      type="text"
+                      name="fullName"
+                      value={editForm.fullName}
+                      onChange={handleChange}
+                      className="mb-2 w-full p-2 rounded border"
+                    />
+                    <input
+                      type="text"
+                      name="addresLine1"
+                      value={editForm.addresLine1}
+                      onChange={handleChange}
+                      className="mb-2 w-full p-2 rounded border"
+                    />
+                    <input
+                      type="text"
+                      name="addresLine2"
+                      value={editForm.addresLine2}
+                      onChange={handleChange}
+                      className="mb-2 w-full p-2 rounded border"
+                    />
+                    <input
+                      type="text"
+                      name="city"
+                      value={editForm.city}
+                      onChange={handleChange}
+                      className="mb-2 w-full p-2 rounded border"
+                    />
+                    <input
+                      type="text"
+                      name="state"
+                      value={editForm.state}
+                      onChange={handleChange}
+                      className="mb-2 w-full p-2 rounded border"
+                    />
+                    <input
+                      type="text"
+                      name="postalCode"
+                      value={editForm.postalCode}
+                      onChange={handleChange}
+                      className="mb-2 w-full p-2 rounded border"
+                    />
+                    <input
+                      type="text"
+                      name="phoneNumber"
+                      value={editForm.phoneNumber}
+                      onChange={handleChange}
+                      className="mb-2 w-full p-2 rounded border"
+                    />
+                    <div className="flex gap-2 mt-2">
+                      <button
+                        className="bg-green-500 px-4 py-2 rounded text-white"
+                        onClick={saveEdit}
+                      >
+                        Save
+                      </button>
+                      <button
+                        className="bg-gray-500 px-4 py-2 rounded text-white"
+                        onClick={cancelEdit}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
+                      {address.fullName}
+                    </h3>
+                    <p className="text-gray-700 dark:text-gray-300 mb-1">
+                      Address1: {address.addresLine1}
+                    </p>
+                    {address.addresLine2 && (
+                      <p className="text-gray-700 dark:text-gray-300 mb-1">
+                        {address.addresLine2}
+                      </p>
+                    )}
+                    <p className="text-gray-700 dark:text-gray-300 mb-1">
+                      City: {address.city}, State: {address.state} - PIN:{" "}
+                      {address.postalCode}
+                    </p>
+                    <p className="text-gray-700 dark:text-gray-300">
+                      Phone: {address.phoneNumber}
+                    </p>
+                    <div className="mt-4 flex space-x-2">
+                      <button
+                        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm"
+                        onClick={() => startEdit(address)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm"
+                        onClick={() => deleteAddress(address.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </>
                 )}
-                <p className="text-gray-700 dark:text-gray-300 mb-1">
-                  city: {address.city},state: {address.state} - pin:
-                  {address.postalCode}
-                </p>
-                <p className="text-gray-700 dark:text-gray-300">
-                  Phone: {address.phoneNumber}
-                </p>
+                {/* <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3"> */}
+                {/*   {address.fullName} */}
+                {/* </h3> */}
+                {/* <p className="text-gray-700 dark:text-gray-300 mb-1"> */}
+                {/*   address1: {address.addresLine1} */}
+                {/* </p> */}
+                {/* {address.addressLine2 && ( // Only render if addressLine2 exists */}
+                {/*   <p className="text-gray-700 dark:text-gray-300 mb-1"> */}
+                {/*     {address.addresLine2} */}
+                {/*   </p> */}
+                {/* )} */}
+                {/* <p className="text-gray-700 dark:text-gray-300 mb-1"> */}
+                {/*   city: {address.city},state: {address.state} - pin: */}
+                {/*   {address.postalCode} */}
+                {/* </p> */}
+                {/* <p className="text-gray-700 dark:text-gray-300"> */}
+                {/*   Phone: {address.phoneNumber} */}
+                {/* </p> */}
 
                 {/* Optional: Add action buttons here */}
                 <div className="mt-4 flex space-x-2">
-                  <button
-                    className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm transition-colors duration-200"
-                    onClick={() => editAddress(address.id)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm transition-colors duration-200"
-                    onClick={() => deleteAddress(address.id)}
-                  >
-                    Delete
-                  </button>
+                  {/* <button */}
+                  {/*   className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md text-sm transition-colors duration-200" */}
+                  {/*   onClick={() => editAddress(address.id)} */}
+                  {/* > */}
+                  {/*   Edit */}
+                  {/* </button> */}
+                  {/* <button */}
+                  {/*   className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm transition-colors duration-200" */}
+                  {/*   onClick={() => deleteAddress(address.id)} */}
+                  {/* > */}
+                  {/*   Delete */}
+                  {/* </button> */}
                 </div>
               </div>
             ))}
