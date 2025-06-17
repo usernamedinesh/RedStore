@@ -10,6 +10,10 @@ const {
   initiateCheckoutFromCart,
   orderSummery,
 } = require("../controllers/order/checkout.Controller");
+const {
+  placeOrder,
+  getOrder,
+} = require("../controllers/order/order.Contrller");
 const router = require("express").Router();
 
 /* get address */
@@ -32,5 +36,11 @@ router.post("/checkout/buy-now", authMiddleware, initiateCheckoutBuyNow);
 
 /* get order summerty */
 router.get("/summery", authMiddleware, orderSummery);
+
+/* place order */
+router.post("/place/order", authMiddleware, placeOrder);
+
+/* get order */
+router.get("/order", authMiddleware, getOrder);
 
 module.exports = router;

@@ -37,3 +37,15 @@ export const getOrderSummery = async () => {
     console.error("Error while fetching orderSummery", error);
   }
 };
+
+export const placeOrder = async (paymentMethod, shippingAddressId) => {
+  try {
+    const response = await axiosInstance.post("api/user/place/order", {
+      paymentMethod,
+      shippingAddressId,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error while placing order", error);
+  }
+};

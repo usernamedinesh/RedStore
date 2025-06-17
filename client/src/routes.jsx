@@ -12,6 +12,7 @@ import CreateOwnerAccount from "./components/ownrAuth/createOwnerAccount.jsx";
 import { SingleProduct } from "./components/product/SingleProduct.jsx";
 import ChatPage from "./pages/Chat.jsx";
 import OrderSummery from "./components/product/OrderSummery.jsx";
+import PlaceOrder from "./components/product/PlaceOrder.jsx";
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
   {
     path: "/order/summery",
     element: <OrderSummery />,
+  },
+  {
+    path: "/place/order",
+    element: <PlaceOrder />,
   },
 
   {

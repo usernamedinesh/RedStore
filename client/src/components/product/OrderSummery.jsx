@@ -38,13 +38,25 @@ const OrderSummery = () => {
     setSelectedAddress(found);
   };
 
+  const getTotalPrice = () => {
+    return checkoutItem
+      .reduce((acc, item) => acc + item.variant.price * item.quantity, 0)
+      .toFixed(2);
+  };
+
   const handlePlaceOrder = () => {
     if (!selectedAddressId) {
       alert("Please select an address.");
       return;
     }
+    //TODO:
     console.log("Order placed with address:", selectedAddressId);
-    // Call your backend with selectedAddressId
+    // go to the place order page
+    // where to will need to make payment
+    const totalPrice = getTotalPrice();
+    navigate("/place/order", {
+      state: { selectedAddressId, totalPrice },
+    });
   };
 
   return (
@@ -168,7 +180,7 @@ const OrderSummery = () => {
                   : "bg-gray-400 cursor-not-allowed"
               }`}
             >
-              Place Order
+              Continue
             </button>
           </div>
         </div>
