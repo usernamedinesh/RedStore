@@ -15,7 +15,7 @@ const generateAccessToken = (user) => {
 
   // Sign the payload with a secret key and an expiration time (optional)
   const token = jwt.sign(payload, env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "15m", // Token expires in 15Minutes
+    expiresIn: "1m", // Token expires in 15Minutes
   });
 
   return token;

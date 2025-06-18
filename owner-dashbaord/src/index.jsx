@@ -24,12 +24,11 @@ function AppContent() {
         <SocketProvider>
           <main>
             <Router>
-              {/* <Route path="/" component={Hi} /> */}
-              <Route path="/" component={Home} />
-              <Route path="/verify/" component={Home} />
-              <Route path="/product" component={Product} />
-              <Route path="/me" component={Me} />
-              <Route path="/chat" component={Chat} />
+              <Route path="/admin/" component={Home} />
+              <Route path="/admin/verify/" component={Home} />
+              <Route path="/admin/product" component={Product} />
+              <Route path="/admin/me" component={Me} />
+              <Route path="/admin/chat" component={Chat} />
               <Route default component={NotFound} />
             </Router>
           </main>

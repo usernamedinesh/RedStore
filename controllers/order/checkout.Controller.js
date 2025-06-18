@@ -5,7 +5,7 @@
  * i can make it one endpoints which will handle both
  * but first i want to see the frontend then i can see
  * what is good and what is best
- * POST /api/checkout/initiate-from-car
+ * POST /api/checkout/initiate-from-cart
  * POST /api/checkout/initiate-buy-now
  * GET /api/checkout/items (order summery) do i need this route?
  * make it
@@ -20,6 +20,7 @@ const {
 } = require("../../validator/orderInitiatorValidator.Joi");
 const { calculateExpirationTime } = require("../../utils/otpExpiration");
 const { successResponse } = require("../../utils/response");
+const { errorResponse } = require("../../utils/response");
 
 /*
  * buy from the card
@@ -41,7 +42,6 @@ exports.initiateCheckoutFromCart = catchAsync(async (req, res, next) => {
     }
 
     const { variantId } = value;
-
     // Clear existing checkout items for this user
     await prisma.checkoutItem.deleteMany({ where: { userId } });
 
@@ -108,13 +108,14 @@ exports.initiateCheckoutFromCart = catchAsync(async (req, res, next) => {
 });
 
 // POST /api/checkout/initiate-buy-now
-// when the user click on buy now button
+// when the user click on buy now button (direct buy now button )
+
 exports.initiateCheckoutBuyNow = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
 
   const { error, value } = initiateBuyNowSchema.validate(req.body, {
     abortEarly: false,
-    allowUnknown: false, // Prevent unknown fields
+    allowUnknown: false,
   });
 
   if (error) {
@@ -124,18 +125,19 @@ exports.initiateCheckoutBuyNow = catchAsync(async (req, res, next) => {
     return next(new Error(`Validation failed: ${errorMessages}`, 400));
   }
 
-  const { variantId, quantity } = value;
+  const { variantId, quantity = 1 } = value;
 
   try {
-    // 2. Transaction for atomic operations
-    const result = await prisma.$transaction(async (prisma) => {
+    let variant, createdItem;
+
+    await prisma.$transaction(async (prisma) => {
       // Clear existing checkout items
       await prisma.checkoutItem.deleteMany({
         where: { userId },
       });
 
-      // Verify variant exists and has stock
-      const variant = await prisma.productVariant.findUnique({
+      // Find variant
+      variant = await prisma.productVariant.findUnique({
         where: { id: variantId },
         select: {
           id: true,
@@ -152,23 +154,17 @@ exports.initiateCheckoutBuyNow = catchAsync(async (req, res, next) => {
         },
       });
 
-      if (!variant) {
-        throw new AppError("Product variant not found", 404);
+      if (!variant || variant.stock < quantity) {
+        // Do not return early here
+        return;
       }
 
-      if (variant.stock < quantity) {
-        throw new AppError(`Only ${variant.stock} items available`, 400);
-      }
-
-      // Create new checkout item
-      return await prisma.checkoutItem.create({
+      createdItem = await prisma.checkoutItem.create({
         data: {
-          // Fixed property name (was 'date')
           userId,
           variantId,
           quantity,
           expiresAt: calculateExpirationTime(),
-          // price: variant.price, // Store price snapshot i dont think it is required
         },
         include: {
           variant: {
@@ -188,14 +184,21 @@ exports.initiateCheckoutBuyNow = catchAsync(async (req, res, next) => {
       });
     });
 
+    if (!variant) {
+      return successResponse(res, null, "no variant found", 404);
+    }
+
+    if (variant.stock < quantity) {
+      return successResponse(res, null, "unavailable stock", 401);
+    }
+
     return successResponse(
       res,
-      result,
+      createdItem,
       `Buy Now checkout initiated for variant ${variantId}`,
       201,
     );
   } catch (error) {
-    // 4. Error handling
     if (!error.statusCode) error.statusCode = 500;
     console.error("Checkout initiation failed:", error);
     next(error);

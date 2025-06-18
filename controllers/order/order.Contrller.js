@@ -86,6 +86,7 @@ exports.placeOrder = catchAsync(async (req, res, next) => {
 
     if (paymentMethod !== "COD") {
       //online payment
+      console.log("here here");
       try {
         // initiate payment
         paymentStatus = "SUCCESS";
@@ -101,14 +102,16 @@ exports.placeOrder = catchAsync(async (req, res, next) => {
           details: paymentError.message,
         });
       }
+
+      console.log(`${paymentMethod} payment selected`);
     } else {
+      console.log("here");
       // cod payment
       paymentStatus = "PENDING";
       transactionId = null;
       gatewayResponse = null;
       console.log("COD payment selected");
     }
-
     // create order
     const order = await prisma.$transaction(async (prisma) => {
       const createOrder = await prisma.order.create({
@@ -127,7 +130,7 @@ exports.placeOrder = catchAsync(async (req, res, next) => {
           variantId: item.variantId,
           quantity: item.quantity,
           price: item.variant.price,
-          productId: item.variant.productId,
+          // productId: item.variant.productId, //TODO: cant use right now not merged
         });
         // reduce the stock
         await prisma.productVariant.update({
@@ -147,7 +150,8 @@ exports.placeOrder = catchAsync(async (req, res, next) => {
       // create payment
       await prisma.payment.create({
         data: {
-          orderId: createOrder.id,
+          // orderId: createOrder.id,
+          order: "12",
           paymentMethod: paymentMethod,
           amount: subtotal,
           status: paymentStatus,
@@ -246,3 +250,18 @@ async function initiatePaymentWithGateway(paymentMethod, amount, paymentToken, g
      router.get('/orders', getOrderHistory);
      router.get('/orders/:orderId', getOrderDetails);
 */
+exports.getOrder = catchAsync(async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    const orderData = await prisma.orderItem.findMany({
+      where: { id: userId },
+    });
+    if (orderData.length === "" || orderData.length === 0) {
+      return next(new Error("no order found"));
+    }
+    successResponse(res, orderData, "fetched order data", 200);
+  } catch (error) {
+    console.error("Error while fetcehing orders", error);
+    next(error);
+  }
+});

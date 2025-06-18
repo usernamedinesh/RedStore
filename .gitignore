@@ -4,3 +4,9 @@ node_modules
 /generated/prisma/
 /prisma/generated/
 
+build
+client/build
+client/dist
+owner-dashbaord/build
+owner-dashbaord/dist
+

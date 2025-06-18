@@ -16,6 +16,7 @@ const {
   getProductByOwer,
 } = require("../../adminControllers/product/product");
 const authMiddleware = require("../../controllers/refresh-token");
+const { authenticateAdminWIthJWT } = require("../../middleware/autheAdmin");
 
 /* create product */
 router.post("/product/:userId", upload.any(), createProduct);
@@ -35,7 +36,8 @@ router.get("/product", authMiddleware, getAllProducts);
 router.get("/product/:id", authMiddleware, SingleProduct);
 
 /* remove product */
-router.delete("/product/:id", authMiddleware, removeProduct);
+// router.delete("/product/:id", authMiddleware, removeProduct);
+router.delete("/product/:id", authenticateAdminWIthJWT, removeProduct);
 
 // delete an variant
 router.delete("variants/:variantId", deleteSingleVariants);

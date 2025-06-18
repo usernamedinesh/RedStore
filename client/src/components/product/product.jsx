@@ -14,6 +14,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { addToCart, getAllProduct } from "../../api/productApi";
 import { NavLink, useLocation, useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import { InitiateOrderFromBuyNow } from "../../api/orderApi";
 
 function Product() {
   const [products, setProducts] = useState([]);
@@ -119,9 +120,14 @@ function Product() {
     }
   };
 
-  //TODO: handle buy now
-  function handleBuyNow(id) {
-    console.log("hitwo", id);
+  //requires variantId, quantity(optional)
+  async function handleBuyNow(variantId) {
+    const response = await InitiateOrderFromBuyNow(variantId);
+    //redirect to order summery page
+    sessionStorage.setItem("orderId", "true");
+    navigate("/order/summery", {
+      state: response.data.id,
+    });
   }
 
   return (
@@ -244,7 +250,7 @@ function Product() {
                     </button>
                     <button
                       className="bg-green-600 text-white font-semibold py-2 px-3 text-sm flex-1"
-                      onClick={() => handleBuyNow(p.id)}
+                      onClick={() => handleBuyNow(p.variants[0].id)}
                     >
                       Buy Now
                     </button>

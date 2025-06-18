@@ -1,4 +1,5 @@
 const s3 = require("../config/awsConfig");
+const { PutObjectCommand } = require("@aws-sdk/client-s3");
 const fs = require("fs/promises");
 const { promisify } = require("util");
 const unlink = promisify(fs.unlink);
@@ -30,18 +31,27 @@ async function uploadToS3(file, uniqueFileName, folder = "") {
     //   `[S3 Upload] Preparing to upload file: ${file.originalname} to S3 Key: ${s3Key}`,
     // );
 
-    const params = {
+    //OLD code
+    // const params = {
+    //   Bucket: env.S3_BUCKET_NAME,
+    //   Key: s3Key,
+    //   Body: fileContent,
+    //   ContentType: file.mimetype,
+    //   // ACL: "public-read", // Removed ACL. Better to manage public access via Bucket Policy + CloudFront OAC/OAI
+    // };
+    //
+    // const s3UploadResult = await s3.upload(params).promise(); // Ensure you're using AWS SDK v2 or handle v3 differently
+
+    // console.log("[S3 Upload] S3 upload successful. Response:", s3UploadResult);
+    //NEW code
+    const command = new PutObjectCommand({
       Bucket: env.S3_BUCKET_NAME,
       Key: s3Key,
       Body: fileContent,
       ContentType: file.mimetype,
-      // ACL: "public-read", // Removed ACL. Better to manage public access via Bucket Policy + CloudFront OAC/OAI
-    };
+    });
 
-    const s3UploadResult = await s3.upload(params).promise(); // Ensure you're using AWS SDK v2 or handle v3 differently
-
-    // console.log("[S3 Upload] S3 upload successful. Response:", s3UploadResult);
-
+    await s3.send(command);
     // Use S3's returned Location or construct with CloudFront URL
     // It's generally safer to rely on your CloudFront URL structure
     cloudFrontUrl = `${env.CLOUDFRONT_URL}/${s3Key}`;

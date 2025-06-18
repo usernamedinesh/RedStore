@@ -2,6 +2,7 @@ import axios from "axios";
 import { useAppContext } from "../customComponents/context";
 import { useLocation } from "preact-iso";
 import { useEffect, useState } from "preact/hooks";
+import { API_URL, CLIENT } from "../api";
 
 export function VerifyPage() {
   const { setData: setContextData, data } = useAppContext();
@@ -17,25 +18,25 @@ export function VerifyPage() {
     console.log("token: ", token);
 
     if (!token) {
-      window.location.href = "http://localhost:5173/login";
+      window.location.href = CLIENT;
       return;
     }
 
     axios
-      .post(`http://localhost:3000/owner/verify-token`, { token })
+      .post(`${API_URL}/owner/verify-token`, { token })
       .then((response) => {
         if (response.data.success === true) {
           console.log(response.data.message);
           setContextData(response.data.data);
-          window.location.href = "http://localhost:5174";
+          window.location.href = CLIENT;
         } else {
           console.log("Token verification failed:", response.data.message);
-          window.location.href = "http://localhost:5173/login";
+          window.location.href = CLIENT;
         }
       })
       .catch((error) => {
         console.error("Error verifying token:", error);
-        window.location.href = "http://localhost:5173/login";
+        window.location.href = CLIENT;
       });
   }, []); // Runs once on component mount
 

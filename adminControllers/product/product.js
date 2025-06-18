@@ -436,7 +436,7 @@ exports.removeProduct = catchAsync(async (req, res, next) => {
      */
     const id = req.user.id;
     const productId = req.params.id;
-    const isAdmin = await prisma.user.findUnique({ where: { id: id } });
+    const isAdmin = await prisma.productOwner.findUnique({ where: { id: id } });
     const isValidProductId = await prisma.product.findUnique({
       where: { id: productId },
       include: {
@@ -448,9 +448,10 @@ exports.removeProduct = catchAsync(async (req, res, next) => {
       },
     });
 
-    if (isAdmin.userRole !== "ADMIN" || !isValidProductId) {
-      return next(new Error("Only ADMIN perfom this operation!"));
-    }
+    // FIX: later there no userRole currently
+    // if (isAdmin.userRole !== "ADMIN" || !isValidProductId) {
+    //   return next(new Error("Only ADMIN perfom this operation!"));
+    // }
     await prisma.product.delete({
       where: { id: productId },
     });

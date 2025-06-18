@@ -11,7 +11,6 @@ const {
 } = require("@prisma/client/runtime/library");
 
 exports.addAddress = catchAsync(async (req, res, next) => {
-  console.log("body: ", req.body);
   const { error, value } = addAddressSchema.validate(req.body.form, {
     abortEarly: false,
   });
@@ -89,7 +88,6 @@ exports.getAddress = catchAsync(async (req, res, next) => {
 exports.updateAddress = catchAsync(async (req, res, next) => {
   const { addressId } = req.params;
   const userId = req.user.id;
-
   const { error, value } = updateAddressSchema.validate(req.body, {
     abortEarly: false,
   });

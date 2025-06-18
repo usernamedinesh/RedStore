@@ -122,7 +122,7 @@ export const getProductByOwner = async () => {
 export const getProfile = async () => {
   try {
     const response = await axiosInstance.get("/api/me");
-    console.log("response: ", response);
+    // console.log("response: ", response);
     return response.data;
   } catch (error) {
     console.error("Error while fetching profile", error);

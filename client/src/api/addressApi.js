@@ -34,4 +34,29 @@ export const addAddress = async (form) => {
   }
 };
 
+// delete address
+export const deleteAddresses = async (addressId) => {
+  try {
+    const response = await axiosInstance.delete(
+      `/api/user/address/${addressId}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error while deleting address", error);
+  }
+};
+
 // Update address
+
+export const updateAddresses = async (data) => {
+  const { id, ...bodyWithoutId } = data;
+  try {
+    const response = await axiosInstance.put(
+      `/api/user/address/${id}`,
+      bodyWithoutId,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error while deleting address", error);
+  }
+};

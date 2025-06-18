@@ -27,10 +27,8 @@ const authenticateJwtWithAutoRefresh = async (req, res, next) => {
   if (!token) {
     return successResponse(res, null, "Malformed auth token", 401);
   }
-  console.log("token", token);
   jwt.verify(token, env.ACCESS_TOKEN_SECRET, async (err, decoded) => {
     if (err) {
-      console.log("JWT verification error:", err);
       if (err.name === "TokenExpiredError") {
         const refreshToken = req.cookies.refreshToken;
         if (!refreshToken) {
@@ -69,7 +67,14 @@ const authenticateJwtWithAutoRefresh = async (req, res, next) => {
           }
 
           const newAccessToken = generateAccessToken(user);
+
+          res.setHeader("Access-Control-Expose-Headers", "x-access-token");
           res.setHeader("x-access-token", newAccessToken);
+          console.log("sended new access token");
+          // res.status(200).json({
+          //   message: "Token refreshed",
+          //   accessToken: newAccessToken,
+          // });
           req.user = user;
           return next();
         } catch (refreshErr) {

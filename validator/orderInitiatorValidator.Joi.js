@@ -11,7 +11,7 @@ exports.initiateCheckoutFromCartSchema = Joi.object({
 
 exports.placeOrderSchema = Joi.object({
   shippingAddressId: Joi.string().uuid().required(),
-  billingAddressId: Joi.string().uuid().required(),
+  billingAddressId: Joi.string().uuid().optional(),
 
   paymentMethod: Joi.string()
     .valid("COD", "CREDIT_CARD", "DEBIT_CARD", "UPI", "PAYPAL", "STRIPE")

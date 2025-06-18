@@ -5,6 +5,7 @@ import { addToCart } from "../../api/productApi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import ChatBox from "../../components/chat/ChatBox";
 import { useSelector } from "../../redux/store";
+import { InitiateOrderFromBuyNow } from "../../api/orderApi";
 
 export const SingleProduct = () => {
   document.title = "single_product";
@@ -79,8 +80,14 @@ export const SingleProduct = () => {
     }
   };
 
-  //Handle buy now
-  //TODO: here todo
+  async function handleBuyNow(variantId) {
+    const response = await InitiateOrderFromBuyNow(variantId);
+    //redirect to order summery page
+    sessionStorage.setItem("orderId", "true");
+    navigate("/order/summery", {
+      state: response.data.id,
+    });
+  }
 
   // chat with seller
   // userId, sellerId
@@ -214,7 +221,7 @@ export const SingleProduct = () => {
             // className="mr-10 px-4 py-2 dark:bg-orange-600 rounded-md bg-orange-600 text-white
             //        transform transition-transform duration-300 ease-in-out
             //        hover:scale-105 hover:shadow-lg"
-            className="mr-10 text-gray-900 dark:text-white 
+            className="mr-10 text-gray-900 dark:text-black 
              bg-gradient-to-r from-teal-300 to-lime-300 
              hover:bg-gradient-to-l hover:from-teal-400 hover:to-lime-400 
              focus:ring-4 focus:outline-none focus:ring-lime-300 dark:focus:ring-teal-700 
@@ -226,14 +233,14 @@ export const SingleProduct = () => {
             add to cart
           </button>
           <button
-            className="mr-10 text-gray-900 dark:text-white 
+            className="mr-10 text-gray-900 dark:text-black 
              bg-gradient-to-r from-teal-300 to-lime-300 
              hover:bg-gradient-to-l hover:from-teal-400 hover:to-lime-400 
              focus:ring-4 focus:outline-none focus:ring-lime-300 dark:focus:ring-teal-700 
              font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 
              transform transition-transform duration-300 ease-in-out 
              hover:scale-105 hover:shadow-lg shadow-md dark:shadow-lg"
-            onClick={() => handleBuyNow(product.id, selectedVariant?.id)}
+            onClick={() => handleBuyNow(selectedVariant?.id)}
           >
             {" "}
             buy now
