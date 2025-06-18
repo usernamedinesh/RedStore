@@ -6,18 +6,18 @@ export function Header() {
   return (
     <header>
       <nav>
-        <a href="/verify/" class={url == "/verify/" && "active"}>
+        <a href="/admin/verify/" class={url == "/admin/verify/" && "active"}>
           Home
         </a>
 
-        <a href="/me" class={url == "/me" && "active"}>
+        <a href="/admin/me" class={url == "/admin/me" && "active"}>
           ME
         </a>
 
-        <a href="/chat" class={url == "/product" && "active"}>
+        <a href="/admin/chat" class={url == "/admin/product" && "active"}>
           Chat
         </a>
-        <a href="/product" class={url == "/product" && "active"}>
+        <a href="/admin/product" class={url == "/admin/product" && "active"}>
           Product
         </a>
       </nav>

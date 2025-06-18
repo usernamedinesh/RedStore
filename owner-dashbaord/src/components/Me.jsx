@@ -1,3 +1,4 @@
+import { CLIENT } from "../api";
 import { useAppContext } from "../customComponents/context";
 
 export function Me() {
@@ -9,7 +10,7 @@ export function Me() {
   }
   function handleLogout() {
     logout();
-    window.location.href = "http://localhost:5173/login";
+    window.location.href = CLIENT;
   }
   return (
     <div>

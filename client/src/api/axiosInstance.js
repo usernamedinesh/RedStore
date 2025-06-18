@@ -2,8 +2,9 @@ import axios from "axios";
 import { store } from "../redux/store";
 import { auth } from "../redux/slice/auth/authSlice";
 
-export const API_URL = "http://localhost:3000";
-
+// export const API_URL = "http://localhost:3000";
+// export const API_URL = "http://localhost:3000";
+export const API_URL = "http://51.21.161.237/3000"; //backend ip
 const axiosInstance = axios.create({
   baseURL: API_URL,
   timeout: 10000,

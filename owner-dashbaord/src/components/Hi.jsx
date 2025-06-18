@@ -1,12 +1,13 @@
 import { useEffect } from "preact/hooks";
 import { useAppContext } from "../customComponents/context";
+import { CLIENT } from "../api";
 
 export function Hi() {
   const { data } = useAppContext();
   // check if there is not token then redirect to login page
   useEffect(() => {
     if (!data || Object.keys(data).length === 0) {
-      window.location.href = "http://localhost:5173/login";
+      window.location.href = `${CLIENT}`;
     }
   }, [data.id]);
   return (

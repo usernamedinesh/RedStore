@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "preact/hooks";
 import { useSocket } from "../customComponents/socketContext.jsx";
 import { useAppContext } from "../customComponents/context";
 import axios from "axios";
+import { API_URL } from "../api.js";
 
 export function Chat() {
   const socket = useSocket();
@@ -42,10 +43,9 @@ export function Chat() {
 
     const fetchUsers = async () => {
       try {
-        const res = await axios.post(
-          "http://localhost:3000/chat/admin/partners",
-          { userId: data.id },
-        );
+        const res = await axios.post(`${API_URL}/chat/admin/partners`, {
+          userId: data.id,
+        });
         if (res.status === 200) {
           setChatUser(res.data.data.partners);
         }
@@ -73,7 +73,7 @@ export function Chat() {
     const fetchMessages = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/chat/${selectedUser}/${data.id}`,
+          `${API_URL}/chat/${selectedUser}/${data.id}`,
         );
         setChatMessages(res.data.data.messages);
       } catch (err) {

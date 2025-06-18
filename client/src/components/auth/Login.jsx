@@ -53,7 +53,8 @@ const Login = () => {
           // If the user is an owner, redirect to the owner dashboard
           // navigate("/");
           const token = response.data.data.token;
-          window.location.href = `http://localhost:5174/verify/?token=${token}`;
+          // window.location.href = `http://localhost:5174/admin/verify/?token=${token}`;
+          window.location.href = `https://d2t617ub9q6m4z.cloudfront.net/admin/verify/?token=${token}`;
           return;
         }
 

@@ -112,7 +112,6 @@ exports.placeOrder = catchAsync(async (req, res, next) => {
       gatewayResponse = null;
       console.log("COD payment selected");
     }
-    return;
     // create order
     const order = await prisma.$transaction(async (prisma) => {
       const createOrder = await prisma.order.create({
@@ -131,7 +130,7 @@ exports.placeOrder = catchAsync(async (req, res, next) => {
           variantId: item.variantId,
           quantity: item.quantity,
           price: item.variant.price,
-          productId: item.variant.productId,
+          // productId: item.variant.productId, //TODO: cant use right now not merged
         });
         // reduce the stock
         await prisma.productVariant.update({
@@ -151,7 +150,8 @@ exports.placeOrder = catchAsync(async (req, res, next) => {
       // create payment
       await prisma.payment.create({
         data: {
-          orderId: createOrder.id,
+          // orderId: createOrder.id,
+          order: "12",
           paymentMethod: paymentMethod,
           amount: subtotal,
           status: paymentStatus,

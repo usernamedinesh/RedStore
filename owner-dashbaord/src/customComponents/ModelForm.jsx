@@ -5,6 +5,7 @@ import axios from "axios";
 import { useAppContext } from "./context";
 
 import ImageUploading from "react-images-uploading";
+import { API_URL } from "../api";
 
 export default function ModalForm({ onClose }) {
   const [loading, setLoading] = useState(false);
@@ -98,7 +99,7 @@ export default function ModalForm({ onClose }) {
     });
 
     const response = await axios.post(
-      `http://localhost:3000/admin/product/${data.id}`,
+      `${API_URL}/admin/product/${data.id}`,
       formData,
     );
     setLoading(false);

@@ -6,6 +6,7 @@ import { useAppContext } from "../customComponents/context";
 // import { getProductByOwner } from "../../../../client/src/api/authApi.js";
 
 import { CreateProductBTN } from "../customComponents/createProductBtn";
+import { API_URL } from "../api";
 
 export function Product() {
   const { data } = useAppContext();
@@ -17,7 +18,7 @@ export function Product() {
     try {
       const fetchProducts = async () => {
         const response = await axios.get(
-          `http://localhost:3000/admin/my-product/${data.id}`,
+          `${API_URL}/admin/my-product/${data.id}`,
         );
         if (response.data.success === true) {
           setProduct(response.data.data.simplifiedProducts);
@@ -34,14 +35,11 @@ export function Product() {
   const HandleRemoveProduct = async (id) => {
     try {
       console.log("productID: ", id);
-      const response = await axios.delete(
-        `http://localhost:3000/admin/product/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${data.token}`,
-          },
+      const response = await axios.delete(`${API_URL}/admin/product/${id}`, {
+        headers: {
+          Authorization: `Bearer ${data.token}`,
         },
-      );
+      });
       if (response.data.success) {
         console.log("product deleted successfully");
         setReFreshFlag((prev) => !prev);

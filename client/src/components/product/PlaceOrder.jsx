@@ -35,8 +35,7 @@ const PlaceOrder = () => {
       orderPayload.shippingAddressId,
     );
     console.log("response from api : ", response);
-    console.log("response from response.data : ", response.data);
-    console.log("paymentMethod", paymentMethod);
+    console.log("response from response.data : ", response?.data);
   };
 
   return (

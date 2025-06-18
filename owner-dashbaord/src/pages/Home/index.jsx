@@ -5,6 +5,7 @@ import { CreateProductBTN } from "../../customComponents/createProductBtn";
 // import VerifyPage from "../../components/VerifyPage";
 import { useAppContext } from "../../customComponents/context";
 import { useEffect } from "preact/hooks";
+import { CLIENT, API_URL } from "../../api";
 
 // lets remove the verify page for now
 export function Home() {
@@ -24,24 +25,24 @@ export function Home() {
     const token = path.get("token");
 
     if (!token) {
-      window.location.href = "http://localhost:5173/login";
+      window.location.href = CLIENT;
       return;
     }
 
     axios
-      .post(`http://localhost:3000/owner/verify-token/${token}`)
+      .post(`${API_URL}/owner/verify-token/${token}`)
       .then((response) => {
         if (response.data.success === true) {
           console.log(response.data.message);
           setContextData(response.data.data);
         } else {
           console.log("Token verification failed:", response.data.message);
-          window.location.href = "http://localhost:5173/login";
+          window.location.href = CLIENT;
         }
       })
       .catch((error) => {
         console.error("Error verifying token:", error);
-        window.location.href = "http://localhost:5173/login";
+        window.location.href = CLIENT;
       });
   }, []);
 
